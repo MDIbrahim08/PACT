@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 15, 23, 42;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: #ffffff;
+  min-height: 100vh;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Official Lenis Smooth Scrolling Styles */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Custom Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Daybreak Text Reveal & Logo Animation */
+@keyframes animate {
+  0% {
+    grid-template-columns: 0% 3.88% 20.96%;
+  }
+  34% {
+    grid-template-columns: 75.16% 3.88% 20.96%;
+  }
+  100% {
+    grid-template-columns: 75.16% 3.88% 20.96%;
+  }
+}
+
+@keyframes logoAnimate {
+  0% {
+    transform: rotate(-360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.daybreak {
+  display: grid;
+  grid-template-columns: 0% 3.88% 20.96%;
+  align-items: center;
+  animation: animate 6s cubic-bezier(0.85, 0, 0.15, 1) infinite;
+  overflow: hidden;
+  max-width: 280px;
+}
+
+.wordmark {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.scrim {
+  display: flex;
+  align-items: center;
+}
+
+.logomark {
+  overflow: visible;
+  width: 100%;
+  height: auto;
+}
+
+.logomark-animate {
+  transform-origin: 100px 99px;
+  animation: logoAnimate 6s cubic-bezier(0.85, 0, 0.15, 1) infinite;
+}
+
+/* Pact Logo Reveal Animation (Enlarged & Visible) */
+@keyframes pactWordmarkReveal {
+  0% {
+    max-width: 0px;
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  30%, 85% {
+    max-width: 220px;
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    max-width: 220px;
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.pact-text-reveal-wrapper {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  animation: pactWordmarkReveal 4.5s cubic-bezier(0.16, 1, 0.3, 1) infinite alternate;
+}
+
+.pact-wordmark-text {
+  white-space: nowrap;
+}
+
+/* Print Styles for Court Evidence Export */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  header, 
+  .no-print,
+  button {
+    display: none !important;
+  }
+
+  .print-certificate-only {
+    display: block !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}
+
+/* ============================================================
+   Glass Shine Card Keyframes & Dynamic Glassmorphism
+   ============================================================ */
+@keyframes ani {
+  0% {
+    transform: translateX(0%) scale(1);
+  }
+  50% {
+    transform: translateX(-100%) scale(0.8);
+  }
+  100% {
+    transform: translateX(0%) scale(1);
+  }
+}
+
+@keyframes shine {
+  0% {
+    top: 100%;
+    left: -100%;
+  }
+  50%,
+  100% {
+    top: 0%;
+    left: 70%;
+  }
+}
+
+.glass-shine-beam {
+  animation: shine 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.glass-shine-container:hover .glass-shine-beam {
+  animation-duration: 2.5s;
+}
+
