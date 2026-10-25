@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Shield, Sparkles, AlertTriangle, Lock, Mic, X, Volume2 } from 'lucide-react';
+import { Shield, Sparkles, AlertTriangle, Lock, Mic, X, Volume2, CheckCircle2 } from 'lucide-react';
 
 export type AgentState = 
   | 'listening' 
@@ -10,7 +10,8 @@ export type AgentState =
   | 'tampered'
   | 'user-speaking'
   | 'processing'
-  | 'agent-speaking';
+  | 'agent-speaking'
+  | 'ready';
 
 interface MuseMascotProps {
   state: AgentState;
@@ -113,6 +114,17 @@ export const MuseMascot: React.FC<MuseMascotProps> = ({
           title: 'Extracting Section 10 Pillars...',
           badgeText: `${enforceabilityScore}% ENFORCEABLE`,
         };
+      case 'ready':
+        return {
+          glow: 'linear-gradient(135deg, rgba(64,122,221,0.85) 0%, rgba(16,185,129,0.85) 100%)',
+          border: 'border-[#10B981]',
+          shadow: 'shadow-emerald-500/30',
+          ring: 'border-emerald-400',
+          badgeBg: 'bg-emerald-950/90 border-emerald-500/60 text-emerald-200',
+          icon: <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />,
+          title: 'Pact AI Agent · Active & Unlocked',
+          badgeText: `${enforceabilityScore}% READY`,
+        };
       case 'locked':
         return {
           glow: 'rgba(16, 185, 129, 0.4)',
@@ -120,8 +132,8 @@ export const MuseMascot: React.FC<MuseMascotProps> = ({
           shadow: 'shadow-emerald-500/30',
           ring: 'border-emerald-400',
           badgeBg: 'bg-emerald-950/90 border-emerald-500/60 text-emerald-200',
-          icon: <Lock className="w-3.5 h-3.5 text-emerald-400" />,
-          title: 'Evidence Locked (BSA §63(4))',
+          icon: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />,
+          title: 'Evidence Verified (BSA §63(4))',
           badgeText: `${enforceabilityScore}% ENFORCEABLE`,
         };
       case 'listening':

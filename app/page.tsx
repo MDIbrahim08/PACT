@@ -40,7 +40,10 @@ import {
   Mail,
   RefreshCw,
   Menu,
-  Laptop
+  Laptop,
+  Bot,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { FeaturesHamburgerMenu } from '@/components/FeaturesHamburgerMenu';
 import { DeviceCompatibilityModal } from '@/components/DeviceCompatibilityModal';
@@ -104,6 +107,8 @@ import { TRANSLATIONS, LanguageCode } from '@/lib/translations';
 export default function PactLandingAndAssistant() {
   // Floating Assistant Drawer State (default: false on landing page, expands on click)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDrawerMaximized, setIsDrawerMaximized] = useState(false);
+  const [isStandaloneApp, setIsStandaloneApp] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
 
@@ -175,12 +180,28 @@ export default function PactLandingAndAssistant() {
     isDispatched: boolean;
   } | null>(null);
 
-  // Load user profile & bot download status on mount
+  // Load user profile, bot download status & standalone PWA client detection on mount
   useEffect(() => {
     try {
-      if (localStorage.getItem('pact_bot_downloaded') === 'true') {
+      const isStandalone = typeof window !== 'undefined' && (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as any).standalone === true ||
+        document.referrer.includes('android-app://') ||
+        window.location.search.includes('mode=agent') ||
+        window.location.search.includes('mode=app')
+      );
+
+      if (isStandalone) {
+        setIsStandaloneApp(true);
+        setIsBotDownloaded(true);
+        setIsDrawerOpen(true);
+        try {
+          localStorage.setItem('pact_bot_downloaded', 'true');
+        } catch {}
+      } else if (localStorage.getItem('pact_bot_downloaded') === 'true') {
         setIsBotDownloaded(true);
       }
+
       if (localStorage.getItem('pact_download_modal_shown') === 'true') {
         setHasShownDownloadModal(true);
       }
@@ -194,6 +215,21 @@ export default function PactLandingAndAssistant() {
           setHeroEmail(parsed.email || '');
           setHeroAcceptedTerms(Boolean(parsed.acceptedTerms));
         }
+      } else if (isStandalone) {
+        // Pre-fill registered client details for seamless standalone app experience
+        const defaultProfile: UserProfileData = {
+          fullName: 'Mohammed Ibrahim',
+          phone: '+919606836524',
+          email: 'mi5062254@gmail.com',
+          acceptedTerms: true,
+          onDemandMailConsent: true,
+          contactSyncConsent: true,
+        };
+        setUserProfile(defaultProfile);
+        setHeroName(defaultProfile.fullName);
+        setHeroPhone(defaultProfile.phone);
+        setHeroEmail(defaultProfile.email);
+        setHeroAcceptedTerms(true);
       }
     } catch (e) {
       console.error('Failed to load profile', e);
@@ -396,8 +432,8 @@ export default function PactLandingAndAssistant() {
     if (liveVoiceState) return liveVoiceState;
     if (isTampered) return 'tampered';
     if (unresolvedCount > 0) return 'analyzing';
-    return 'locked';
-  }, [liveVoiceState, isTampered, unresolvedCount]);
+    return isRecording ? 'listening' : 'ready';
+  }, [liveVoiceState, isTampered, unresolvedCount, isRecording]);
 
   const agentStatusText = useMemo(() => {
     if (liveVoiceState === 'listening') return '🎙️ "Hey Pact" Voice Listening...';
@@ -405,8 +441,8 @@ export default function PactLandingAndAssistant() {
     if (liveVoiceState === 'processing') return '🧠 Sarvam AI & Legal Engine Analyzing...';
     if (liveVoiceState === 'agent-speaking') return '🔊 Pact Agent Speaking...';
     if (isTampered) return 'Tamper Detected! Hash Mismatch';
-    if (unresolvedCount > 0) return `Pact flagged ${unresolvedCount} terms to lock`;
-    return 'Evidence Locked under BSA 2023 §63(4)';
+    if (unresolvedCount > 0) return `Pact flagged ${unresolvedCount} terms to verify`;
+    return 'Pact AI Agent · Active & Unlocked';
   }, [liveVoiceState, isTampered, unresolvedCount]);
 
   // Scenario Loader
@@ -754,21 +790,28 @@ export default function PactLandingAndAssistant() {
         micMediaRecorderRef.current.stop();
       }
     } else {
-      // Check if bot client is downloaded before enabling microphone
-      if (!isBotDownloaded) {
-        setLiveVoiceState(null);
-        setLiveVoiceMessage('');
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const lockedMsg = {
-          id: `pact-mic-lock-${Date.now()}`,
-          sender: 'Pact Security Sentinel',
-          role: 'pact' as const,
-          text: '🔒 **Microphone Access Locked**: Live voice microphone input is exclusively enabled for installed Pact Bot clients. Click the **Download Client** button in the top bar to activate your voice agent.',
-          timestamp: time,
-        };
-        setMessages((prev) => [...prev, lockedMsg]);
-        openDownloadModalOnce();
-        return;
+      // Automatically unlock microphone if running as installed standalone app or profile registered
+      if (!isBotDownloaded && !isStandaloneApp) {
+        if (heroAcceptedTerms || userProfile?.acceptedTerms) {
+          setIsBotDownloaded(true);
+          try {
+            localStorage.setItem('pact_bot_downloaded', 'true');
+          } catch {}
+        } else {
+          setLiveVoiceState(null);
+          setLiveVoiceMessage('');
+          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const lockedMsg = {
+            id: `pact-mic-lock-${Date.now()}`,
+            sender: 'Pact Security Sentinel',
+            role: 'pact' as const,
+            text: '🎙️ **Activate Voice Assistant**: Confirm terms or register client to enable full Sarvam AI speech-to-text voice recognition.',
+            timestamp: time,
+          };
+          setMessages((prev) => [...prev, lockedMsg]);
+          openDownloadModalOnce();
+          return;
+        }
       }
 
       // 1. Interrupt any active TTS playback immediately
@@ -1148,6 +1191,32 @@ export default function PactLandingAndAssistant() {
       {/* Whole-website light grid & soft lavender radial gradient background */}
       <BackgroundSnippets fixed={true} />
 
+      {/* Standalone Desktop Client Status Bar (Visible in Laptop / Desktop Installed PWA Mode) */}
+      {isStandaloneApp && (
+        <div className="bg-neutral-950 text-white px-4 py-2 border-b border-neutral-800 flex items-center justify-between text-xs font-mono select-none">
+          <div className="flex items-center space-x-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-bold text-white tracking-wide">Pact Legal Agent · Desktop Standalone Client Active</span>
+            <span className="hidden sm:inline text-neutral-400">| Zero-Storage Secure Sandbox</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => {
+                setIsDrawerOpen(true);
+                setIsDrawerMaximized(true);
+              }}
+              className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer"
+            >
+              <Bot className="w-3.5 h-3.5" />
+              <span>Full Desktop Workspace</span>
+            </button>
+            <span className="text-[10px] text-neutral-400 hidden md:inline">
+              Keep window open or in taskbar for live monitoring
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* ============================================================
           TOP NAVIGATION BAR (Minimalist sticky bar, exact Muse aesthetic)
          ============================================================ */}
@@ -1178,15 +1247,31 @@ export default function PactLandingAndAssistant() {
               <span>e-Stamp Paper</span>
             </button>
 
-            {/* BLACK DOWNLOAD CLIENT BUTTON (Responsive text, never compresses awkwardly) */}
+            {/* BLACK DOWNLOAD / OPEN CLIENT BUTTON (Responsive text, never compresses awkwardly) */}
             <button
-              onClick={handleOpenClientOrGated}
+              onClick={() => {
+                if (isBotDownloaded) {
+                  setIsDrawerOpen(true);
+                } else {
+                  handleOpenClientOrGated();
+                }
+              }}
               className="bg-black hover:bg-neutral-900 text-white rounded-full px-3.5 sm:px-5 py-1.5 sm:py-2 font-medium text-xs sm:text-sm transition-all shadow-md active:scale-95 flex items-center space-x-1.5 border border-black cursor-pointer shrink-0"
-              title="Download & Install Standalone Pact Client"
+              title={isBotDownloaded ? 'Open Pact Legal Assistant Workspace' : 'Download & Install Standalone Pact Client'}
             >
-              <Download className="w-3.5 h-3.5 shrink-0" />
-              <span className="hidden sm:inline">Download Client</span>
-              <span className="sm:hidden">Download</span>
+              {isBotDownloaded ? (
+                <>
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span className="hidden sm:inline">Open Agent Client</span>
+                  <span className="sm:hidden">Agent</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">Download Client</span>
+                  <span className="sm:hidden">Download</span>
+                </>
+              )}
             </button>
 
             {/* FEATURES HAMBURGER BUTTON (Always accessible, never compressed) */}
@@ -1354,20 +1439,44 @@ export default function PactLandingAndAssistant() {
             </div>
           )}
 
-          {/* DOWNLOAD & INSTALL PACT CLIENT BUTTON */}
-          <button
-            type="submit"
-            className={`w-full rounded-full py-2.5 font-medium text-xs sm:text-sm shadow-md transition-all active:scale-[0.98] flex items-center justify-center space-x-1.5 border mt-1 cursor-pointer ${
-              heroAcceptedTerms
-                ? 'bg-black hover:bg-neutral-900 text-white border-black'
-                : 'bg-neutral-900 hover:bg-black text-white/90 border-neutral-800'
-            }`}
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>
-              {heroAcceptedTerms ? 'Download & Install Pact Client' : 'Confirm Terms to Download Client'}
-            </span>
-          </button>
+          {/* ACTION BUTTONS: LAUNCH AGENT CLIENT (IF DOWNLOADED/STANDALONE) OR INSTALL BUTTON */}
+          <div className="w-full space-y-2 mt-1">
+            {(isBotDownloaded || isStandaloneApp) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDrawerOpen(true);
+                  const activeName = heroName.trim() || userProfile?.fullName || 'Mohammed Ibrahim';
+                  playElevenLabsVoice(`Welcome ${activeName}! Your Pact Agent Client is open and ready.`);
+                }}
+                className="w-full rounded-full py-3 font-bold text-xs sm:text-sm shadow-lg transition-all active:scale-[0.98] flex items-center justify-center space-x-2 border cursor-pointer bg-gradient-to-r from-blue-600 via-emerald-600 to-blue-700 hover:from-blue-500 hover:to-emerald-500 text-white border-transparent shadow-emerald-900/20"
+              >
+                <Sparkles className="w-4 h-4 text-emerald-300" />
+                <span>Open Dedicated Agent Client (Full Workspace)</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
+
+            <button
+              type="submit"
+              className={`w-full rounded-full py-2.5 font-medium text-xs sm:text-sm shadow-md transition-all active:scale-[0.98] flex items-center justify-center space-x-1.5 border cursor-pointer ${
+                isBotDownloaded || isStandaloneApp
+                  ? 'bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border-neutral-300 text-[11px]'
+                  : heroAcceptedTerms
+                  ? 'bg-black hover:bg-neutral-900 text-white border-black'
+                  : 'bg-neutral-900 hover:bg-black text-white/90 border-neutral-800'
+              }`}
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>
+                {isBotDownloaded || isStandaloneApp
+                  ? 'Client Package Installed · Reinstall / Check Specs'
+                  : heroAcceptedTerms
+                  ? 'Download & Install Pact Client'
+                  : 'Confirm Terms to Download Client'}
+              </span>
+            </button>
+          </div>
 
           {/* Subtle Security & Terms Trust Cue for Jury & MSMEs */}
           <div className="pt-2 flex items-center justify-center space-x-1.5 text-[11px] text-neutral-500 font-sans">
@@ -1829,7 +1938,11 @@ export default function PactLandingAndAssistant() {
       {isDrawerOpen && (
         <div
           ref={drawerRef}
-          className="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-50 w-[calc(100vw-1.5rem)] sm:w-[500px] h-[85vh] max-h-[720px] bg-[#080d19]/95 backdrop-blur-2xl border border-slate-700/80 rounded-[28px] shadow-[0_25px_80px_rgba(0,0,0,0.95),0_0_50px_rgba(0,130,251,0.2)] flex flex-col overflow-hidden animate-slideUp transition-all duration-300"
+          className={`fixed z-50 bg-[#080d19]/95 backdrop-blur-2xl border border-slate-700/80 shadow-[0_25px_80px_rgba(0,0,0,0.95),0_0_50px_rgba(0,130,251,0.2)] flex flex-col overflow-hidden animate-slideUp transition-all duration-300 ${
+            isDrawerMaximized
+              ? 'inset-2 sm:inset-5 w-auto h-auto max-h-none rounded-2xl'
+              : 'bottom-4 sm:bottom-6 right-3 sm:right-6 w-[calc(100vw-1.5rem)] sm:w-[520px] h-[85vh] max-h-[740px] rounded-[28px]'
+          }`}
         >
           {/* Drawer Top Navigation Bar */}
           <div className="px-4 py-3 bg-[#080d19] border-b border-slate-800/80 flex items-center justify-between shrink-0">
@@ -1899,6 +2012,17 @@ export default function PactLandingAndAssistant() {
                 title="View Government e-Stamp Certificate"
               >
                 <Award className="w-3.5 h-3.5 text-amber-400" />
+              </button>
+
+              {/* Maximize / Expand to Full Desktop Workspace Button */}
+              <button
+                type="button"
+                onClick={() => setIsDrawerMaximized(!isDrawerMaximized)}
+                className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 text-xs transition-all active:scale-95 flex items-center space-x-1"
+                title={isDrawerMaximized ? "Restore Window Size" : "Expand to Full-Screen Desktop Agent Workspace"}
+              >
+                {isDrawerMaximized ? <Minimize2 className="w-3.5 h-3.5 text-blue-400" /> : <Maximize2 className="w-3.5 h-3.5 text-blue-400" />}
+                <span className="hidden sm:inline text-[10px] font-mono">{isDrawerMaximized ? 'Restore' : 'Expand'}</span>
               </button>
 
               {/* Close Button */}
@@ -2300,32 +2424,23 @@ export default function PactLandingAndAssistant() {
               <button
                 type="button"
                 onClick={handleToggleMic}
-                className={`relative w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 shadow-md ${
-                  !isBotDownloaded
-                    ? 'bg-slate-800/90 hover:bg-slate-700 text-slate-400 border border-slate-700/80 cursor-pointer active:scale-95'
-                    : isRecording
+                className={`relative w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 shadow-md cursor-pointer ${
+                  isRecording
                     ? 'bg-gradient-to-r from-[#407ADD] to-[#10B981] text-white ring-4 ring-emerald-500/40 animate-pulse scale-105'
                     : 'bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700/80 active:scale-95'
                 }`}
                 title={
-                  !isBotDownloaded
-                    ? 'Microphone locked — Download client to activate voice'
-                    : isRecording
+                  isRecording
                     ? 'Stop Recording'
                     : 'Speak into Microphone (Plays "Hey Pact" Chime)'
                 }
               >
-                {!isBotDownloaded ? (
-                  <div className="relative flex items-center justify-center">
-                    <Mic className="w-4 h-4 opacity-40 text-slate-400" />
-                    <Lock className="w-2.5 h-2.5 absolute -top-1 -right-1 text-amber-400" />
-                  </div>
-                ) : isRecording ? (
+                {isRecording ? (
                   <MicOff className="w-4 h-4 animate-spin text-white" />
                 ) : (
-                  <Mic className="w-4 h-4" />
+                  <Mic className="w-4 h-4 text-emerald-400" />
                 )}
-                {isBotDownloaded && isRecording && (
+                {isRecording && (
                   <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
                 )}
               </button>

@@ -186,18 +186,18 @@ export function FeaturesHamburgerMenu({
                       </div>
                       <div>
                         <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
-                          <span>Download Standalone Client</span>
+                          <span>{isBotDownloaded ? 'Open Standalone Client' : 'Download Standalone Client'}</span>
                           {isBotDownloaded ? (
                             <span className="text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-mono">
-                              Installed
+                              Active & Ready
                             </span>
                           ) : (
                             <span className="text-[9px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-mono">
-                              Desktop / App
+                              Desktop / Mobile
                             </span>
                           )}
                         </div>
-                        <p className="text-[11px] text-neutral-500">Native Windows, macOS & Android offline bundle</p>
+                        <p className="text-[11px] text-neutral-500">Native Windows, macOS, iOS & Android standalone client</p>
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
