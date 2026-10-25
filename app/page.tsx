@@ -39,9 +39,11 @@ import {
   Phone,
   Mail,
   RefreshCw,
-  Menu
+  Menu,
+  Laptop
 } from 'lucide-react';
 import { FeaturesHamburgerMenu } from '@/components/FeaturesHamburgerMenu';
+import { DeviceCompatibilityModal } from '@/components/DeviceCompatibilityModal';
 import { MuseMascot, AgentState } from '@/components/MuseMascot';
 import { LiquidShaderGradient } from '@/components/LiquidShaderGradient';
 import { LiquidLogo } from '@/components/LiquidLogo';
@@ -129,6 +131,7 @@ export default function PactLandingAndAssistant() {
   const [isBotDownloaded, setIsBotDownloaded] = useState(false);
   const [hasShownDownloadModal, setHasShownDownloadModal] = useState(false);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+  const [isCompatibilityModalOpen, setIsCompatibilityModalOpen] = useState(false);
 
   // Helper to ensure installer modal only pops up ONCE automatically
   const openDownloadModalOnce = () => {
@@ -1598,6 +1601,13 @@ export default function PactLandingAndAssistant() {
               <FileText className="w-3.5 h-3.5 text-amber-400" />
               <span>Preview Legal e-Stamp Paper</span>
             </button>
+            <button
+              onClick={() => setIsCompatibilityModalOpen(true)}
+              className="px-4 py-2 rounded-xl bg-white border border-neutral-200 shadow-sm text-xs font-semibold text-neutral-800 hover:bg-neutral-50 hover:border-neutral-300 transition-all flex items-center gap-2"
+            >
+              <Laptop className="w-3.5 h-3.5 text-blue-600" />
+              <span>Device & OS Matrix (Mobile / Laptop / Tab)</span>
+            </button>
           </div>
 
         </div>
@@ -2507,6 +2517,7 @@ export default function PactLandingAndAssistant() {
           const activeName = heroName.trim() || userProfile?.fullName || 'Mohammed Ibrahim';
           playElevenLabsVoice(`Namaste ${activeName}! Your Pact Client is installed. How can I help you today?`);
         }}
+        onOpenCompatibility={() => setIsCompatibilityModalOpen(true)}
       />
 
       {/* Complete Features & Navigation Drawer Hamburger Modal */}
@@ -2519,7 +2530,14 @@ export default function PactLandingAndAssistant() {
         onOpenJudge={() => setIsJudgeModalOpen(true)}
         onOpenClient={handleOpenClientOrGated}
         onOpenAgent={handleOpenDrawerOrGated}
+        onOpenCompatibility={() => setIsCompatibilityModalOpen(true)}
         isBotDownloaded={isBotDownloaded}
+      />
+
+      {/* Operating System & Device Compatibility Modal */}
+      <DeviceCompatibilityModal
+        isOpen={isCompatibilityModalOpen}
+        onClose={() => setIsCompatibilityModalOpen(false)}
       />
 
     </div>

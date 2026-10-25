@@ -21,6 +21,7 @@ interface DownloadClientModalProps {
   userProfile: UserProfileData | null;
   onOpenClient: () => void;
   onDownloadSuccess?: () => void;
+  onOpenCompatibility?: () => void;
 }
 
 export const DownloadClientModal: React.FC<DownloadClientModalProps> = ({
@@ -29,6 +30,7 @@ export const DownloadClientModal: React.FC<DownloadClientModalProps> = ({
   userProfile,
   onOpenClient,
   onDownloadSuccess,
+  onOpenCompatibility,
 }) => {
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState('Initiating cryptographic packaging...');
@@ -259,6 +261,19 @@ export const DownloadClientModal: React.FC<DownloadClientModalProps> = ({
                 <span>Launch Installed Client Now</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
+
+              {onOpenCompatibility && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onOpenCompatibility();
+                  }}
+                  className="w-full py-2 text-center text-[11px] font-mono text-slate-400 hover:text-white transition-colors border border-slate-800 rounded-xl hover:bg-slate-800/50 flex items-center justify-center space-x-1.5 cursor-pointer"
+                >
+                  <Laptop className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Inspect Mobile, Laptop & Tablet OS Specifications</span>
+                </button>
+              )}
             </div>
           ) : (
             <div className="w-full py-3 bg-slate-800/50 text-slate-400 rounded-xl text-center text-xs font-mono animate-pulse">

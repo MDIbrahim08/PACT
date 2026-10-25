@@ -18,7 +18,8 @@ import {
   Lock,
   Sparkles,
   ChevronRight,
-  Award
+  Award,
+  Laptop
 } from 'lucide-react';
 
 export interface FeaturesHamburgerMenuProps {
@@ -30,6 +31,7 @@ export interface FeaturesHamburgerMenuProps {
   onOpenJudge: () => void;
   onOpenClient: () => void;
   onOpenAgent: () => void;
+  onOpenCompatibility: () => void;
   isBotDownloaded?: boolean;
 }
 
@@ -42,6 +44,7 @@ export function FeaturesHamburgerMenu({
   onOpenJudge,
   onOpenClient,
   onOpenAgent,
+  onOpenCompatibility,
   isBotDownloaded = false,
 }: FeaturesHamburgerMenuProps) {
   // Close menu on Escape key press
@@ -244,7 +247,7 @@ export function FeaturesHamburgerMenu({
                     <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
                   </button>
 
-                  {/* Architecture Deep Dive */}
+                  {/* System Architecture Deep Dive */}
                   <button
                     onClick={() => {
                       onClose();
@@ -261,6 +264,31 @@ export function FeaturesHamburgerMenu({
                           System Architecture Deep Dive
                         </div>
                         <p className="text-[11px] text-neutral-500">4-model cascade, CAD blueprints & tech stack</p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
+                  </button>
+
+                  {/* Device & OS Compatibility Matrix */}
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onOpenCompatibility();
+                    }}
+                    className="w-full p-3.5 rounded-xl bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-900/60 dark:hover:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 transition-all flex items-center justify-between text-left group active:scale-[0.99] cursor-pointer"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 flex items-center justify-center shrink-0">
+                        <Laptop className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
+                          <span>Device & OS Compatibility Standard</span>
+                          <span className="text-[9px] bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-300 px-1.5 py-0.2 rounded font-mono">
+                            SPEC-2024
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-neutral-500">Android, iOS, Windows, macOS & Tablet specs</p>
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
