@@ -38,8 +38,10 @@ import {
   User,
   Phone,
   Mail,
-  RefreshCw
+  RefreshCw,
+  Menu
 } from 'lucide-react';
+import { FeaturesHamburgerMenu } from '@/components/FeaturesHamburgerMenu';
 import { MuseMascot, AgentState } from '@/components/MuseMascot';
 import { LiquidShaderGradient } from '@/components/LiquidShaderGradient';
 import { LiquidLogo } from '@/components/LiquidLogo';
@@ -126,6 +128,7 @@ export default function PactLandingAndAssistant() {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [isBotDownloaded, setIsBotDownloaded] = useState(false);
   const [hasShownDownloadModal, setHasShownDownloadModal] = useState(false);
+  const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
 
   // Helper to ensure installer modal only pops up ONCE automatically
   const openDownloadModalOnce = () => {
@@ -1147,35 +1150,47 @@ export default function PactLandingAndAssistant() {
           {/* Top-Left: Animated & Enlarged Clean Pact Brand Mascot Logo & Reveal */}
           <PactLogoReveal />
 
-          {/* Top-Right: Security & Terms, Judicial e-Stamp Paper & Launch Agent */}
+          {/* Top-Right: Security & Terms, Judicial e-Stamp Paper, Download Client & Features Hamburger */}
           <div className="flex items-center space-x-2 sm:space-x-3">
+            {/* Desktop-only secondary actions to avoid mobile compression */}
             <button
               onClick={() => setIsPrivacyModalOpen(true)}
-              className="px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all flex items-center space-x-1.5 shadow-sm active:scale-95"
+              className="hidden lg:flex px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
               title="Inspect Zero-Storage Security Measures & DPDP Act 2023 Terms"
             >
               <Shield className="w-3.5 h-3.5 text-emerald-600" />
-              <span className="hidden sm:inline">Security & Terms</span>
-              <span className="sm:hidden">Security</span>
+              <span>Security & Terms</span>
             </button>
 
             <button
               onClick={() => setIsPrintModalOpen(true)}
-              className="px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all flex items-center space-x-1.5 shadow-sm active:scale-95"
+              className="hidden md:flex px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
               title="View Judicial e-Stamp Paper"
             >
               <Award className="w-3.5 h-3.5 text-neutral-800" />
               <span>e-Stamp Paper</span>
             </button>
 
-            {/* BLACK DOWNLOAD CLIENT BUTTON */}
+            {/* BLACK DOWNLOAD CLIENT BUTTON (Responsive text, never compresses awkwardly) */}
             <button
               onClick={handleOpenClientOrGated}
-              className="bg-black hover:bg-neutral-900 text-white rounded-full px-5 py-2 font-medium text-xs sm:text-sm transition-all shadow-md active:scale-95 flex items-center space-x-1.5 border border-black cursor-pointer"
+              className="bg-black hover:bg-neutral-900 text-white rounded-full px-3.5 sm:px-5 py-1.5 sm:py-2 font-medium text-xs sm:text-sm transition-all shadow-md active:scale-95 flex items-center space-x-1.5 border border-black cursor-pointer shrink-0"
               title="Download & Install Standalone Pact Client"
             >
-              <Download className="w-3.5 h-3.5" />
-              <span>Download Client</span>
+              <Download className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">Download Client</span>
+              <span className="sm:hidden">Download</span>
+            </button>
+
+            {/* FEATURES HAMBURGER BUTTON (Always accessible, never compressed) */}
+            <button
+              onClick={() => setIsHamburgerOpen(true)}
+              className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-full bg-neutral-100 hover:bg-neutral-200 border border-neutral-300 text-neutral-900 transition-all flex items-center space-x-1.5 shadow-sm active:scale-95 cursor-pointer shrink-0"
+              aria-label="Open Features Menu"
+              title="Explore All Features, Blueprints & Legal Tools"
+            >
+              <Menu className="w-4 h-4 text-neutral-900 shrink-0" />
+              <span className="text-xs font-bold font-mono uppercase tracking-wide">Features</span>
             </button>
           </div>
 
@@ -1378,7 +1393,7 @@ export default function PactLandingAndAssistant() {
       {/* ============================================================
           SECTION 2: CENTERED 4K DEAL EXTRACTION VIDEO (SCROLL ANIMATE)
          ============================================================ */}
-      <section id="interactive-workspace" className="relative z-10 py-10 sm:py-16 px-4 sm:px-8 border-t border-neutral-200/80 bg-transparent flex flex-col items-center justify-center">
+      <section id="walkthrough-video" className="relative z-10 py-10 sm:py-16 px-4 sm:px-8 border-t border-neutral-200/80 bg-transparent flex flex-col items-center justify-center">
         <div className="max-w-4xl mx-auto w-full flex flex-col items-center justify-center">
           <CenteredWalkthroughVideo />
         </div>
@@ -1588,7 +1603,7 @@ export default function PactLandingAndAssistant() {
           SECTION 4: 3D INTERACTIVE MSME LEGAL BOOKSHELF & ARTICLE ARCHIVE
           (Replaces old App Ecosystem & 4-model pipeline with 3D Library)
          ============================================================ */}
-      <section className="relative z-10 py-20 sm:py-28 px-4 sm:px-8 border-t border-neutral-200/80 bg-transparent">
+      <section id="bookshelf-section" className="relative z-10 py-20 sm:py-28 px-4 sm:px-8 border-t border-neutral-200/80 bg-transparent">
         <div className="max-w-6xl mx-auto space-y-12">
           
           {/* Section Header */}
@@ -1606,8 +1621,8 @@ export default function PactLandingAndAssistant() {
               Hand-bound 3D legal volumes designed to protect Indian MSMEs. Click any book to inspect its leather spine and foil in real-time, or double-click to open comprehensive legal guides, actionable clauses, and official government portals.
             </p>
 
-            {/* Category Filter Pills */}
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+            {/* Category Filter Pills (Smooth scroll on mobile to prevent congested vertical blocks) */}
+            <div className="flex sm:flex-wrap items-center justify-start sm:justify-center gap-2 pt-2 overflow-x-auto sm:overflow-visible pb-2 sm:pb-0 scrollbar-none max-w-full px-1">
               {[
                 { id: 'all', label: 'All Guides (8)' },
                 { id: 'Cash Flow & Recovery', label: 'Cash Flow & MSMED Act' },
@@ -1623,7 +1638,7 @@ export default function PactLandingAndAssistant() {
                   key={cat.id}
                   type="button"
                   onClick={() => setBookshelfCategory(cat.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold font-mono transition-all ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold font-mono transition-all shrink-0 whitespace-nowrap ${
                     bookshelfCategory === cat.id
                       ? 'bg-neutral-900 text-white shadow-sm'
                       : 'bg-white/80 hover:bg-neutral-100 text-neutral-700 border border-neutral-200'
@@ -2353,6 +2368,19 @@ export default function PactLandingAndAssistant() {
           const activeName = heroName.trim() || userProfile?.fullName || 'Mohammed Ibrahim';
           playElevenLabsVoice(`Namaste ${activeName}! Your Pact Client is installed. How can I help you today?`);
         }}
+      />
+
+      {/* Complete Features & Navigation Drawer Hamburger Modal */}
+      <FeaturesHamburgerMenu
+        isOpen={isHamburgerOpen}
+        onClose={() => setIsHamburgerOpen(false)}
+        onOpenPrivacy={() => setIsPrivacyModalOpen(true)}
+        onOpenPrint={() => setIsPrintModalOpen(true)}
+        onOpenCertificate={() => setIsCertificateModalOpen(true)}
+        onOpenJudge={() => setIsJudgeModalOpen(true)}
+        onOpenClient={handleOpenClientOrGated}
+        onOpenAgent={handleOpenDrawerOrGated}
+        isBotDownloaded={isBotDownloaded}
       />
 
     </div>
