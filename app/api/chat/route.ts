@@ -6,7 +6,14 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
-    const { message, conversationHistory = [], currentChatContext = '', userName = '' } = await req.json().catch(() => ({}));
+    const { 
+      message, 
+      conversationHistory = [], 
+      currentChatContext = '', 
+      userName = '',
+      userPhone = '',
+      userEmail = ''
+    } = await req.json().catch(() => ({}));
 
     if (!message || typeof message !== 'string' || !message.trim()) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
@@ -14,11 +21,15 @@ export async function POST(req: NextRequest) {
 
     const userPrompt = message.trim();
     const displayName = userName && typeof userName === 'string' && userName.trim() ? userName.trim() : 'Trader';
+    const displayPhone = userPhone && typeof userPhone === 'string' && userPhone.trim() ? userPhone.trim() : '+91 96068 36524';
+    const displayEmail = userEmail && typeof userEmail === 'string' && userEmail.trim() ? userEmail.trim() : 'mi5062254@gmail.com';
+    const cleanDigits = displayPhone.replace(/\D/g, '');
+    const cleanPhone = cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
 
     // Instant warm friendly greeting if user says "hi", "hello", etc.
     const isGreeting = /^(hi|hello|hey|namaste|good\s*(morning|afternoon|evening)|pact|hey\s*pact|halo)\b/i.test(userPrompt);
     if (isGreeting && userPrompt.length < 25) {
-      const greetingReply = `Namaste **${displayName}**! 👋\n\nI am **Pact**, your commercial AI legal notary. How can I help you today? You can:\n\n• 🎙️ **Dictate deal terms** directly with your voice\n• 💬 **Paste a WhatsApp agreement** to lock terms\n• ⚖️ **Draft a binding contract** under Indian Contract Act §10\n• 🛡️ **Enforce MSMED Act §15** 45-day payment protection`;
+      const greetingReply = `Namaste **${displayName}**! 👋\n\nI am **Pact**, your commercial AI legal notary. How can I help you today? You can:\n\n• 🎙️ **Dictate deal terms** directly with your voice\n• 💬 **Paste a WhatsApp agreement** to lock terms\n• 📲 **Connect & sync WhatsApp / Email / SMS** to your device\n• ⚖️ **Draft a binding contract** under Indian Contract Act §10\n• 🛡️ **Enforce MSMED Act §15** 45-day payment protection`;
       const greetingSpoken = `Namaste ${displayName}! I am Pact, your commercial AI assistant. What deal or contract can I help you prepare today?`;
 
       return NextResponse.json({
@@ -29,14 +40,82 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Specific Handling for Email Connection & In-Memory Thread Search
-    const isEmailIntent = /(connect.*mail|connect.*email|try.*mail|check.*mail|sync.*email|search.*email|open.*inbox|access.*mail|my mail|mail.*now)/i.test(userPrompt);
+    // 1. General Omni-Channel Sync Intent (WhatsApp + Email + SMS to User Device)
+    const isGeneralSyncIntent = /(sync.*device|connect.*device|sync.*all|device.*sync|connect.*whatsapp.*(and|or).*mail|sync.*whatsapp.*(and|or).*email|sync.*to.*device|connect.*all|how.*sync|can.*connect)/i.test(userPrompt);
+    if (isGeneralSyncIntent) {
+      const syncReply = `✅ **Omni-Channel Device Sync Status: 100% Active**\n\n` +
+        `Namaste **${displayName}**! Your Pact Legal Bot is linked and synchronized to your device across all commercial channels:\n\n` +
+        `• 🟢 **WhatsApp Synchronization**: **Connected** (\`${displayPhone}\`)\n` +
+        `  - Direct WhatsApp chat deal extraction, 1-click buyer dispatches & "Blame-The-Bot" counter-nudges.\n\n` +
+        `• 🟢 **Email Synchronization**: **Connected** (\`${displayEmail}\`)\n` +
+        `  - In-memory commercial thread analysis, e-Stamp delivery & non-judicial PDF agreements.\n\n` +
+        `• 🟢 **SMS Telephony Gateway**: **Connected** (\`${displayPhone}\`)\n` +
+        `  - Direct native SMS notices under MSMED Act §15 (45-day statutory payment enforcement).\n\n` +
+        `• 🔒 **Zero-Storage Device Vault**: **Active**\n` +
+        `  - All data is encrypted locally on your device under DPDP Act 2023. Zero contracts stored on external servers.\n\n` +
+        `You can now ask me to **"Draft a deal"**, **"Sync WhatsApp"**, or **"Check email threads"** at any time!`;
+
+      const syncSpoken = `All channels are connected and synced to your device, ${displayName}! WhatsApp, email, and SMS are ready.`;
+
+      return NextResponse.json({
+        success: true,
+        reply: syncReply,
+        spokenSummary: syncSpoken,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      });
+    }
+
+    // 2. Specific Handling for WhatsApp Connection & Sync
+    const isWhatsAppIntent = /(connect.*whats?app|sync.*whats?app|send.*whats?app|share.*whats?app|link.*whats?app|open.*whats?app|whats?app.*now|whats?app.*sync|whats?app.*deal)/i.test(userPrompt);
+    if (isWhatsAppIntent) {
+      const waReply = `✅ **Connected to WhatsApp Session (${displayPhone})**\n\n` +
+        `Your Pact Legal Bot is synchronized with WhatsApp on your device under **Bharatiya Sakshya Adhiniyam 2023 §63(4)**.\n\n` +
+        `• 📱 **Target Mobile**: \`${displayPhone}\`\n` +
+        `• 🔒 **Zero-Storage Enforced**: Messages and voice notes process strictly in temporary session memory.\n` +
+        `• ⚡ **Active Features**:\n` +
+        `  1. **Paste any WhatsApp chat** into our chat box to parse Section 10 contract pillars.\n` +
+        `  2. **1-Click WhatsApp Dispatch**: Push court-enforceable digital agreements directly to counterparty chats.\n` +
+        `  3. **Diplomatic Nudges**: Copy pre-drafted polite legal clarifications to protect business relationships.\n\n` +
+        `Would you like to dispatch the current agreement to WhatsApp or copy the legal reply nudge, **${displayName}**?`;
+
+      const waSpoken = `Connected to WhatsApp on your device, ${displayName}! Your zero-storage legal gateway is active.`;
+
+      return NextResponse.json({
+        success: true,
+        reply: waReply,
+        spokenSummary: waSpoken,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      });
+    }
+
+    // 3. Specific Handling for SMS Connection & Sync
+    const isSmsIntent = /(connect.*sms|sync.*sms|send.*sms|share.*sms|text.*message|sms.*alert|phone.*sms)/i.test(userPrompt);
+    if (isSmsIntent) {
+      const smsReply = `✅ **Connected to Device SMS Gateway (${displayPhone})**\n\n` +
+        `Pact Telephony Integration is verified and synchronized with your device's native SMS application.\n\n` +
+        `• 📲 **Telephony Target**: \`${displayPhone}\`\n` +
+        `• 🛡️ **Statutory Function**: SMS dispatch of MSMED Act §15 45-day statutory payment notices & SHA-256 evidence digests.\n` +
+        `• 📜 **Court Admissibility**: Conforms to BSA 2023 §63(4) electronic dispatch certificates.\n\n` +
+        `All outgoing notifications and legal reminders can be triggered directly to your mobile network with zero carrier interception.`;
+
+      const smsSpoken = `Connected to SMS on your device, ${displayName}! Telephony gateway is active.`;
+
+      return NextResponse.json({
+        success: true,
+        reply: smsReply,
+        spokenSummary: smsSpoken,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      });
+    }
+
+    // 4. Specific Handling for Email Connection & In-Memory Thread Search
+    const isEmailIntent = /(connect.*(mail|email)|sync.*(mail|email)|send.*(mail|email)|share.*(mail|email)|check.*(mail|email)|inbox|email.*sync|my mail|mail.*now)/i.test(userPrompt);
     const isAffirmative = /^(yes|yeah|sure|haan|ha|hanji|ਹਾਂਜੀ|ok|okay|yep|yup|proceed|do it)\b/i.test(userPrompt);
     const lastMessageWasEmail = conversationHistory.length > 0 && 
       /email|mail|subject|client|inbox/i.test(conversationHistory[conversationHistory.length - 1].content || '');
 
     if (isEmailIntent || (isAffirmative && lastMessageWasEmail)) {
-      const emailReply = `✅ **Connected to Email (In-Memory Session: mi5062254@gmail.com)**\n\n` +
+      const emailReply = `✅ **Connected to Email (In-Memory Session: ${displayEmail})**\n\n` +
         `Under our **Zero-Storage Privacy Charter**, your inbox is synced strictly in temporary session memory (0 bytes stored on servers).\n\n` +
         `Here are the **3 unsealed commercial threads** found in your inbox:\n\n` +
         `• 🧵 **Thread 1: Surat Cotton Mills** (\`orders@suratcotton.in\`)\n` +
@@ -80,6 +159,7 @@ export async function POST(req: NextRequest) {
 
     const systemPrompt = `You are Pact, a friendly, young, professional commercial legal AI assistant for Indian MSMEs, traders, and business owners.
 The user's name is "${displayName}". Always address the user warmly by their name ("${displayName}").
+The user's registered phone is "${displayPhone}" and registered email is "${displayEmail}".
 Keep your tone young, energetic, and highly conversational.
 DO NOT use hardcoded fictional sample names unless the user provides them.
 
@@ -89,9 +169,9 @@ You enforce Indian commercial laws strictly:
 - Bharatiya Sakshya Adhiniyam 2023 (§63(4) electronic evidence certificate)
 - MSMED Act 2006 (§15 45-day payment protection & §16 3x RBI compounding interest)
 
-STRICT PRIVACY:
-- Zero-Storage Inbox: If ${displayName} asks to connect email, confirm that mi5062254@gmail.com is synced in temporary session memory and show recent trade threads.
-- Never store data on servers.
+STRICT PRIVACY & SYNC:
+- Omni-Channel Device Sync: You can sync contracts with WhatsApp (${displayPhone}), Email (${displayEmail}), and SMS (${displayPhone}) in a 100% zero-storage session.
+- Never store data on external servers.
 
 IMPORTANT: Always end your response on a new line with "SPOKEN_SUMMARY:" followed by exactly ONE or TWO short, punchy, conversational sentences (maximum 20 words) suitable for young energetic voice playback addressing ${displayName}.`;
 

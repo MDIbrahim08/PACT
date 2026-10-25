@@ -11,7 +11,9 @@ import {
   ExternalLink, 
   QrCode, 
   Award,
-  FileText
+  FileText,
+  Mail,
+  Smartphone
 } from 'lucide-react';
 import { Section10Pillars, BSACertificateData } from '@/lib/types';
 import { formatHashDisplay } from '@/lib/crypto';
@@ -53,6 +55,8 @@ export const PrintModal: React.FC<PrintModalProps> = ({
   );
 
   const whatsappShareUrl = `https://api.whatsapp.com/send?text=${shareText}`;
+  const emailShareUrl = `mailto:?subject=${encodeURIComponent(`PACT Statutory e-Stamp Agreement: ${pillars.scope.itemTitle}`)}&body=${shareText}`;
+  const smsShareUrl = `sms:?&body=${shareText}`;
 
   const handleCopyShareLink = () => {
     navigator.clipboard.writeText(decodeURIComponent(shareText));
@@ -94,10 +98,31 @@ export const PrintModal: React.FC<PrintModalProps> = ({
               href={whatsappShareUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#20ba5a] text-black font-semibold text-xs shadow transition-all active:scale-95"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#20ba5a] text-black font-semibold text-xs shadow transition-all active:scale-95 shrink-0"
+              title="Sync & Share on WhatsApp"
             >
               <Share2 className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Share on WhatsApp</span>
+              <span className="hidden md:inline">WhatsApp</span>
+            </a>
+
+            {/* Email Share Button */}
+            <a
+              href={emailShareUrl}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow transition-all active:scale-95 shrink-0"
+              title="Sync & Dispatch via Email"
+            >
+              <Mail className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Email</span>
+            </a>
+
+            {/* SMS Share Button */}
+            <a
+              href={smsShareUrl}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow transition-all active:scale-95 shrink-0"
+              title="Sync & Send via Native SMS"
+            >
+              <Smartphone className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">SMS</span>
             </a>
 
             {/* Print / Save PDF Button */}

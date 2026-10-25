@@ -683,12 +683,16 @@ export default function PactLandingAndAssistant() {
 
     try {
       const activeName = userProfile?.fullName || heroName || 'Trader';
+      const activePhone = userProfile?.phone || heroPhone || '+91 96068 36524';
+      const activeEmail = userProfile?.email || heroEmail || 'mi5062254@gmail.com';
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: promptToSend,
           userName: activeName,
+          userPhone: activePhone,
+          userEmail: activeEmail,
           conversationHistory: messages.map((m) => ({
             role: m.role === 'buyer' ? 'user' : 'assistant',
             content: m.text,
@@ -1994,6 +1998,93 @@ export default function PactLandingAndAssistant() {
                         </div>
                       )}
 
+                      {/* Interactive WhatsApp Connection & 1-Click Launch Card */}
+                      {msg.text.includes('Connected to WhatsApp Session') && (
+                        <div className="mt-3 pt-2.5 border-t border-slate-800 space-y-2">
+                          <span className="text-[10px] text-slate-400 font-mono block uppercase">
+                            WhatsApp 1-Click Device Actions:
+                          </span>
+                          <div className="flex flex-wrap gap-2">
+                            <a
+                              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                                `🤝 *PACT COMMERCIAL CONTRACT SUMMARY*\n` +
+                                `*Registered Trader:* ${userProfile?.fullName || heroName || 'Trader'}\n` +
+                                `*Mobile:* ${userProfile?.phone || heroPhone || '+91 96068 36524'}\n` +
+                                `*Statutory Terms:* Indian Contract Act §10 & MSMED Act §15 (45-Day Payment Lock)\n` +
+                                `*BSA 2023 Evidence Seal:* SHA-256 [${currentHash ? currentHash.substring(0, 16) : '7a8f4b1e9c20'}...]\n\n` +
+                                `_Verified via Pact MSME Contract Notary_`
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex-1 min-w-[140px] p-2.5 rounded-xl bg-[#25D366]/20 hover:bg-[#25D366]/30 border border-[#25D366]/40 text-emerald-300 text-xs flex items-center justify-center space-x-1.5 transition-all active:scale-95 group font-semibold"
+                            >
+                              <Share2 className="w-3.5 h-3.5 text-[#25D366]" />
+                              <span>Launch WhatsApp App</span>
+                            </a>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const sampleNudge = `Bhaiya, Pact app requires an exact delivery date and consideration to lock our GST e-stamp certificate under Section 10. Please confirm so I can dispatch goods.`;
+                                navigator.clipboard.writeText(sampleNudge);
+                                setCopiedNudgeId('msg-wa-nudge');
+                                setTimeout(() => setCopiedNudgeId(null), 2500);
+                              }}
+                              className="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-xs text-slate-200 flex items-center space-x-1.5 transition-all active:scale-95"
+                            >
+                              <Copy className="w-3.5 h-3.5 text-slate-400" />
+                              <span>{copiedNudgeId === 'msg-wa-nudge' ? 'Copied Nudge!' : 'Copy WhatsApp Nudge'}</span>
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Interactive SMS Gateway Card */}
+                      {msg.text.includes('Connected to Device SMS Gateway') && (
+                        <div className="mt-3 pt-2.5 border-t border-slate-800 space-y-2">
+                          <span className="text-[10px] text-slate-400 font-mono block uppercase">
+                            SMS Native Telephony Action:
+                          </span>
+                          <a
+                            href={`sms:${(userProfile?.phone || heroPhone || '+919606836524').replace(/\D/g, '')}?&body=${encodeURIComponent(
+                              `[PACT LEGAL ALERT] Agreement sealed under Indian Contract Act §10 & BSA 2023 §63 for ${userProfile?.fullName || 'Trader'}. Dual-hash verified.`
+                            )}`}
+                            className="w-full p-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 text-xs flex items-center justify-center space-x-1.5 transition-all active:scale-95 font-semibold"
+                          >
+                            <Smartphone className="w-3.5 h-3.5 text-blue-400" />
+                            <span>Open SMS on this Device</span>
+                          </a>
+                        </div>
+                      )}
+
+                      {/* Interactive Omni-Channel Sync Hub Card */}
+                      {msg.text.includes('Omni-Channel Device Sync Status') && (
+                        <div className="mt-3 pt-2.5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                          <a
+                            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🤝 Pact Legal Bot synced on WhatsApp: ${userProfile?.phone || heroPhone || '+91 96068 36524'}`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366]/25 border border-[#25D366]/30 text-emerald-300 flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
+                          >
+                            <Share2 className="w-3 h-3 text-[#25D366]" />
+                            <span>Test WhatsApp</span>
+                          </a>
+                          <a
+                            href={`mailto:${userProfile?.email || heroEmail || 'mi5062254@gmail.com'}?subject=${encodeURIComponent('Pact Contract Sync Test')}&body=${encodeURIComponent('Pact Zero-Storage Legal Contract Sync verified.')}`}
+                            className="p-2 rounded-xl bg-indigo-600/15 hover:bg-indigo-600/25 border border-indigo-500/30 text-indigo-300 flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
+                          >
+                            <Mail className="w-3 h-3 text-indigo-400" />
+                            <span>Test Email</span>
+                          </a>
+                          <a
+                            href={`sms:${(userProfile?.phone || heroPhone || '+919606836524').replace(/\D/g, '')}?&body=${encodeURIComponent('Pact SMS Telephony sync test verified.')}`}
+                            className="p-2 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
+                          >
+                            <Smartphone className="w-3 h-3 text-blue-400" />
+                            <span>Test SMS</span>
+                          </a>
+                        </div>
+                      )}
+
                       {/* Interactive Extracted Surat Cotton Deal Action Card */}
                       {msg.text.includes('Extracted Deal Terms: Surat Cotton Mills') && (
                         <div className="mt-3 pt-2.5 border-t border-slate-800 flex items-center gap-2">
@@ -2106,9 +2197,55 @@ export default function PactLandingAndAssistant() {
                     </button>
                   </div>
                 ) : (
-                  <div className="pt-2 border-t border-slate-800 text-[11px] text-emerald-300 flex items-center space-x-1.5 font-mono">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>Dual-hash certified. Delivered to {userProfile?.email || 'registered email'}.</span>
+                  <div className="pt-2 border-t border-slate-800 space-y-2">
+                    <div className="text-[11px] text-emerald-300 flex items-center space-x-1.5 font-mono">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>Dual-hash certified. Delivered to {userProfile?.email || heroEmail || 'registered email'}.</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-[10px]">
+                      <a
+                        href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                          `🤝 *PACT COMMERCIAL CONTRACT DISPATCH*\n` +
+                          `*Agreement:* ${preSendConsentDoc.title}\n` +
+                          `*Recipient:* ${preSendConsentDoc.recipient}\n` +
+                          `*Scope:* ${preSendConsentDoc.summary}\n` +
+                          `*BSA 2023 §63(4) Seal:* SHA-256 [${currentHash ? currentHash.substring(0, 16) : '7a8f4b1e9c20'}...]\n` +
+                          `*Authorized by:* ${userProfile?.fullName || heroName || 'Trader'}\n\n` +
+                          `_Digitally certified under Indian Contract Act 1872 §10_`
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1.5 rounded-lg bg-[#25D366]/20 hover:bg-[#25D366]/30 border border-[#25D366]/40 text-emerald-300 flex items-center justify-center space-x-1 transition-all"
+                        title="Send via WhatsApp"
+                      >
+                        <Share2 className="w-3 h-3 text-[#25D366]" />
+                        <span>WhatsApp</span>
+                      </a>
+                      <a
+                        href={`mailto:${userProfile?.email || heroEmail || 'mi5062254@gmail.com'}?subject=${encodeURIComponent(`PACT Legal Contract: ${preSendConsentDoc.title}`)}&body=${encodeURIComponent(
+                          `Commercial Contract Dispatch under Indian Contract Act 1872 §10\n\n` +
+                          `Recipient: ${preSendConsentDoc.recipient}\n` +
+                          `Scope: ${preSendConsentDoc.summary}\n` +
+                          `BSA 2023 §63 SHA-256 Hash: ${currentHash}\n` +
+                          `Authorized by: ${userProfile?.fullName || heroName || 'Trader'}`
+                        )}`}
+                        className="p-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 flex items-center justify-center space-x-1 transition-all"
+                        title="Send via Email"
+                      >
+                        <Mail className="w-3 h-3 text-indigo-400" />
+                        <span>Email</span>
+                      </a>
+                      <a
+                        href={`sms:${(userProfile?.phone || heroPhone || '+919606836524').replace(/\D/g, '')}?&body=${encodeURIComponent(
+                          `[PACT] ${preSendConsentDoc.title} authorized. Hash: ${currentHash ? currentHash.substring(0, 12) : '7a8f4b1e9c20'}... MSMED Act §15 active.`
+                        )}`}
+                        className="p-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 flex items-center justify-center space-x-1 transition-all"
+                        title="Send via SMS"
+                      >
+                        <Smartphone className="w-3 h-3 text-blue-400" />
+                        <span>SMS</span>
+                      </a>
+                    </div>
                   </div>
                 )}
               </div>
@@ -2122,8 +2259,10 @@ export default function PactLandingAndAssistant() {
             {[
               '✍️ Draft a Supply Agreement',
               '🛡️ Lock MSMED 45-Day Payment',
-              '🔍 Search Email Thread (Zero-Storage)',
-              '📱 Sync Contacts In-Memory',
+              '📲 Sync WhatsApp & Deal',
+              '✉️ Check Email Threads',
+              '💬 Send SMS Notice',
+              '📱 Sync Device (Zero-Storage)',
             ].map((suggestion, idx) => (
               <button
                 key={idx}

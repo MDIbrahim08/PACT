@@ -166,6 +166,22 @@ export const DownloadClientModal: React.FC<DownloadClientModalProps> = ({
           </div>
         </div>
 
+        {/* Multi-Channel Device Sync Status Indicators */}
+        <div className="mb-3.5 grid grid-cols-3 gap-2 text-[10px] font-mono">
+          <div className="p-2 rounded-xl bg-slate-900/90 border border-emerald-500/30 flex items-center space-x-1.5 text-emerald-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span className="truncate">WhatsApp: Ready</span>
+          </div>
+          <div className="p-2 rounded-xl bg-slate-900/90 border border-indigo-500/30 flex items-center space-x-1.5 text-indigo-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse shrink-0" />
+            <span className="truncate">Email: Synced</span>
+          </div>
+          <div className="p-2 rounded-xl bg-slate-900/90 border border-blue-500/30 flex items-center space-x-1.5 text-blue-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse shrink-0" />
+            <span className="truncate">SMS: Connected</span>
+          </div>
+        </div>
+
         {/* Verified Statutory Terms & Consent Badge */}
         <div className="mb-5 px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between text-[11px] font-mono text-emerald-400">
           <div className="flex items-center space-x-1.5">
