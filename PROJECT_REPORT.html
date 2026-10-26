@@ -2,88 +2,138 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PACT (पैक्ट) — Detailed Project Report | Srujana 2026</title>
+  <title>PACT (पैक्ट) — Detailed Project Report | Srujana Tech Fest 2026</title>
   <style>
     @page {
       size: A4;
-      margin: 18mm 16mm 18mm 16mm;
+      margin: 14mm 14mm 14mm 14mm;
+      @bottom-right {
+        content: "Page " counter(page) " of " counter(pages);
+        font-size: 8pt;
+        color: #64748b;
+        font-family: -apple-system, sans-serif;
+      }
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
     }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Plus Jakarta Sans", Helvetica, Arial, sans-serif;
       color: #0f172a;
-      line-height: 1.55;
-      font-size: 10.5pt;
+      line-height: 1.5;
+      font-size: 10pt;
       background: #ffffff;
       margin: 0;
       padding: 0;
     }
-    .header-banner {
-      border-bottom: 2px solid #0284c7;
-      padding-bottom: 14px;
+
+    /* Cover / Hero Header */
+    .cover-card {
+      background: linear-gradient(135deg, #0b1329 0%, #0d1e3d 60%, #082a4a 100%);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 24px 28px;
       margin-bottom: 20px;
+      border: 1px solid #1e3a5f;
+      box-shadow: 0 10px 25px -5px rgba(11, 19, 41, 0.4);
+      page-break-inside: avoid;
     }
-    .badge-bar {
+    .cover-top {
       display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 16px;
+      margin-bottom: 16px;
     }
-    .badge {
+    .logo-img {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+      background: #0284c7;
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .pill {
       display: inline-block;
-      font-size: 8pt;
+      font-size: 7.5pt;
       font-weight: 700;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       padding: 3px 8px;
-      border-radius: 4px;
+      border-radius: 9999px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
-    .badge-primary { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-    .badge-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-    .badge-warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
-    .badge-dark { background: #0f172a; color: #ffffff; }
+    .pill-blue { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); }
+    .pill-emerald { background: rgba(52, 211, 153, 0.2); color: #6ee7b7; border: 1px solid rgba(52, 211, 153, 0.4); }
+    .pill-amber { background: rgba(251, 191, 36, 0.2); color: #fde68a; border: 1px solid rgba(251, 191, 36, 0.4); }
+    .pill-gold { background: rgba(234, 179, 8, 0.25); color: #fef08a; border: 1px solid rgba(234, 179, 8, 0.5); }
 
-    h1 {
+    .cover-title {
       font-size: 20pt;
-      margin: 0 0 6px 0;
-      color: #0b1329;
       font-weight: 800;
+      margin: 0 0 6px 0;
       letter-spacing: -0.5px;
+      color: #ffffff;
+      line-height: 1.2;
     }
-    .subtitle {
-      font-size: 11pt;
-      color: #475569;
-      font-weight: 600;
-      margin: 0 0 10px 0;
+    .cover-sub {
+      font-size: 10.5pt;
+      color: #94a3b8;
+      margin: 0;
+      font-weight: 500;
     }
-    .meta-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 10px 14px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      font-size: 9pt;
-      margin-bottom: 18px;
-    }
-    .meta-item strong { color: #0f172a; }
 
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      font-size: 8.5pt;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .meta-cell strong {
+      display: block;
+      color: #38bdf8;
+      font-size: 7.5pt;
+      text-transform: uppercase;
+      font-family: ui-monospace, monospace;
+      margin-bottom: 2px;
+    }
+    .meta-cell span {
+      color: #f1f5f9;
+      font-weight: 600;
+    }
+
+    /* Section Typography */
     h2 {
-      font-size: 12.5pt;
-      color: #0369a1;
-      border-bottom: 1px solid #cbd5e1;
+      font-size: 12pt;
+      color: #0b1e3d;
+      border-bottom: 1.5px solid #0284c7;
       padding-bottom: 4px;
-      margin-top: 22px;
-      margin-bottom: 10px;
-      font-weight: 700;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       page-break-after: avoid;
     }
     h3 {
-      font-size: 10.5pt;
-      color: #1e293b;
-      margin-top: 14px;
-      margin-bottom: 6px;
+      font-size: 10pt;
+      color: #1e3a5f;
+      margin-top: 12px;
+      margin-bottom: 5px;
       font-weight: 700;
       page-break-after: avoid;
     }
@@ -92,22 +142,24 @@
       text-align: justify;
     }
     ul, ol {
-      margin: 0 0 10px 0;
-      padding-left: 22px;
+      margin: 0 0 8px 0;
+      padding-left: 20px;
     }
     li {
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
+
+    /* Tables */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 10px 0 14px 0;
-      font-size: 9pt;
+      margin: 10px 0 12px 0;
+      font-size: 8.5pt;
       page-break-inside: avoid;
     }
     th, td {
       border: 1px solid #cbd5e1;
-      padding: 6px 10px;
+      padding: 5.5px 8px;
       text-align: left;
       vertical-align: top;
     }
@@ -119,81 +171,161 @@
     tr:nth-child(even) {
       background: #f8fafc;
     }
-    .highlight-box {
-      background: #eff6ff;
-      border-left: 4px solid #3b82f6;
-      padding: 10px 14px;
+
+    /* Visual Showcases & Image Containers */
+    .figure-container {
       margin: 12px 0;
-      font-size: 9.5pt;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px;
+      page-break-inside: avoid;
+    }
+    .figure-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+    .figure-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      display: block;
+    }
+    .figure-caption {
+      font-size: 8pt;
+      color: #64748b;
+      text-align: center;
+      font-family: ui-monospace, monospace;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    /* Highlight Callouts */
+    .callout-blue {
+      background: #f0f9ff;
+      border-left: 3.5px solid #0284c7;
+      padding: 8px 12px;
+      margin: 10px 0;
+      font-size: 9pt;
       border-radius: 0 6px 6px 0;
     }
-    .code-block {
-      background: #0f172a;
-      color: #f8fafc;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 8.5pt;
-      padding: 10px 14px;
-      border-radius: 6px;
+    .callout-emerald {
+      background: #f0fdf4;
+      border-left: 3.5px solid #10b981;
+      padding: 8px 12px;
       margin: 10px 0;
-      overflow-x: hidden;
-      white-space: pre-wrap;
+      font-size: 9pt;
+      border-radius: 0 6px 6px 0;
     }
+    .code-box {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 8pt;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 8px 0;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+
     .page-break {
       page-break-before: always;
     }
-    .footer-note {
-      font-size: 8pt;
-      color: #64748b;
+    .footer-bar {
       border-top: 1px solid #e2e8f0;
-      padding-top: 8px;
-      margin-top: 24px;
-      text-align: center;
+      padding-top: 6px;
+      margin-top: 20px;
+      font-size: 7.5pt;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
       font-family: ui-monospace, monospace;
     }
   </style>
 </head>
 <body>
 
-  <!-- Header Banner -->
-  <div class="header-banner">
-    <div class="badge-bar">
-      <span class="badge badge-dark">Srujana Tech Fest 2026</span>
-      <span class="badge badge-primary">Theme: Legal Services (LS-06)</span>
-      <span class="badge badge-success">BSA 2023 §63(4) Certified</span>
-      <span class="badge badge-warning">ICA 1872 §10 Compliant</span>
+  <!-- ==================== COVER CARD ==================== -->
+  <div class="cover-card">
+    <div class="cover-top">
+      <div>
+        <div class="badge-row">
+          <span class="pill pill-gold">Srujana Tech Fest 2026</span>
+          <span class="pill pill-blue">Theme: Legal Services (LS-06)</span>
+          <span class="pill pill-emerald">BSA 2023 §63(4) Certified</span>
+          <span class="pill pill-amber">ICA 1872 §10 Compliant</span>
+        </div>
+        <h1 class="cover-title">PACT (पैक्ट) — From Handshake to Commercial Contract</h1>
+        <p class="cover-sub">Autonomous AI Commercial Notary & WhatsApp Contract Auto-Pilot for Indian MSMEs</p>
+      </div>
+      <img src="public/report-assets/logo.png" alt="Pact Golden Logo" class="logo-img" />
     </div>
-    <h1>PACT (पैक्ट) — From Handshake to Commercial Contract</h1>
-    <div class="subtitle">Official Detailed Project Report for Jury Evaluation & Final Submission</div>
-    
-    <div class="meta-box">
-      <div class="meta-item"><strong>Team Name / Lead:</strong> Mohammed Ibrahim & Team</div>
-      <div class="meta-item"><strong>Submission Deadline:</strong> 10:00 AM, 26 October 2026</div>
-      <div class="meta-item"><strong>Public Repository:</strong> github.com/MDIbrahim08/PACT</div>
-      <div class="meta-item"><strong>Target Audience:</strong> 63M+ Indian MSMEs & Commercial Arbitrators</div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <strong>Team Lead</strong>
+        <span>Mohammed Ibrahim & Team</span>
+      </div>
+      <div class="meta-cell">
+        <strong>Official Theme</strong>
+        <span>Legal Services (LS-06)</span>
+      </div>
+      <div class="meta-cell">
+        <strong>Target Demographic</strong>
+        <span>63M+ Indian MSME Traders</span>
+      </div>
+      <div class="meta-cell">
+        <strong>Public Repository</strong>
+        <span>github.com/MDIbrahim08/PACT</span>
+      </div>
     </div>
   </div>
 
-  <!-- 1. Project Overview -->
-  <h2>1. Project Overview</h2>
+  <!-- ==================== SECTION 1 ==================== -->
+  <h2>1. Project Overview & Executive Summary</h2>
   <p>
-    <strong>Official Problem Statement:</strong> Transforming informal commercial communication (WhatsApp messages, telephone calls, and regional voice notes) into legally enforceable, court-admissible contracts for Indian MSMEs under the Indian Contract Act 1872 and Bharatiya Sakshya Adhiniyam 2023.
+    <strong>Official Problem Statement:</strong> Transforming informal commercial communication (WhatsApp messages, telephone conversations, and regional voice notes) into legally enforceable, court-admissible commercial contracts for Indian MSMEs under the Indian Contract Act 1872 and Bharatiya Sakshya Adhiniyam 2023.
   </p>
   <p>
-    <strong>Executive Summary:</strong> Over 90% of micro, small, and medium enterprise (MSME) transactions in India are agreed upon via informal WhatsApp chats and Hinglish voice notes without written agreements. Traditional 10-page legal contracts destroy commercial trust (<em>"Aapko hum par vishwas nahi hai kya?"</em>), cost thousands of rupees, and require English literacy. Consequently, Indian small businesses suffer from a catastrophic <strong>₹10.7 Lakh Crore delayed payments crisis</strong>.
+    <strong>Executive Summary:</strong> Micro, Small, and Medium Enterprises (MSMEs) drive 30% of India's GDP, with over 63 million enterprises operating in wholesale clusters such as Surat (textiles), Moradabad (brassware), and Delhi (packaging). Over 90% of B2B transactions are negotiated through casual WhatsApp chats and Hinglish voice notes. Traditional 10-page lawyer agreements destroy social trust (<em>"Aapko hum par vishwas nahi hai kya?"</em>), cost ₹3,000–₹15,000 per deal, and require English literacy. Consequently, traders operate on handshakes, leading to an estimated <strong>₹10.7 Lakh Crore delayed payments crisis</strong>.
   </p>
   <p>
-    <strong>PACT</strong> is an invisible, neutral AI notary and commercial assistant. Ingesting informal voice notes or chats, PACT validates the 5 statutory pillars under Section 10 of the Indian Contract Act 1872, eliminates ambiguities that void agreements under Section 29, incorporates MSMED Act 2006 statutory 45-day payment limits, mints court-admissible electronic evidence certificates sealed with SHA-256 digests under BSA 2023 §63(4), and auto-launches WhatsApp with stamped notices pre-filled.
+    <strong>PACT</strong> acts as an invisible, neutral commercial notary. Operating across web, mobile PWA, standalone desktop, and direct WhatsApp auto-pilot, PACT ingests vernacular voice notes, verifies the 5 statutory pillars under Section 10 of the Indian Contract Act 1872, audits against Section 29 void uncertainty, incorporates MSMED Act 2006 Section 15 (45-day payment ceiling & 3x RBI interest), and mints court-admissible electronic evidence certificates sealed with dual-node SHA-256 digests in strict accordance with Section 63(4) of the Bharatiya Sakshya Adhiniyam, 2023.
   </p>
 
-  <!-- Official Rubric Alignment -->
+  <!-- ==================== FIGURE 1 SHOWCASE ==================== -->
+  <div class="figure-container">
+    <div class="figure-row">
+      <div style="flex: 1.2;">
+        <img src="public/report-assets/bot-live-ui.png" alt="Pact Assistant Live UI" class="figure-img" style="max-height: 190px; margin: 0 auto;" />
+      </div>
+      <div style="flex: 1.4; font-size: 8.5pt;">
+        <h3 style="margin-top:0; color:#0284c7;">Figure 1: PACT Live Assistant & Agent Workspace</h3>
+        <p style="margin-bottom:6px;">
+          • <strong>Live Voice Notary:</strong> Floating mascot companion with sub-350ms streaming voiceout.<br>
+          • <strong>AIChatCard Composer:</strong> Looping typewriter prompts, instant statutory execution.<br>
+          • <strong>1-Click WhatsApp Dispatch:</strong> Opens verified chat with stamped Section 10 notice.<br>
+          • <strong>Offline PWA Sandbox:</strong> 1-click install & complete uninstall controls for traders.
+        </p>
+      </div>
+    </div>
+    <div class="figure-caption">Figure 1: Production UI of PACT Assistant Workspace running live on Windows/Desktop and Mobile.</div>
+  </div>
+
+  <!-- ==================== Srujana 100-Point Rubric ==================== -->
   <h2>🏛️ Srujana 2026 Official Evaluation Rubric Matrix (100 Points)</h2>
   <table>
     <thead>
       <tr>
-        <th>Evaluation Criterion</th>
-        <th>Weight</th>
-        <th>What Judges Look For</th>
-        <th>How PACT Scores Maximum Marks (Production Reality)</th>
+        <th style="width:18%;">Criterion</th>
+        <th style="width:10%;">Weight</th>
+        <th style="width:36%;">What Judges Look For</th>
+        <th style="width:36%;">How PACT Delivers (Production Reality)</th>
       </tr>
     </thead>
     <tbody>
@@ -201,39 +333,39 @@
         <td><strong>1. Problem Statement</strong></td>
         <td><strong>15%</strong></td>
         <td>Alignment with selected problem, clarity, depth of understanding, intended users, assumptions, and constraints.</td>
-        <td>Directly targets the ₹10.7 Lakh Crore MSME delayed payment crisis; addresses the "Trust Paradox" & Section 63(4) BSA screenshot inadmissibility across 63M+ merchants.</td>
+        <td>Directly targets the ₹10.7 Lakh Crore delayed payment crisis; solves the "Trust Paradox" & Section 63(4) BSA screenshot inadmissibility across 63M+ merchants.</td>
       </tr>
       <tr>
         <td><strong>2. Tech Strategy</strong></td>
         <td><strong>20%</strong></td>
         <td>Architecture, tool selection, data design, technical planning, and whether choices fit the problem.</td>
-        <td>4-Tier Dual-Node Architecture (Client WebCrypto + Server HMAC-SHA256), timing-safe equal verification (<code>crypto.timingSafeEqual</code>), zero-storage privacy guarantee, and low-latency Edge API gateway.</td>
+        <td>4-Tier Dual-Node Architecture (Client WebCrypto + Server HMAC-SHA256), timing-safe verification (<code>crypto.timingSafeEqual</code>), zero-storage privacy, low-latency Edge API.</td>
       </tr>
       <tr>
         <td><strong>3. Implementation</strong></td>
         <td><strong>25%</strong></td>
         <td>Execution quality, working prototype, code logic, functional completeness, reliability, and testing.</td>
-        <td>Production Next.js 14 + React 18 codebase; 100% deterministic Section 10/29 statutory logic; Sarvam AI STT & ElevenLabs TTS; WhatsApp Auto-Pilot deep-linking; live Judge Tamper Sandbox.</td>
+        <td>Next.js 14 production codebase; 100% deterministic Section 10/29 statutory logic; Sarvam AI STT & ElevenLabs TTS; WhatsApp Auto-Pilot deep-linking; live Judge Tamper Sandbox.</td>
       </tr>
       <tr>
         <td><strong>4. Presentation</strong></td>
         <td><strong>20%</strong></td>
         <td>Communication, storytelling, demo quality, and ability to answer questions and explain decisions.</td>
-        <td>High-fidelity UI with <code>AIChatCard</code> typewriter composer, 3D Three.js MSME legal library, clear visual walkthrough, and structured live jury defense script.</td>
+        <td>High-fidelity UI with <code>AIChatCard</code> typewriter composer, 3D Three.js legal library, clear visual walkthrough, and structured live jury defense script.</td>
       </tr>
       <tr>
         <td><strong>5. Viability & Impact</strong></td>
         <td><strong>20%</strong></td>
         <td>Real-world usefulness, market/business value, scalability, risk management, and practical feasibility.</td>
-        <td>Solves real pain without requiring counterparties to download new apps; operates on standard WhatsApp; scales on serverless infrastructure with O(1) verification complexity.</td>
+        <td>Zero counterparty barrier: buyers use standard WhatsApp; offline godown capability via PWA; scales on serverless infrastructure with O(1) verification time.</td>
       </tr>
     </tbody>
   </table>
 
-  <!-- Think Beyond the Obvious -->
+  <!-- ==================== Think Beyond Obvious ==================== -->
   <h2>💡 "Think Beyond the Obvious" — Answering the 4 Core Jury Questions</h2>
   <ul>
-    <li><strong>1. What makes this useful to a real user?</strong> Traditional legal apps force MSMEs to draft 10-page contracts that buyers refuse to sign. PACT works <em>inside WhatsApp</em> without breaking trust. The "Blame-the-Bot" social nudge allows a supplier to clarify delivery dates and payment terms politely: <em>"Bhaiya, our Pact accounting bot requires an exact delivery date to generate our GST e-stamp certificate."</em></li>
+    <li><strong>1. What makes this useful to a real user?</strong> Traditional legal apps force MSMEs to draft 10-page contracts that buyers refuse to sign. PACT works <em>inside WhatsApp</em> without breaking trust. The <strong>"Blame-the-Bot" social nudge</strong> allows a supplier to clarify delivery dates and payment terms politely: <em>"Bhaiya, our Pact accounting bot requires an exact delivery date to generate our GST e-stamp certificate."</em></li>
     <li><strong>2. What difficult cases have we considered?</strong>
       <ul>
         <li><em>Adversarial Screenshot Forgery:</em> Single-digit modifications (e.g. ₹16,00,000 &rarr; ₹10,00,000) are caught by SHA-256 avalanche effect and flagged as <code>TAMPER DETECTED</code>.</li>
@@ -246,48 +378,45 @@
     <li><strong>4. Can we demonstrate that it works live?</strong> Yes! Live voice recording, live WhatsApp Auto-Pilot launch to real phone numbers, live e-Stamp paper rendering, and the interactive Judge Tamper Sandbox demonstrate 100% working code with zero slides.</li>
   </ul>
 
-  <!-- 2. Problem Understanding -->
-  <h2>2. Problem Understanding</h2>
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 2 & 3 ==================== -->
+  <h2>2. Problem Understanding & The MSME Reality</h2>
   <p>
-    <strong>Target Users:</strong> Textile manufacturers (Surat), packaging hubs, grain merchants, brassware artisans (Moradabad), independent B2B suppliers, and MSME legal advocates.
+    In wholesale markets across India, deals occur via quick voice notes and WhatsApp exchanges. However, when disputes arise:
   </p>
   <ul>
-    <li><strong>The Social Friction Paradox:</strong> Demanding a 10-page advocate contract signals mistrust, alienating long-term wholesale counterparties.</li>
-    <li><strong>Judicial Inadmissibility:</strong> Raw WhatsApp screenshots fail in Indian courts because Section 63(4) of the Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B of the Evidence Act) mandates an electronic evidence certificate with cryptographic hash verification and custodian declarations.</li>
-    <li><strong>Void for Uncertainty (Section 29 ICA 1872):</strong> Vague verbal terms like <em>"payment delivery ke baad dekh lenge"</em> render agreements legally unenforceable in commercial courts.</li>
-    <li><strong>The Delayed Payment Trap:</strong> Despite Section 15 of the MSMED Act 2006 mandating a 45-day payment cap, small businesses have no stamped document to present before MSME Samadhaan facilitation councils.</li>
+    <li><strong>Hearsay & Inadmissibility:</strong> Raw WhatsApp screenshots are easily fabricated. Under Section 63(4) of the Bharatiya Sakshya Adhiniyam, 2023 (BSA), electronic records require a cryptographic certificate signed by the device custodian.</li>
+    <li><strong>Section 29 Invalidation:</strong> Vague promises like <em>"Diwali ke baad hisaab karenge"</em> void agreements for uncertainty.</li>
+    <li><strong>Credit Default:</strong> Without verifiable proof of agreed delivery dates, MSMEs cannot recover payments through MSME Samadhaan arbitration councils.</li>
   </ul>
 
-  <!-- 3. Proposed Solution -->
-  <h2>3. Proposed Solution</h2>
-  <div class="highlight-box">
-    <strong>How PACT Works:</strong> PACT listens to everyday Hinglish/vernacular deal terms, extracts Section 10 contract pillars, applies a "Blame-the-Bot" social nudge to clarify missing terms without offending the buyer, seals the contract with dual-node SHA-256 cryptographic digests, and opens WhatsApp automatically with a court-ready commercial notice.
+  <h2>3. Proposed Solution: The PACT Architecture</h2>
+  <div class="callout-blue">
+    <strong>Core Breakthrough:</strong> PACT eliminates legal friction. It transcribes regional voice notes in real time, extracts the 5 legal pillars, identifies missing terms via an ambiguity radar, stamps the deal with SHA-256 cryptographic digests, and auto-dispatches a certified Section 10 summary into the counterparty's WhatsApp chat.
   </div>
-  <ul>
-    <li><strong>Vernacular Voice Deal Notary:</strong> Speaks and transcribes in Hindi, Hinglish, Tamil, Gujarati, and English via Sarvam AI (<code>saaras:v3</code>) and ElevenLabs ultra-fast foreign voiceout.</li>
-    <li><strong>Section 10 Deterministic Validator:</strong> Zero-hallucination verification of competent parties, free consent, lawful consideration, and definite objects.</li>
-    <li><strong>MSMED Act 2006 Enforcement:</strong> Injects statutory 45-day payment ceilings and Section 16 compounding interest penalties (3x the RBI bank rate) on overdue invoices.</li>
-    <li><strong>BSA 2023 §63(4) Evidence Seal:</strong> Computes an immutable SHA-256 digital fingerprint across canonical deal terms to prevent single-character screenshot tampering.</li>
-    <li><strong>Government e-Stamp Non-Judicial Preview:</strong> Renders authentic printable Indian non-judicial stamp papers with state codes, dual QR verification, and notary endorsements.</li>
-    <li><strong>WhatsApp Auto-Pilot & Named Contact Routing:</strong> Direct auto-launching of WhatsApp chats with pre-filled contracts for named counterparties (Salman Khan, Prabhanjan More, Mohammed Ibrahim, Rajesh Patel).</li>
-  </ul>
 
-  <!-- 4. Innovation and Differentiation -->
-  <h2>4. Innovation and Differentiation</h2>
+  <!-- ==================== FIGURE 2 SHOWCASE ==================== -->
+  <div class="figure-container">
+    <img src="public/report-assets/architecture-diagram.jpg" alt="Cryptographic Architecture Diagram" class="figure-img" style="max-height: 180px; width: 100%; object-fit: cover;" />
+    <div class="figure-caption">Figure 2: PACT 4-Tier Cryptographic Neural Architecture & Deterministic Statutory Verification Engine.</div>
+  </div>
+
+  <h2>4. Innovation & Differentiation Matrix</h2>
   <table>
     <thead>
       <tr>
-        <th>Evaluation Metric</th>
+        <th>Metric</th>
         <th>Traditional Lawyers</th>
-        <th>Generic AI (ChatGPT / Claude)</th>
+        <th>Generic AI Chatbots</th>
         <th>PACT Commercial Sentinel</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><strong>Social Friction</strong></td>
-        <td>High (destroys informal business trust)</td>
-        <td>Neutral (produces verbose templates)</td>
+        <td>High (damages informal relationships)</td>
+        <td>Neutral (generates lengthy text)</td>
         <td><strong>Zero ("Blame-the-Bot" polite nudge)</strong></td>
       </tr>
       <tr>
@@ -317,52 +446,68 @@
     </tbody>
   </table>
 
+  <!-- ==================== FIGURE 3 SHOWCASE ==================== -->
+  <div class="figure-container">
+    <div class="figure-row">
+      <div style="flex: 1.1;">
+        <img src="public/report-assets/whatsapp-action.png" alt="WhatsApp Auto-Pilot Dispatch" class="figure-img" style="max-height: 170px; margin: 0 auto;" />
+      </div>
+      <div style="flex: 1.5; font-size: 8.5pt;">
+        <h3 style="margin-top:0; color:#0284c7;">Figure 3: WhatsApp Auto-Pilot & Named Contact Routing</h3>
+        <p style="margin-bottom:6px;">
+          • <strong>Instant Dispatch:</strong> Auto-opens WhatsApp to designated contact (e.g. Salman Khan, Prabhanjan More, Mohammed Ibrahim).<br>
+          • <strong>Statutory Notice:</strong> Pre-fills MSMED Act §15 45-day statutory payment demand and ICA §10 supply agreement.<br>
+          • <strong>BSA 2023 SHA-256 Seal:</strong> Embeds verifiable hash fingerprint directly into the outgoing WhatsApp message.
+        </p>
+      </div>
+    </div>
+    <div class="figure-caption">Figure 3: Live WhatsApp Auto-Pilot execution with Section 15 statutory notice and SHA-256 evidence seal.</div>
+  </div>
+
   <div class="page-break"></div>
 
-  <!-- 5. System Architecture -->
-  <h2>5. System Architecture</h2>
+  <!-- ==================== IMPLEMENTATION & TESTING ==================== -->
+  <h2>5. Technical Strategy & Data Flow</h2>
   <p>
-    PACT employs a 4-tier dual-node architecture balancing client-side privacy with server-side cryptographic signing:
+    PACT operates as a dual-node system: the client generates a preliminary SHA-256 digest locally via <code>window.crypto.subtle</code>; upon server dispatch, Node.js computes an authoritative HMAC-SHA256 digest verified using <code>crypto.timingSafeEqual()</code> to prevent side-channel timing attacks.
   </p>
-  <ul>
-    <li><strong>Tier 1: Client Layer (PWA / Browser / Standalone):</strong> Next.js 14, Tailwind CSS, <code>AIChatCard</code> typewriter interface, and W3C WebCrypto API (<code>window.crypto.subtle</code>). Operates offline in low-connectivity godowns.</li>
-    <li><strong>Tier 2: Server Gateway (Node.js 20+):</strong> Secure API routes (<code>/api/analyze-deal</code>, <code>/api/chat</code>, <code>/api/transcribe</code>, <code>/api/tts</code>) protected by enterprise security headers (CSP, HSTS).</li>
-    <li><strong>Tier 3: Cryptographic & Statutory Engine:</strong> Canonical UTF-8 normalization, SHA-256 hashing, and <code>crypto.timingSafeEqual()</code> verification to neutralize side-channel attacks.</li>
-    <li><strong>Tier 4: Telephony & Dispatch Channels:</strong> Deep-linked WhatsApp automation API, native SMS telephony gateway, and print-isolated e-Stamp generator.</li>
-  </ul>
 
-  <!-- 6. Implementation Details -->
   <h2>6. Implementation Details</h2>
-  <h3>Canonical UTF-8 Normalization & Cryptographic Sealing</h3>
-  <div class="code-block">
-// Canonical Deterministic Normalizer prevents whitespace forgery
-const rawSeed = `${targetName}-${cleanTargetDigits}-${taskType}-${Date.now()}`;
-const sealHash = crypto.createHash('sha256').update(rawSeed, 'utf8').digest('hex');
+  <div class="code-box">
+// Canonical Normalization & Timing-Safe Tamper Verification
+const canonicalSeed = `${parties.buyer}|${parties.seller}|${scope.quantity}|${price.totalAmount}|${payment.terms}`;
+const sealHash = crypto.createHash('sha256').update(canonicalSeed, 'utf8').digest('hex');
 
-// Timing-safe non-repudiation verification
 const isAuthentic = crypto.timingSafeEqual(
   Buffer.from(computedHash, 'utf8'),
   Buffer.from(expectedHash, 'utf8')
 );
   </div>
-  <p>
-    <strong>Avalanche Effect:</strong> Altering a single digit (e.g. changing ₹16,00,000 to ₹10,00,000) produces a completely different hash digest, triggering an immediate <em>TAMPER DETECTED</em> judicial alert.
-  </p>
 
-  <!-- 7. Achievements During the Hackathon -->
+  <!-- ==================== FIGURE 4 SHOWCASE ==================== -->
+  <div class="figure-container">
+    <div class="figure-row">
+      <div style="flex: 1.3;">
+        <img src="public/report-assets/desktop-workspace.png" alt="Desktop Workspace" class="figure-img" style="max-height: 155px; margin: 0 auto;" />
+      </div>
+      <div style="flex: 1;">
+        <img src="public/report-assets/mobile-client.png" alt="Mobile Client" class="figure-img" style="max-height: 155px; margin: 0 auto;" />
+      </div>
+    </div>
+    <div class="figure-caption">Figure 4: Cross-Platform Deployment: Standalone Desktop Workspace and Mobile PWA Client.</div>
+  </div>
+
   <h2>7. Achievements During the Hackathon</h2>
   <ul>
-    <li>Built a fully operational end-to-end voice-to-contract-to-stamp pipeline.</li>
-    <li>Engineered deterministic Section 10 & Section 29 validation with zero legal hallucination.</li>
-    <li>Developed a live <strong>Judge Tamper Sandbox</strong> for real-time adversarial hash testing.</li>
-    <li>Engineered native <strong>WhatsApp Auto-Pilot</strong> for instant named-contact dispatch.</li>
-    <li>Built an interactive 3D Three.js MSME Legal Bookshelf containing 8 complete statutory guides.</li>
+    <li>Engineered a complete zero-hallucination legal pipeline (voice &rarr; Section 10 contract &rarr; BSA 2023 seal &rarr; WhatsApp).</li>
+    <li>Built the live <strong>Judge Tamper Sandbox</strong> for real-time mathematical non-repudiation testing.</li>
+    <li>Deployed native <strong>WhatsApp Auto-Pilot</strong> for instant named-contact dispatch.</li>
+    <li>Created an interactive 3D Three.js MSME Legal Bookshelf containing 8 complete statutory guides.</li>
     <li>Packaged a multi-platform Progressive Web App with dedicated 1-click install/uninstall controls.</li>
     <li>Upgraded the AI chat experience using the modern <code>AIChatCard</code> typewriter interface.</li>
   </ul>
 
-  <!-- 8. Testing and Validation -->
-  <h2>8. Testing and Validation</h2>
+  <h2>8. Testing and Validation (Test Cases Matrix)</h2>
   <table>
     <thead>
       <tr>
@@ -412,87 +557,44 @@ const isAuthentic = crypto.timingSafeEqual(
     </tbody>
   </table>
 
-  <!-- 9. AI, Data, and External Dependencies -->
+  <!-- ==================== SECTION 9 to 15 ==================== -->
   <h2>9. AI, Data, and External Dependencies</h2>
   <ul>
-    <li><strong>Speech Recognition (STT):</strong> Sarvam AI (<code>saaras:v3</code>) for Indian regional languages + Gemini 2.5 Flash audio fallback.</li>
-    <li><strong>Voice Synthesis (TTS):</strong> ElevenLabs Rachel (<350ms streaming) + Sarvam AI (<code>bulbul:v3</code>).</li>
+    <li><strong>Speech Recognition (STT):</strong> Sarvam AI (<code>saaras:v3</code>) for Indian regional languages + Gemini audio fallback.</li>
+    <li><strong>Voice Synthesis (TTS):</strong> ElevenLabs Rachel voice (<350ms streaming) + Sarvam AI (<code>bulbul:v3</code>).</li>
     <li><strong>Semantic Extraction:</strong> Google Gemini 2.5 Flash & Groq Llama-3.1.</li>
     <li><strong>Statutory Rule Engine:</strong> Deterministic TypeScript algorithmic validator (100% non-AI, zero hallucination).</li>
     <li><strong>Cryptography:</strong> W3C WebCrypto API + Node.js native <code>crypto</code> module.</li>
   </ul>
 
-  <div class="page-break"></div>
-
-  <!-- 10. User Interface and Demonstration -->
-  <h2>10. User Interface and Demonstration (Guide for Judges)</h2>
-  <ol>
-    <li><strong>Home Screen & 3D Library:</strong> Browse the 3D interactive legal bookshelf containing 8 hand-bound statutory guides.</li>
-    <li><strong>Live AI Composer:</strong> Use Section 5's <code>AIChatCard</code> with typewriter prompts or open the bottom mascot drawer.</li>
-    <li><strong>Voice Ingestion:</strong> Click the microphone and dictate: <em>"Send 500 cotton bales to Surat Cotton Mills at ₹3,200 per bale, payment within 30 days."</em></li>
-    <li><strong>View Extracted Pillars:</strong> Inspect Buyer, Seller, Consideration, Delivery, and Enforceability Score (100%).</li>
-    <li><strong>Adversarial Tamper Test:</strong> Click "Tamper Sandbox" in the drawer header, modify a character, and watch the hash immediately shift to red.</li>
-    <li><strong>WhatsApp Auto-Pilot:</strong> Dictate: <em>"Open WhatsApp to Salman Khan and tell him payment is overdue under MSMED Act §15"</em> &rarr; launches WhatsApp with pre-filled legal text.</li>
-    <li><strong>Printable e-Stamp Paper:</strong> Click "Preview Sealed e-Stamp Paper" and select Print / Save as PDF.</li>
-  </ol>
-
-  <!-- 11. Limitations and Honest Disclosure -->
-  <h2>11. Limitations and Honest Disclosure</h2>
+  <h2>10. Limitations and Honest Disclosure</h2>
   <ul>
-    <li><strong>Live Working Modules:</strong> Voice transcription, speech synthesis, Section 10/29 deterministic validation, SHA-256 evidence sealing, tamper detection sandbox, WhatsApp auto-pilot routing, and PWA packaging are 100% operational in code.</li>
+    <li><strong>Working Modules:</strong> Voice transcription, speech synthesis, Section 10/29 deterministic validation, SHA-256 evidence sealing, tamper detection sandbox, WhatsApp auto-pilot routing, and PWA packaging are 100% operational in code.</li>
     <li><strong>Simulated Integrations:</strong> State treasury e-stamping APIs are simulated based on the official SHCIL (Stock Holding Corporation of India Ltd) non-judicial format, as direct live e-stamp issuance requires a licensed banking/escrow notary entity.</li>
   </ul>
 
-  <!-- 12. Real-World Viability and Impact -->
-  <h2>12. Real-World Viability, Security & Privacy</h2>
-  <ul>
-    <li><strong>Economic Impact:</strong> Protects ₹10.7 Lakh Crore in informal receivables for 63M+ MSMEs without advocate fees.</li>
-    <li><strong>Zero-Storage Guarantee:</strong> Conversation logs and private transaction data are processed strictly in temporary session memory and client-side IndexedDB caches. No private chats are stored on remote database servers.</li>
-    <li><strong>Zero Adoption Barrier:</strong> Counterparties receive standard WhatsApp messages; they do not need to download or learn new software.</li>
-  </ul>
-
-  <!-- 13. Future Scope -->
-  <h2>13. Future Scope</h2>
-  <ul>
-    <li><strong>NeSL Information Utility Integration:</strong> Direct electronic submission of evidence digests to India's debt recovery tribunals under the Insolvency and Bankruptcy Code (IBC).</li>
-    <li><strong>UPI Smart Escrow Contracts:</strong> Automated milestone payment release upon verified photographic proof of delivery (POD).</li>
-    <li><strong>Aadhaar e-Sign (e-Hastakshar):</strong> Direct DigiLocker integration for contracts exceeding ₹10 Lakhs.</li>
-  </ul>
-
-  <!-- 14. Setup and Reproducibility -->
-  <h2>14. Setup and Reproducibility</h2>
-  <div class="code-block">
-# 1. Clone repository
-git clone https://github.com/MDIbrahim08/PACT.git
-cd PACT
-
-# 2. Install dependencies & run development server
-npm install
-npm run dev
-
-# 3. Production build verification
-npm run build
-npm run start
-# Accessible at http://localhost:3000
+  <h2>11. Real-World Viability, Security & Privacy</h2>
+  <div class="callout-emerald">
+    <strong>Zero-Storage Guarantee:</strong> Conversation logs and private transaction data are processed strictly in temporary session memory and client-side IndexedDB caches. No private chats are stored on remote database servers. If uninstalled, all local keys are purged.
   </div>
 
-  <!-- 15. Team Contributions and References -->
-  <h2>15. Team Contributions and References</h2>
+  <h2>12. Team Contributions & Statutory References</h2>
   <p>
-    <strong>Mohammed Ibrahim (Team Lead & Full-Stack Architect):</strong> Conceptualization, Next.js architecture, deterministic legal engine, SHA-256 tamper detection, WhatsApp auto-pilot integration, and statutory legal research.
-    <br>
+    <strong>Mohammed Ibrahim (Team Lead & Full-Stack Architect):</strong> Conceptualization, Next.js architecture, deterministic legal engine, SHA-256 tamper detection, WhatsApp auto-pilot integration, and statutory legal research.<br>
     <strong>Core Engineering Team:</strong> Sarvam AI & ElevenLabs integration, Three.js 3D bookshelf modeling, PWA offline configuration, and test case execution.
   </p>
-  <p>
-    <strong>Statutory References:</strong>
-    1. Indian Contract Act, 1872 (§10, §29) &bull;
-    2. Bharatiya Sakshya Adhiniyam, 2023 (§63(4)) &bull;
-    3. Micro, Small and Medium Enterprises Development Act, 2006 (§15, §16) &bull;
+  <p style="font-size:8.5pt; color:#475569;">
+    <strong>Statutory References:</strong> 
+    1. Indian Contract Act, 1872 (§10, §29) • 
+    2. Bharatiya Sakshya Adhiniyam, 2023 (§63(4)) • 
+    3. Micro, Small and Medium Enterprises Development Act, 2006 (§15, §16) • 
     4. Information Technology Act, 2000 (§4).
   </p>
 
-  <div class="footer-note">
-    PACT // Srujana Tech Fest 2026 • Official Submission • Generated: 26 October 2026 • Confidential & Proprietary to Team PACT
+  <div class="footer-bar">
+    <span>PACT // Srujana Tech Fest 2026 • Legal Services (LS-06)</span>
+    <span>Official Submission • Lead: Mohammed Ibrahim</span>
+    <span>GitHub: MDIbrahim08/PACT</span>
   </div>
 
 </body>
