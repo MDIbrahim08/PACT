@@ -122,13 +122,13 @@ export const TelegramAutomationModal: React.FC<TelegramAutomationModalProps> = (
         {/* Top Header */}
         <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#229ED9] to-[#0088cc] flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
+            <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-black shadow-md">
               <Send className="w-5 h-5 -rotate-45" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
                 <h3 className="text-base font-bold text-white tracking-tight">Pact Telegram Commercial Notary</h3>
-                <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-mono text-[10px] border border-sky-500/30">
+                <span className="px-2 py-0.5 rounded-full bg-neutral-800 text-white font-mono text-[10px] border border-neutral-700">
                   Live Webhook Active
                 </span>
               </div>
@@ -312,9 +312,9 @@ export const TelegramAutomationModal: React.FC<TelegramAutomationModalProps> = (
                 href="https://t.me/PactCommercialBot"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#229ED9] to-[#0088cc] hover:opacity-90 text-white font-bold text-xs flex items-center justify-center space-x-2 transition-all active:scale-95 shadow-md cursor-pointer"
+                className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-neutral-200 text-black font-bold text-xs flex items-center justify-center space-x-2 transition-all active:scale-95 shadow-md cursor-pointer"
               >
-                <ExternalLink className="w-4 h-4 text-white" />
+                <ExternalLink className="w-4 h-4 text-black" />
                 <span>Launch in Telegram Web / App</span>
               </a>
 
@@ -324,7 +324,7 @@ export const TelegramAutomationModal: React.FC<TelegramAutomationModalProps> = (
                   onClick={() => { onClose(); onViewStamp(); }}
                   className="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs flex items-center justify-center space-x-1.5 transition-all border border-slate-700"
                 >
-                  <FileText className="w-3.5 h-3.5 text-amber-400" />
+                  <FileText className="w-3.5 h-3.5 text-white" />
                   <span>Inspect Judicial e-Stamp Certificate</span>
                 </button>
               )}

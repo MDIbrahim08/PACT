@@ -61,8 +61,8 @@ export const UninstallClientModal: React.FC<UninstallClientModalProps> = ({
             </p>
 
             {/* Warning Pill */}
-            <div className="my-4 p-3.5 rounded-2xl bg-amber-950/30 border border-amber-500/30 text-xs text-amber-200/90 flex items-start space-x-2.5">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+            <div className="my-4 p-3.5 rounded-2xl bg-neutral-900 border border-neutral-700 text-xs text-neutral-300 flex items-start space-x-2.5">
+              <AlertTriangle className="w-4 h-4 text-white shrink-0 mt-0.5" />
               <div className="text-[11px] leading-relaxed">
                 <strong>Zero Data Loss:</strong> Your cryptographic evidence certificates and legal documents remain valid under Indian Contract Act §10. You can reinstall the bot anytime with 1 tap.
               </div>
@@ -75,15 +75,15 @@ export const UninstallClientModal: React.FC<UninstallClientModalProps> = ({
               </span>
               <div className="space-y-1.5 text-slate-400">
                 <div className="flex items-center gap-2">
-                  <Smartphone className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                  <Smartphone className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                   <span><strong>Android:</strong> Long-press "Pact" on Home Screen &rarr; Tap "Uninstall".</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Smartphone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <Smartphone className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                   <span><strong>iPhone / iPad:</strong> Touch & hold icon &rarr; Tap "Delete Bookmark" / "Remove".</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Laptop className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+                  <Laptop className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                   <span><strong>Laptop / PC:</strong> Click 3 dots in title bar &rarr; "Uninstall Pact Legal Agent".</span>
                 </div>
               </div>
@@ -101,17 +101,17 @@ export const UninstallClientModal: React.FC<UninstallClientModalProps> = ({
               <button
                 type="button"
                 onClick={handleUninstall}
-                className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-red-950/50 transition-all active:scale-95 cursor-pointer"
+                className="flex-1 py-2.5 px-4 rounded-xl bg-neutral-900 hover:bg-black text-white text-xs font-bold border border-neutral-700 flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <Trash2 className="w-3.5 h-3.5 text-white" />
                 <span>Confirm Uninstall</span>
               </button>
             </div>
           </div>
         ) : (
           <div className="text-center py-4 space-y-3">
-            <div className="w-12 h-12 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-950/40">
-              <CheckCircle2 className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-full bg-neutral-900 border border-neutral-700 text-white flex items-center justify-center mx-auto shadow-md">
+              <CheckCircle2 className="w-6 h-6 text-white" />
             </div>
             <h3 className="text-base font-bold text-white">Bot Client Uninstalled</h3>
             <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
@@ -121,7 +121,7 @@ export const UninstallClientModal: React.FC<UninstallClientModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="py-2.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer"
+                className="py-2.5 px-6 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs font-bold transition-all shadow-md cursor-pointer"
               >
                 Close & Return to Web
               </button>

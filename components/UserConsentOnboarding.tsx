@@ -126,7 +126,7 @@ export function UserConsentOnboarding({
           </div>
           <div className="flex items-center space-x-1.5 shrink-0 ml-2">
             {isSaved ? (
-              <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-neutral-200 text-neutral-900 border border-neutral-300">
                 Verified MSME
               </span>
             ) : (
@@ -146,12 +146,12 @@ export function UserConsentOnboarding({
         >
           <div className="flex items-center space-x-2.5 overflow-hidden min-w-0">
             {isSaved && profile.acceptedTerms ? (
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-neutral-800 shrink-0" />
             ) : (
-              <Shield className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <Shield className="w-3.5 h-3.5 text-neutral-800 shrink-0" />
             )}
             <div className="truncate text-left">
-              <span className="text-[11px] font-mono font-medium text-emerald-800 block truncate">
+              <span className="text-[11px] font-mono font-medium text-neutral-900 block truncate">
                 {isSaved && profile.acceptedTerms
                   ? 'Terms & Conditions Accepted (ICA §10 · BSA §63)'
                   : 'Zero-Storage Privacy Protocol · DPDP Act 2023'}

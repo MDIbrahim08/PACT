@@ -667,15 +667,15 @@ export default function PactLandingAndAssistant() {
         }
       });
 
-      pipWindow.document.body.className = 'bg-[#080d19] text-white flex flex-col items-center justify-center p-4 overflow-hidden select-none m-0';
+      pipWindow.document.body.className = 'bg-black text-white flex flex-col items-center justify-center p-4 overflow-hidden select-none m-0';
       pipWindow.document.body.innerHTML = `
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;font-family:system-ui,sans-serif;padding:12px;box-sizing:border-box;">
-          <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;border:2px solid #10B981;box-shadow:0 0 25px rgba(16,185,129,0.5);margin-bottom:12px;background:#fff;position:relative;">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:16px;box-sizing:border-box;background:#000;">
+          <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;border:2px solid #ffffff;box-shadow:0 8px 24px rgba(255,255,255,0.15);margin-bottom:14px;background:#fff;position:relative;">
             <video src="/pact-mascot.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;transform:scale(1.1);"></video>
           </div>
-          <div style="font-size:14px;font-weight:bold;color:#fff;margin-bottom:2px;">Pact AI Companion</div>
-          <div style="font-size:10px;font-family:monospace;color:#34D399;margin-bottom:14px;">Floating Over Screen · Say "Hey Pact"</div>
-          <button id="pip-talk-btn" style="background:linear-gradient(to right, #2563EB, #059669);color:#fff;border:none;padding:10px 20px;border-radius:24px;font-size:12px;font-weight:bold;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,0.6);display:flex;align-items:center;gap:6px;">
+          <div style="font-size:15px;font-weight:700;color:#ffffff;margin-bottom:4px;letter-spacing:-0.2px;">Pact AI Companion</div>
+          <div style="font-size:11px;font-family:-apple-system,sans-serif;color:#a3a3a3;margin-bottom:16px;font-weight:500;">Floating Over Screen · Say "Hey Pact"</div>
+          <button id="pip-talk-btn" style="background:#ffffff;color:#000000;border:1px solid #ffffff;padding:10px 24px;border-radius:9999px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.4);display:flex;align-items:center;gap:8px;transition:all 0.2s ease;">
             <span>🎙️ Talk to Pact</span>
           </button>
         </div>
@@ -1603,7 +1603,7 @@ export default function PactLandingAndAssistant() {
       {isStandaloneApp && (
         <div className="bg-neutral-950 text-white px-3 sm:px-4 py-2 border-b border-neutral-800 flex items-center justify-between text-xs font-mono select-none">
           <div className="flex items-center space-x-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
             <span className="font-bold text-white tracking-wide text-[11px] sm:text-xs">
               {isMobile ? 'Pact Voice AI · Background Listening Active' : 'Pact Legal Agent · Desktop Standalone Client Active'}
             </span>
@@ -1616,7 +1616,7 @@ export default function PactLandingAndAssistant() {
                 isDrawerOpenRef.current = true;
                 if (!isMobile) setIsDrawerMaximized(true);
               }}
-              className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer shrink-0"
+              className="px-2.5 py-1 rounded bg-white hover:bg-neutral-200 text-black text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer shrink-0"
             >
               <Bot className="w-3.5 h-3.5" />
               <span>{isMobile ? 'Open Workspace' : 'Full Desktop Workspace'}</span>
@@ -1642,20 +1642,20 @@ export default function PactLandingAndAssistant() {
             {/* Telegram Commercial Notary Bot */}
             <button
               onClick={() => setIsTelegramModalOpen(true)}
-              className="hidden lg:flex px-3.5 py-1.5 rounded-full bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
+              className="hidden lg:flex px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
               title="Autonomous Telegram Commercial Notary Bot (@PactCommercialBot)"
             >
-              <Send className="w-3.5 h-3.5 text-sky-600" />
+              <Send className="w-3.5 h-3.5 text-neutral-800" />
               <span>Telegram Bot</span>
             </button>
 
             {/* MSME Samadhaan Statutory Recovery Auto-Filer */}
             <button
               onClick={() => setIsSamadhaanModalOpen(true)}
-              className="hidden md:flex px-3.5 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
+              className="hidden md:flex px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
               title="1-Click MSME Samadhaan Recovery Auto-Filer (MSEFC Form 1)"
             >
-              <Gavel className="w-3.5 h-3.5 text-amber-600" />
+              <Gavel className="w-3.5 h-3.5 text-neutral-800" />
               <span>MSME Samadhaan</span>
             </button>
 
@@ -1665,7 +1665,7 @@ export default function PactLandingAndAssistant() {
               className="hidden xl:flex px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
               title="Inspect Zero-Storage Security Measures & DPDP Act 2023 Terms"
             >
-              <Shield className="w-3.5 h-3.5 text-emerald-600" />
+              <Shield className="w-3.5 h-3.5 text-neutral-800" />
               <span>Security & Terms</span>
             </button>
 
@@ -1692,7 +1692,7 @@ export default function PactLandingAndAssistant() {
             >
               {isBotDownloaded ? (
                 <>
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <Sparkles className="w-3.5 h-3.5 text-white shrink-0" />
                   <span className="hidden sm:inline">Open Agent Client</span>
                   <span className="sm:hidden">Agent</span>
                 </>
@@ -1801,7 +1801,7 @@ export default function PactLandingAndAssistant() {
           {/* Dedicated Terms & Conditions Confirmation Card (Mandatory to unlock download) */}
           <div className={`p-3 rounded-2xl border transition-all text-left ${
             heroAcceptedTerms
-              ? 'bg-emerald-50/80 border-emerald-300 shadow-xs'
+              ? 'bg-neutral-100/90 border-neutral-400 shadow-xs'
               : registrationError
               ? 'bg-red-50/80 border-red-300 ring-2 ring-red-200'
               : 'bg-white/90 border-neutral-300/80 hover:border-neutral-400 shadow-xs'
@@ -1838,12 +1838,12 @@ export default function PactLandingAndAssistant() {
               </button>
 
               {heroAcceptedTerms ? (
-                <span className="inline-flex items-center space-x-1 text-[10px] font-bold font-mono text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                <span className="inline-flex items-center space-x-1 text-[10px] font-bold font-mono text-neutral-900 bg-neutral-200 px-2 py-0.5 rounded-full border border-neutral-300">
+                  <CheckCircle2 className="w-3 h-3 text-neutral-800" />
                   <span>Terms Confirmed</span>
                 </span>
               ) : (
-                <span className="text-[10px] font-mono text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 font-medium">
+                <span className="text-[10px] font-mono text-neutral-700 bg-neutral-100 px-2 py-0.5 rounded-full border border-neutral-300 font-medium">
                   Required to Download
                 </span>
               )}
@@ -1861,7 +1861,7 @@ export default function PactLandingAndAssistant() {
                 <button
                   type="button"
                   onClick={() => setIsPrivacyModalOpen(true)}
-                  className="w-full mt-1 py-1.5 px-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-[11px] font-bold transition-all shadow-xs flex items-center justify-center space-x-1.5 cursor-pointer active:scale-95"
+                  className="w-full mt-1 py-1.5 px-3 bg-neutral-900 hover:bg-black text-white rounded-xl text-[11px] font-bold transition-all shadow-xs flex items-center justify-center space-x-1.5 cursor-pointer active:scale-95"
                 >
                   <FileCheck2 className="w-3.5 h-3.5" />
                   <span>Read & Confirm Terms & Conditions Now ↗</span>
@@ -1880,9 +1880,9 @@ export default function PactLandingAndAssistant() {
                   const activeName = heroName.trim() || userProfile?.fullName || 'Mohammed Ibrahim';
                   playElevenLabsVoice(`Welcome ${activeName}! Your Pact Agent Client is open and ready.`);
                 }}
-                className="w-full rounded-full py-3 font-bold text-xs sm:text-sm shadow-lg transition-all active:scale-[0.98] flex items-center justify-center space-x-2 border cursor-pointer bg-gradient-to-r from-blue-600 via-emerald-600 to-blue-700 hover:from-blue-500 hover:to-emerald-500 text-white border-transparent shadow-emerald-900/20"
+                className="w-full rounded-full py-3 font-bold text-xs sm:text-sm shadow-md transition-all active:scale-[0.98] flex items-center justify-center space-x-2 border cursor-pointer bg-black hover:bg-neutral-900 text-white border-black"
               >
-                <Sparkles className="w-4 h-4 text-emerald-300" />
+                <Sparkles className="w-4 h-4 text-white" />
                 <span>Open Dedicated Agent Client (Full Workspace)</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -1911,7 +1911,7 @@ export default function PactLandingAndAssistant() {
 
           {/* Subtle Security & Terms Trust Cue for Jury & MSMEs */}
           <div className="pt-2 flex items-center justify-center space-x-1.5 text-[11px] text-neutral-500 font-sans">
-            <Shield className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <Shield className="w-3.5 h-3.5 text-neutral-700 shrink-0" />
             <span>Zero-Storage Client Vault · DPDP Act & BSA §63</span>
             <span>·</span>
             <button
@@ -1928,21 +1928,21 @@ export default function PactLandingAndAssistant() {
             <button
               type="button"
               onClick={() => setIsTelegramModalOpen(true)}
-              className="px-3 py-1.5 rounded-full bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+              className="px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-xs cursor-pointer active:scale-95 font-mono"
             >
-              <Send className="w-3.5 h-3.5 text-sky-600" />
+              <Send className="w-3.5 h-3.5 text-neutral-800" />
               <span>Telegram Bot Sentinel</span>
-              <span className="text-[9px] font-mono bg-sky-200/70 text-sky-900 px-1.5 py-0.2 rounded font-bold">LIVE API</span>
+              <span className="text-[9px] font-mono bg-neutral-200 text-neutral-900 px-1.5 py-0.5 rounded font-bold border border-neutral-300">LIVE API</span>
             </button>
 
             <button
               type="button"
               onClick={() => setIsSamadhaanModalOpen(true)}
-              className="px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+              className="px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-xs cursor-pointer active:scale-95 font-mono"
             >
-              <Gavel className="w-3.5 h-3.5 text-amber-700" />
+              <Gavel className="w-3.5 h-3.5 text-neutral-800" />
               <span>MSME Samadhaan Auto-Filer</span>
-              <span className="text-[9px] font-mono bg-amber-200/70 text-amber-900 px-1.5 py-0.2 rounded font-bold">§18 PETITION</span>
+              <span className="text-[9px] font-mono bg-neutral-200 text-neutral-900 px-1.5 py-0.5 rounded font-bold border border-neutral-300">§18 PETITION</span>
             </button>
           </div>
         </form>
@@ -1979,7 +1979,7 @@ export default function PactLandingAndAssistant() {
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16 sm:mb-20">
             <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-neutral-100 border border-neutral-300 text-xs font-mono text-neutral-900 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
               <span>STATUTORY LEGAL CHARTERS & AGENT BLUEPRINTS</span>
             </div>
 
@@ -1999,10 +1999,10 @@ export default function PactLandingAndAssistant() {
             <div className="flex flex-col items-center w-full">
               <div className="w-full max-w-[360px] mb-3 flex items-center justify-between text-xs font-mono">
                 <span className="flex items-center gap-2 text-neutral-900 font-bold uppercase tracking-wider">
-                  <Cpu className="w-4 h-4 text-blue-600" />
+                  <Cpu className="w-4 h-4 text-neutral-800" />
                   Left: Agent Blueprints & Models
                 </span>
-                <span className="text-[11px] bg-blue-50 border border-blue-200 text-blue-800 px-2 py-0.5 rounded font-semibold">CAD & AI Specs</span>
+                <span className="text-[11px] bg-neutral-100 border border-neutral-300 text-neutral-900 px-2 py-0.5 rounded font-semibold">CAD & AI Specs</span>
               </div>
 
               <GlassFolder
@@ -2058,7 +2058,7 @@ export default function PactLandingAndAssistant() {
               />
 
               <div className="mt-4 flex items-center gap-2 text-xs text-neutral-500 font-mono">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-neutral-800"></span>
                 <span>Click CAD or Neural card to inspect architectural schematics</span>
               </div>
             </div>
@@ -2067,10 +2067,10 @@ export default function PactLandingAndAssistant() {
             <div className="flex flex-col items-center w-full">
               <div className="w-full max-w-[360px] mb-3 flex items-center justify-between text-xs font-mono">
                 <span className="flex items-center gap-2 text-neutral-900 font-bold uppercase tracking-wider">
-                  <Shield className="w-4 h-4 text-emerald-600" />
+                  <Shield className="w-4 h-4 text-neutral-800" />
                   Right: Rules, Terms & Charters
                 </span>
-                <span className="text-[11px] bg-emerald-50 border border-emerald-200 text-emerald-800 px-2 py-0.5 rounded font-semibold">Statutory Rules</span>
+                <span className="text-[11px] bg-neutral-100 border border-neutral-300 text-neutral-900 px-2 py-0.5 rounded font-semibold">Statutory Rules</span>
               </div>
 
               <GlassFolder
@@ -2127,7 +2127,7 @@ export default function PactLandingAndAssistant() {
               />
 
               <div className="mt-4 flex items-center gap-2 text-xs text-neutral-500 font-mono">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-neutral-800"></span>
                 <span>Click any charter card to preview statutory compliance text</span>
               </div>
             </div>
@@ -2138,37 +2138,37 @@ export default function PactLandingAndAssistant() {
           <div className="mt-14 max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={() => setIsJudgeModalOpen(true)}
-              className="px-4 py-2 rounded-xl bg-white border border-neutral-200 shadow-sm text-xs font-semibold text-neutral-800 hover:bg-neutral-50 hover:border-neutral-300 transition-all flex items-center gap-2"
+              className="px-4 py-2 rounded-xl bg-white border border-neutral-300 shadow-sm text-xs font-semibold text-neutral-900 hover:bg-neutral-100 transition-all flex items-center gap-2"
             >
-              <Cpu className="w-3.5 h-3.5 text-blue-600" />
+              <Cpu className="w-3.5 h-3.5 text-neutral-800" />
               <span>Open Architecture Deep Dive</span>
             </button>
             <button
               onClick={() => setIsPrivacyModalOpen(true)}
-              className="px-4 py-2 rounded-xl bg-white border border-neutral-200 shadow-sm text-xs font-semibold text-neutral-800 hover:bg-neutral-50 hover:border-neutral-300 transition-all flex items-center gap-2"
+              className="px-4 py-2 rounded-xl bg-white border border-neutral-300 shadow-sm text-xs font-semibold text-neutral-900 hover:bg-neutral-100 transition-all flex items-center gap-2"
             >
-              <Shield className="w-3.5 h-3.5 text-emerald-600" />
+              <Shield className="w-3.5 h-3.5 text-neutral-800" />
               <span>Zero-Storage & Privacy Charter</span>
             </button>
             <button
               onClick={() => setIsCertificateModalOpen(true)}
-              className="px-4 py-2 rounded-xl bg-white border border-neutral-200 shadow-sm text-xs font-semibold text-neutral-800 hover:bg-neutral-50 hover:border-neutral-300 transition-all flex items-center gap-2"
+              className="px-4 py-2 rounded-xl bg-white border border-neutral-300 shadow-sm text-xs font-semibold text-neutral-900 hover:bg-neutral-100 transition-all flex items-center gap-2"
             >
-              <Gavel className="w-3.5 h-3.5 text-purple-600" />
+              <Gavel className="w-3.5 h-3.5 text-neutral-800" />
               <span>BSA 2023 §63(4) Evidence Format</span>
             </button>
             <button
               onClick={() => setIsPrintModalOpen(true)}
-              className="px-4 py-2 rounded-xl bg-neutral-900 text-white shadow-sm text-xs font-semibold hover:bg-neutral-800 transition-all flex items-center gap-2"
+              className="px-4 py-2 rounded-xl bg-black text-white shadow-sm text-xs font-semibold hover:bg-neutral-800 transition-all flex items-center gap-2"
             >
-              <FileText className="w-3.5 h-3.5 text-amber-400" />
+              <FileText className="w-3.5 h-3.5 text-white" />
               <span>Preview Legal e-Stamp Paper</span>
             </button>
             <button
               onClick={() => setIsCompatibilityModalOpen(true)}
-              className="px-4 py-2 rounded-xl bg-white border border-neutral-200 shadow-sm text-xs font-semibold text-neutral-800 hover:bg-neutral-50 hover:border-neutral-300 transition-all flex items-center gap-2"
+              className="px-4 py-2 rounded-xl bg-white border border-neutral-300 shadow-sm text-xs font-semibold text-neutral-900 hover:bg-neutral-100 transition-all flex items-center gap-2"
             >
-              <Laptop className="w-3.5 h-3.5 text-blue-600" />
+              <Laptop className="w-3.5 h-3.5 text-neutral-800" />
               <span>Device & OS Matrix (Mobile / Laptop / Tab)</span>
             </button>
           </div>
@@ -2186,7 +2186,7 @@ export default function PactLandingAndAssistant() {
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-neutral-100 border border-neutral-300 text-xs font-mono text-neutral-900 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
               <span>3D INTERACTIVE LEGAL LIBRARY • INDIAN MSME STATUTE ARCHIVE</span>
             </div>
 
@@ -2242,7 +2242,7 @@ export default function PactLandingAndAssistant() {
           <div className="p-6 rounded-2xl bg-neutral-50/80 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="space-y-1 text-center md:text-left">
               <div className="text-sm font-bold text-neutral-900 dark:text-white flex items-center justify-center md:justify-start gap-2">
-                <Sparkles className="w-4 h-4 text-amber-500" />
+                <Sparkles className="w-4 h-4 text-neutral-900 dark:text-white" />
                 <span>Direct Access to Indian Government Legal & MSME Portals</span>
               </div>
               <p className="text-xs text-neutral-500 font-mono">
@@ -2307,8 +2307,8 @@ export default function PactLandingAndAssistant() {
       <section className="relative z-10 py-16 sm:py-24 px-4 sm:px-8 border-t border-neutral-200/80 bg-neutral-50/60 dark:bg-neutral-950/60">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-3">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-mono text-blue-600 dark:text-blue-400">
-              <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-xs font-mono text-neutral-900 dark:text-white shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-neutral-900 dark:bg-white animate-ping" />
               <span>LIVE INTERACTIVE COMMERCIAL AI COMPOSER</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
@@ -2333,9 +2333,9 @@ export default function PactLandingAndAssistant() {
                   "Open WhatsApp to Prabhanjan More and draft commercial contract",
                   "Generate a court-admissible electronic evidence certificate under BSA 2023 §63"
                 ]}
-                autoType={true}
+                autoType={false}
                 placeholder="Ask Pact anything or dictate commercial terms…"
-                icon={<Bot className="h-5 w-5 text-blue-500" />}
+                icon={<Bot className="h-5 w-5 text-white" />}
                 onSend={(msg) => {
                   setIsDrawerOpen(true);
                   isDrawerOpenRef.current = true;
@@ -2383,13 +2383,13 @@ export default function PactLandingAndAssistant() {
               onClick={() => setIsJudgeModalOpen(true)}
               className="px-4 py-2 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 flex items-center space-x-2 transition-all shadow-xs"
             >
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-neutral-900 animate-ping" />
               <span className="font-mono text-xs font-semibold">Engine Status & Architecture Badge</span>
             </button>
 
             <button
               onClick={() => setIsTamperModalOpen(true)}
-              className="px-3.5 py-2 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 text-xs font-mono transition-all"
+              className="px-3.5 py-2 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-mono transition-all"
             >
               Judge Sandbox
             </button>
@@ -2414,7 +2414,7 @@ export default function PactLandingAndAssistant() {
               className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-[11px] font-mono transition-all active:scale-95"
               title="Official Srujana 2026 Evaluation Matrix & Architecture Rubric"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-neutral-900 animate-pulse" />
               <span className="font-semibold">Engine & Rubric</span>
             </button>
 
@@ -2423,7 +2423,7 @@ export default function PactLandingAndAssistant() {
               className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-black hover:bg-neutral-800 text-white border border-black text-[11px] font-mono transition-all shadow-xs active:scale-95 group"
               title="Run Live Health-Check on Gemini 3.8, Nvidia Nemotron, DeepSeek, Meta Llama & Crypto Engine (Shortcut: Ctrl + Shift + D)"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping mr-0.5" />
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping mr-0.5" />
               <span className="font-bold">Test LLM Backend Live</span>
               <kbd className="hidden sm:inline text-[9px] text-neutral-300 border border-neutral-700 px-1.5 py-0.5 rounded bg-neutral-900 font-mono ml-1">
                 Ctrl+Shift+D
@@ -2456,7 +2456,7 @@ export default function PactLandingAndAssistant() {
               <div>
                 <div className="flex items-center space-x-1.5">
                   <span className="text-xs font-bold text-white tracking-tight">Pact Legal Assistant</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                 </div>
                 <span className="text-[10px] text-slate-400 block -mt-0.5 font-sans">
                   {liveVoiceState === 'agent-speaking'
@@ -2498,12 +2498,12 @@ export default function PactLandingAndAssistant() {
                   liveVoiceState === 'agent-speaking'
                     ? 'bg-neutral-800 text-white border-neutral-600 animate-pulse'
                     : isVoiceMuted
-                    ? 'bg-red-500/15 text-red-300 border-red-500/30'
+                    ? 'bg-neutral-800 text-neutral-400 border-neutral-700'
                     : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 border-slate-700/60'
                 }`}
                 title={liveVoiceState === 'agent-speaking' ? 'Stop Speech' : isVoiceMuted ? 'Unmute Audio' : 'Mute Audio'}
               >
-                {isVoiceMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5" />}
+                {isVoiceMuted ? <VolumeX className="w-3.5 h-3.5 text-neutral-400" /> : <Volume2 className="w-3.5 h-3.5" />}
                 {liveVoiceState === 'agent-speaking' && <span className="text-[10px] font-mono font-semibold">Stop</span>}
               </button>
 
@@ -2511,10 +2511,10 @@ export default function PactLandingAndAssistant() {
               <button
                 type="button"
                 onClick={() => setIsPrintModalOpen(true)}
-                className="p-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs transition-all active:scale-95"
+                className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700 text-xs transition-all active:scale-95"
                 title="View Government e-Stamp Certificate"
               >
-                <Award className="w-3.5 h-3.5 text-amber-400" />
+                <Award className="w-3.5 h-3.5 text-white" />
               </button>
 
               {/* Maximize / Expand to Full Desktop Workspace Button */}
@@ -2524,7 +2524,7 @@ export default function PactLandingAndAssistant() {
                 className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 text-xs transition-all active:scale-95 flex items-center space-x-1"
                 title={isDrawerMaximized ? "Restore Window Size" : "Expand to Full-Screen Desktop Agent Workspace"}
               >
-                {isDrawerMaximized ? <Minimize2 className="w-3.5 h-3.5 text-blue-400" /> : <Maximize2 className="w-3.5 h-3.5 text-blue-400" />}
+                {isDrawerMaximized ? <Minimize2 className="w-3.5 h-3.5 text-white" /> : <Maximize2 className="w-3.5 h-3.5 text-white" />}
                 <span className="hidden sm:inline text-[10px] font-mono">{isDrawerMaximized ? 'Restore' : 'Expand'}</span>
               </button>
 
@@ -2534,12 +2534,12 @@ export default function PactLandingAndAssistant() {
                 onClick={handleTogglePiPCompanion}
                 className={`p-1.5 rounded-lg border text-xs transition-all active:scale-95 flex items-center space-x-1 cursor-pointer ${
                   isPiPActive
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse'
+                    ? 'bg-white text-black border-white animate-pulse'
                     : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700/60'
                 }`}
                 title="Float Mascot Over Screen & Apps (Picture-in-Picture)"
               >
-                <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                <Layers className="w-3.5 h-3.5" />
                 <span className="text-[10px] font-mono">Float</span>
               </button>
 
@@ -2548,10 +2548,10 @@ export default function PactLandingAndAssistant() {
                 <button
                   type="button"
                   onClick={() => setIsUninstallModalOpen(true)}
-                  className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 border border-rose-500/30 text-xs transition-all active:scale-95 flex items-center space-x-1"
+                  className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white border border-neutral-700 text-xs transition-all active:scale-95 flex items-center space-x-1"
                   title="Uninstall Bot Client / Reset to Web Mode"
                 >
-                  <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+                  <Trash2 className="w-3.5 h-3.5 text-neutral-400" />
                   <span className="hidden sm:inline text-[10px] font-mono">Uninstall</span>
                 </button>
               )}
@@ -2578,22 +2578,14 @@ export default function PactLandingAndAssistant() {
                   subtitle="MSME Indian Contract Act §10 & WhatsApp Notary"
                   greeting={`Namaste, ${userProfile?.fullName || heroName || 'Trader'}!`}
                   prompt="What deal terms, WhatsApp chat, or legal notice can I draft or verify today?"
-                  prompts={[
-                    "Open WhatsApp to Salman Khan and tell him payment is overdue under MSMED Act §15",
-                    "Draft a Section 10 supply contract for 500 Bales with Surat Mills",
-                    "Audit our WhatsApp chat for Section 10 pillars and statutory payment limits",
-                    "Open WhatsApp to Prabhanjan More and draft commercial contract",
-                    "Generate a court-admissible electronic evidence certificate under BSA 2023 §63"
-                  ]}
-                  autoType={true}
-                  placeholder="Ask anything or dictate deal terms…"
-                  icon={<Bot className="h-5 w-5 text-emerald-400" />}
+                  placeholder="Ask anything, paste a WhatsApp deal, or upload a receipt…"
+                  icon={<Bot className="h-5 w-5 text-white" />}
                   onSend={(msg) => handleSendMessage(undefined, msg)}
                   onReset={handleResetChat}
                   onAttach={() => fileInputRef.current?.click()}
                   onMic={handleToggleMic}
                   isRecording={isRecording}
-                  className="bg-slate-900/95 border border-slate-800/90 text-white shadow-2xl max-w-full"
+                  className="bg-slate-900 border border-slate-800 text-white shadow-2xl max-w-full"
                 />
 
                 {/* 1-Click File, Image & Voice Upload Quick Actions */}
@@ -2601,7 +2593,7 @@ export default function PactLandingAndAssistant() {
                   <button
                     type="button"
                     onClick={() => imageInputRef.current?.click()}
-                    className="px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-sky-400 border border-slate-800 hover:border-sky-500/40 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                    className="px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-white border border-slate-800 hover:border-slate-600 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
                   >
                     <ImageIcon className="w-3.5 h-3.5" />
                     <span>Upload Deal Screenshot / Receipt</span>
@@ -2610,7 +2602,7 @@ export default function PactLandingAndAssistant() {
                   <button
                     type="button"
                     onClick={() => docInputRef.current?.click()}
-                    className="px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-amber-400 border border-slate-800 hover:border-amber-500/40 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                    className="px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-white border border-slate-800 hover:border-slate-600 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
                   >
                     <Paperclip className="w-3.5 h-3.5" />
                     <span>Upload Agreement PDF</span>
@@ -2640,13 +2632,13 @@ export default function PactLandingAndAssistant() {
                     <div
                       className={`max-w-[88%] rounded-2xl px-4 py-3 text-xs shadow-md leading-relaxed ${
                         isUser
-                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-tr-xs border border-blue-500/30'
+                          ? 'bg-white text-black rounded-tr-xs border border-neutral-300 font-medium'
                           : 'bg-slate-900/95 text-slate-100 rounded-tl-xs border border-slate-800/90'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-3 mb-1.5">
                         <span className={`text-[10px] font-bold tracking-wide ${
-                          isUser ? 'text-blue-100' : 'text-emerald-400'
+                          isUser ? 'text-neutral-700' : 'text-white'
                         }`}>
                           {msg.sender}
                         </span>
@@ -2656,7 +2648,7 @@ export default function PactLandingAndAssistant() {
                             <button
                               type="button"
                               onClick={() => playElevenLabsVoice(msg.text)}
-                              className="p-0.5 text-slate-400 hover:text-emerald-400 transition-colors"
+                              className="p-0.5 text-slate-400 hover:text-white transition-colors"
                               title="Listen to response (Sarvam AI / ElevenLabs Voice)"
                             >
                               <Volume2 className="w-3.5 h-3.5" />
@@ -2682,7 +2674,7 @@ export default function PactLandingAndAssistant() {
                             </div>
                           ) : (
                             <div className="flex items-center space-x-2.5 p-1">
-                              <div className="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-400/30 text-blue-400 flex items-center justify-center shrink-0">
+                              <div className="w-8 h-8 rounded-lg bg-neutral-800 border border-neutral-700 text-white flex items-center justify-center shrink-0">
                                 <FileText className="w-4 h-4" />
                               </div>
                               <div className="overflow-hidden flex-1">
@@ -2700,15 +2692,15 @@ export default function PactLandingAndAssistant() {
 
                       {/* WhatsApp Auto-Pilot Executed Action Card */}
                       {msg.whatsappAction && (
-                        <div className="mt-3 pt-3 border-t border-emerald-500/30 space-y-2.5 bg-emerald-950/20 p-3 rounded-xl border border-emerald-500/20">
+                        <div className="mt-3 pt-3 border-t border-neutral-800 space-y-2.5 bg-neutral-900/90 p-3 rounded-xl border border-neutral-800 text-white">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                              <span className="text-[11px] font-bold text-emerald-300 font-mono flex items-center space-x-1">
+                              <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                              <span className="text-[11px] font-bold text-white font-mono flex items-center space-x-1">
                                 <span>⚡ WhatsApp Auto-Pilot Executed</span>
                               </span>
                             </div>
-                            <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono border border-emerald-500/30">
+                            <span className="text-[9px] px-2 py-0.5 rounded-full bg-neutral-800 text-white font-mono border border-neutral-700">
                               BSA 2023 §63(4) Sealed
                             </span>
                           </div>
@@ -2721,7 +2713,7 @@ export default function PactLandingAndAssistant() {
                             </div>
                             <div>
                               <span className="text-slate-400 block font-mono">Executed Task:</span>
-                              <span className="font-bold text-emerald-400 block">{msg.whatsappAction.taskSummary}</span>
+                              <span className="font-bold text-white block">{msg.whatsappAction.taskSummary}</span>
                               <span className="text-[9px] text-slate-400 font-mono line-clamp-1">{msg.whatsappAction.taskType}</span>
                             </div>
                           </div>
@@ -2732,7 +2724,7 @@ export default function PactLandingAndAssistant() {
                               href={msg.whatsappAction.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex-1 min-w-[150px] p-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-black text-xs flex items-center justify-center space-x-2 transition-all active:scale-95 shadow-md shadow-[#25D366]/20 font-bold"
+                              className="flex-1 min-w-[150px] p-2.5 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs flex items-center justify-center space-x-2 transition-all active:scale-95 shadow-md font-bold"
                             >
                               <Share2 className="w-4 h-4 text-black" />
                               <span>Re-Open WhatsApp Chat ↗</span>
@@ -2769,7 +2761,7 @@ export default function PactLandingAndAssistant() {
                                   key={cp.name}
                                   type="button"
                                   onClick={() => handleSendMessage(undefined, cp.prompt)}
-                                  className="text-[10px] px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-emerald-500/20 hover:border-emerald-500/40 border border-slate-700 text-slate-300 hover:text-emerald-300 font-mono transition-all flex items-center space-x-1"
+                                  className="text-[10px] px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-neutral-800 hover:border-neutral-600 border border-slate-700 text-slate-300 hover:text-white font-mono transition-all flex items-center space-x-1"
                                 >
                                   <span>📱 {cp.name}</span>
                                 </button>
@@ -2791,10 +2783,10 @@ export default function PactLandingAndAssistant() {
                             className="w-full text-left p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-xs flex items-center justify-between group transition-all"
                           >
                             <div>
-                              <span className="font-bold text-emerald-400 block">Thread 1: Surat Cotton Mills</span>
+                              <span className="font-bold text-white block">Thread 1: Surat Cotton Mills</span>
                               <span className="text-[10px] text-slate-300 font-mono">PO #SC-2024/89 · 500 Bales (₹16,00,000)</span>
                             </div>
-                            <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono group-hover:bg-emerald-500 group-hover:text-black transition-all">
+                            <span className="text-[10px] px-2 py-0.5 rounded bg-neutral-800 text-white font-mono group-hover:bg-white group-hover:text-black transition-all">
                               Lock Deal ↗
                             </span>
                           </button>
@@ -2804,10 +2796,10 @@ export default function PactLandingAndAssistant() {
                             className="w-full text-left p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-xs flex items-center justify-between group transition-all"
                           >
                             <div>
-                              <span className="font-bold text-blue-400 block">Thread 2: Apex Packaging Corp</span>
+                              <span className="font-bold text-white block">Thread 2: Apex Packaging Corp</span>
                               <span className="text-[10px] text-slate-300 font-mono">Invoice #AP-4109 · 10,000 Boxes (₹3,20,000)</span>
                             </div>
-                            <span className="text-[10px] px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-mono group-hover:bg-blue-500 group-hover:text-black transition-all">
+                            <span className="text-[10px] px-2 py-0.5 rounded bg-neutral-800 text-white font-mono group-hover:bg-white group-hover:text-black transition-all">
                               Lock Deal ↗
                             </span>
                           </button>
@@ -2817,10 +2809,10 @@ export default function PactLandingAndAssistant() {
                             className="w-full text-left p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-xs flex items-center justify-between group transition-all"
                           >
                             <div>
-                              <span className="font-bold text-amber-400 block">Thread 3: Rajesh Fabrics & Yarn</span>
+                              <span className="font-bold text-white block">Thread 3: Rajesh Fabrics & Yarn</span>
                               <span className="text-[10px] text-slate-300 font-mono">MSMED Act §15 · 45-Day Payment Recovery</span>
                             </div>
-                            <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono group-hover:bg-amber-500 group-hover:text-black transition-all">
+                            <span className="text-[10px] px-2 py-0.5 rounded bg-neutral-800 text-white font-mono group-hover:bg-white group-hover:text-black transition-all">
                               Lock Deal ↗
                             </span>
                           </button>
@@ -2844,9 +2836,9 @@ export default function PactLandingAndAssistant() {
                               )}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex-1 min-w-[140px] p-2.5 rounded-xl bg-[#25D366]/20 hover:bg-[#25D366]/30 border border-[#25D366]/40 text-emerald-300 text-xs flex items-center justify-center space-x-1.5 transition-all active:scale-95 group font-semibold"
+                              className="flex-1 min-w-[140px] p-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white text-xs flex items-center justify-center space-x-1.5 transition-all active:scale-95 group font-semibold"
                             >
-                              <Share2 className="w-3.5 h-3.5 text-[#25D366]" />
+                              <Share2 className="w-3.5 h-3.5 text-white" />
                               <span>Launch WhatsApp App</span>
                             </a>
                             <button
@@ -2857,7 +2849,7 @@ export default function PactLandingAndAssistant() {
                                 setCopiedNudgeId('msg-wa-nudge');
                                 setTimeout(() => setCopiedNudgeId(null), 2500);
                               }}
-                              className="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-xs text-slate-200 flex items-center space-x-1.5 transition-all active:scale-95"
+                              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 flex items-center space-x-1.5 transition-all active:scale-95"
                             >
                               <Copy className="w-3.5 h-3.5 text-slate-400" />
                               <span>{copiedNudgeId === 'msg-wa-nudge' ? 'Copied Nudge!' : 'Copy WhatsApp Nudge'}</span>
@@ -2876,9 +2868,9 @@ export default function PactLandingAndAssistant() {
                             href={`sms:${(userProfile?.phone || heroPhone || '').replace(/\D/g, '')}?&body=${encodeURIComponent(
                               `[PACT LEGAL ALERT] Agreement sealed under Indian Contract Act §10 & BSA 2023 §63 for ${userProfile?.fullName || 'Trader'}. Dual-hash verified.`
                             )}`}
-                            className="w-full p-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 text-xs flex items-center justify-center space-x-1.5 transition-all active:scale-95 font-semibold"
+                            className="w-full p-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white text-xs flex items-center justify-center space-x-1.5 transition-all active:scale-95 font-semibold"
                           >
-                            <Smartphone className="w-3.5 h-3.5 text-blue-400" />
+                            <Smartphone className="w-3.5 h-3.5 text-white" />
                             <span>Open SMS on this Device</span>
                           </a>
                         </div>
@@ -2891,23 +2883,23 @@ export default function PactLandingAndAssistant() {
                             href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🤝 Pact Legal Bot synced on WhatsApp for ${userProfile?.fullName || heroName || 'Verified Merchant'}`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366]/25 border border-[#25D366]/30 text-emerald-300 flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
+                            className="p-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
                           >
-                            <Share2 className="w-3 h-3 text-[#25D366]" />
+                            <Share2 className="w-3 h-3 text-white" />
                             <span>Test WhatsApp</span>
                           </a>
                           <a
                             href={`mailto:${userProfile?.email || heroEmail || ''}?subject=${encodeURIComponent('Pact Contract Sync Test')}&body=${encodeURIComponent('Pact Zero-Storage Legal Contract Sync verified.')}`}
-                            className="p-2 rounded-xl bg-indigo-600/15 hover:bg-indigo-600/25 border border-indigo-500/30 text-indigo-300 flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
+                            className="p-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
                           >
-                            <Mail className="w-3 h-3 text-indigo-400" />
+                            <Mail className="w-3 h-3 text-white" />
                             <span>Test Email</span>
                           </a>
                           <a
                             href={`sms:${(userProfile?.phone || heroPhone || '').replace(/\D/g, '')}?&body=${encodeURIComponent('Pact SMS Telephony sync test verified.')}`}
-                            className="p-2 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
+                            className="p-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
                           >
-                            <Smartphone className="w-3 h-3 text-blue-400" />
+                            <Smartphone className="w-3 h-3 text-white" />
                             <span>Test SMS</span>
                           </a>
                         </div>
@@ -2919,9 +2911,9 @@ export default function PactLandingAndAssistant() {
                           <button
                             type="button"
                             onClick={() => setIsPrintModalOpen(true)}
-                            className="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[11px] py-2 px-3 rounded-xl flex items-center justify-center space-x-1.5 shadow-md transition-all active:scale-95"
+                            className="flex-1 bg-white hover:bg-neutral-200 text-black font-bold text-[11px] py-2 px-3 rounded-xl flex items-center justify-center space-x-1.5 shadow-md transition-all active:scale-95"
                           >
-                            <Award className="w-3.5 h-3.5 text-slate-950" />
+                            <Award className="w-3.5 h-3.5 text-black" />
                             <span>Preview Sealed e-Stamp Paper</span>
                           </button>
                           <button
@@ -2936,7 +2928,7 @@ export default function PactLandingAndAssistant() {
                                 isDispatched: false,
                               });
                             }}
-                            className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-[11px] py-2 px-3 rounded-xl flex items-center justify-center space-x-1 transition-all active:scale-95"
+                            className="bg-white hover:bg-neutral-200 text-black font-semibold text-[11px] py-2 px-3 rounded-xl flex items-center justify-center space-x-1 transition-all active:scale-95"
                           >
                             <Check className="w-3.5 h-3.5" />
                             <span>Authorize</span>
@@ -2952,11 +2944,11 @@ export default function PactLandingAndAssistant() {
               {isAiResponding && (
                 <div className="flex items-start animate-fadeIn">
                   <div className="bg-slate-900/90 text-slate-300 rounded-2xl rounded-tl-xs border border-slate-800 px-4 py-2.5 text-xs flex items-center space-x-2.5">
-                    <span className="text-emerald-400 text-[11px] font-semibold">Pact is analyzing...</span>
+                    <span className="text-white text-[11px] font-semibold">Pact is analyzing...</span>
                     <span className="flex space-x-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce" />
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce [animation-delay:0.2s]" />
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce [animation-delay:0.4s]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce [animation-delay:0.2s]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce [animation-delay:0.4s]" />
                     </span>
                   </div>
                 </div>
@@ -2966,11 +2958,11 @@ export default function PactLandingAndAssistant() {
 
             {/* Mandatory Pre-Send Authorization Consent Card (Only appears when user creates a legal doc) */}
             {preSendConsentDoc && (
-              <div className="rounded-2xl p-3.5 border transition-all shadow-xl bg-slate-900/95 border-amber-500/40 text-left font-sans animate-fadeIn">
+              <div className="rounded-2xl p-3.5 border transition-all shadow-xl bg-slate-900 border-neutral-800 text-left font-sans animate-fadeIn">
                 <div className="flex items-center justify-between pb-2 border-b border-slate-800">
                   <div className="flex items-center space-x-2">
                     <div className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
-                      preSendConsentDoc.isDispatched ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'
+                      preSendConsentDoc.isDispatched ? 'bg-neutral-800 text-white' : 'bg-neutral-800 text-neutral-300'
                     }`}>
                       {preSendConsentDoc.isDispatched ? <CheckCircle2 className="w-4 h-4" /> : <Lock className="w-3.5 h-3.5" />}
                     </div>
@@ -2982,7 +2974,7 @@ export default function PactLandingAndAssistant() {
                     </div>
                   </div>
                   <span className={`text-[9px] font-mono font-semibold px-2 py-0.5 rounded-full ${
-                    preSendConsentDoc.isDispatched ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                    preSendConsentDoc.isDispatched ? 'bg-neutral-800 text-white border border-neutral-700' : 'bg-neutral-800 text-neutral-300 border border-neutral-700'
                   }`}>
                     {preSendConsentDoc.isDispatched ? 'DISPATCHED' : 'AWAITING CONSENT'}
                   </span>
@@ -3003,7 +2995,7 @@ export default function PactLandingAndAssistant() {
                   </div>
                   <div className="flex justify-between items-center text-slate-300">
                     <span className="text-slate-400 text-[11px]">BSA §63 Hash:</span>
-                    <span className="text-emerald-400 font-mono text-[10px]">{currentHash.substring(0, 16)}...</span>
+                    <span className="text-white font-mono text-[10px]">{currentHash.substring(0, 16)}...</span>
                   </div>
                 </div>
 
@@ -3012,7 +3004,7 @@ export default function PactLandingAndAssistant() {
                     <button
                       type="button"
                       onClick={handleConfirmDispatch}
-                      className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl py-2 font-medium text-xs shadow-sm transition-all flex items-center justify-center space-x-1.5 active:scale-95"
+                      className="flex-1 bg-white hover:bg-neutral-200 text-black font-bold rounded-xl py-2 text-xs shadow-sm transition-all flex items-center justify-center space-x-1.5 active:scale-95"
                     >
                       <Check className="w-3.5 h-3.5" />
                       <span>Authorize & Dispatch Agreement</span>
@@ -3027,8 +3019,8 @@ export default function PactLandingAndAssistant() {
                   </div>
                 ) : (
                   <div className="pt-2 border-t border-slate-800 space-y-2">
-                    <div className="text-[11px] text-emerald-300 flex items-center space-x-1.5 font-mono">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <div className="text-[11px] text-white flex items-center space-x-1.5 font-mono">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-white shrink-0" />
                       <span>Dual-hash certified. Delivered to {userProfile?.email || heroEmail || 'registered email'}.</span>
                     </div>
                     <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-[10px]">
@@ -3044,10 +3036,10 @@ export default function PactLandingAndAssistant() {
                         )}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1.5 rounded-lg bg-[#25D366]/20 hover:bg-[#25D366]/30 border border-[#25D366]/40 text-emerald-300 flex items-center justify-center space-x-1 transition-all"
+                        className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white flex items-center justify-center space-x-1 transition-all"
                         title="Send via WhatsApp"
                       >
-                        <Share2 className="w-3 h-3 text-[#25D366]" />
+                        <Share2 className="w-3 h-3 text-white" />
                         <span>WhatsApp</span>
                       </a>
                       <a
@@ -3058,20 +3050,20 @@ export default function PactLandingAndAssistant() {
                           `BSA 2023 §63 SHA-256 Hash: ${currentHash}\n` +
                           `Authorized by: ${userProfile?.fullName || heroName || 'Trader'}`
                         )}`}
-                        className="p-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 flex items-center justify-center space-x-1 transition-all"
+                        className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white flex items-center justify-center space-x-1 transition-all"
                         title="Send via Email"
                       >
-                        <Mail className="w-3 h-3 text-indigo-400" />
+                        <Mail className="w-3 h-3 text-white" />
                         <span>Email</span>
                       </a>
                       <a
                         href={`sms:${(userProfile?.phone || heroPhone || '').replace(/\D/g, '')}?&body=${encodeURIComponent(
                           `[PACT] ${preSendConsentDoc.title} authorized. Hash: ${currentHash ? currentHash.substring(0, 12) : '7a8f4b1e9c20'}... MSMED Act §15 active.`
                         )}`}
-                        className="p-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 flex items-center justify-center space-x-1 transition-all"
+                        className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white flex items-center justify-center space-x-1 transition-all"
                         title="Send via SMS"
                       >
-                        <Smartphone className="w-3 h-3 text-blue-400" />
+                        <Smartphone className="w-3 h-3 text-white" />
                         <span>SMS</span>
                       </a>
                     </div>
@@ -3141,8 +3133,8 @@ export default function PactLandingAndAssistant() {
                   onClick={handleToggleMic}
                   className={`relative w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 shadow-md cursor-pointer ${
                     isRecording
-                      ? 'bg-gradient-to-r from-[#407ADD] to-[#10B981] text-white ring-4 ring-emerald-500/40 animate-pulse scale-105'
-                      : 'bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700/80 active:scale-95'
+                      ? 'bg-white text-black ring-4 ring-white/30 animate-pulse scale-105'
+                      : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700/80 active:scale-95'
                   }`}
                   title={
                     isRecording
@@ -3151,12 +3143,12 @@ export default function PactLandingAndAssistant() {
                   }
                 >
                   {isRecording ? (
-                    <MicOff className="w-4 h-4 animate-spin text-white" />
+                    <MicOff className="w-4 h-4 animate-spin text-black" />
                   ) : (
-                    <Mic className="w-4 h-4 text-emerald-400" />
+                    <Mic className="w-4 h-4 text-white" />
                   )}
                   {isRecording && (
-                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-white animate-ping" />
                   )}
                 </button>
 
@@ -3164,7 +3156,7 @@ export default function PactLandingAndAssistant() {
                 <button
                   type="button"
                   onClick={() => imageInputRef.current?.click()}
-                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 hover:text-sky-300 transition-all active:scale-95 cursor-pointer"
+                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all active:scale-95 cursor-pointer"
                   title="Upload WhatsApp Deal Screenshot, Invoice or Receipt Image"
                 >
                   <ImageIcon className="w-3.5 h-3.5" />
@@ -3174,7 +3166,7 @@ export default function PactLandingAndAssistant() {
                 <button
                   type="button"
                   onClick={() => docInputRef.current?.click()}
-                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 transition-all active:scale-95 cursor-pointer"
+                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all active:scale-95 cursor-pointer"
                   title="Upload Contract PDF or Document"
                 >
                   <Paperclip className="w-3.5 h-3.5" />
@@ -3203,14 +3195,14 @@ export default function PactLandingAndAssistant() {
                     }
                   }}
                   placeholder={userProfile?.fullName || heroName ? `Ask Pact or dictate terms, ${userProfile?.fullName || heroName}...` : "Ask Pact or paste a WhatsApp deal..."}
-                  className="flex-1 bg-transparent text-xs text-slate-100 placeholder-slate-500 focus:outline-none px-2 py-1 pointer-events-auto"
+                  className="flex-1 bg-transparent text-xs sm:text-sm text-white placeholder:text-slate-400 caret-white focus:outline-none px-2 py-1 pointer-events-auto font-medium"
                 />
 
                 {/* Send Button */}
                 <button
                   type="submit"
                   disabled={!inputText.trim() || isAiResponding}
-                  className="w-9 h-9 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white flex items-center justify-center shrink-0 transition-all active:scale-95 shadow-sm"
+                  className="w-9 h-9 rounded-xl bg-white hover:bg-neutral-200 disabled:opacity-40 text-black font-bold flex items-center justify-center shrink-0 transition-all active:scale-95 shadow-sm"
                   title="Send Message"
                 >
                   <Send className="w-3.5 h-3.5" />

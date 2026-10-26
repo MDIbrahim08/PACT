@@ -186,16 +186,16 @@ export function FeaturesHamburgerMenu({
                         onClose();
                         onOpenTelegram();
                       }}
-                      className="w-full p-3.5 rounded-xl bg-gradient-to-r from-sky-50 to-blue-50/60 dark:from-sky-950/30 dark:to-blue-950/20 hover:from-sky-100 hover:to-blue-100 dark:hover:from-sky-950/50 dark:hover:to-blue-950/40 border border-sky-200 dark:border-sky-800/60 transition-all flex items-center justify-between text-left group active:scale-[0.99] cursor-pointer shadow-sm"
+                      className="w-full p-3.5 rounded-xl bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-900/60 dark:hover:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 transition-all flex items-center justify-between text-left group active:scale-[0.99] cursor-pointer shadow-xs"
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="w-9 h-9 rounded-lg bg-sky-500/10 border border-sky-400/30 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
+                        <div className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100 flex items-center justify-center shrink-0">
                           <Send className="w-4 h-4" />
                         </div>
                         <div>
                           <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
                             <span>Telegram Notary Bot</span>
-                            <span className="text-[9px] bg-sky-100 dark:bg-sky-900/60 text-sky-800 dark:text-sky-300 px-1.5 py-0.2 rounded font-mono font-semibold">
+                            <span className="text-[9px] bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-200 px-1.5 py-0.2 rounded font-mono font-semibold">
                               Live Bot API
                             </span>
                           </div>
@@ -213,16 +213,16 @@ export function FeaturesHamburgerMenu({
                         onClose();
                         onOpenSamadhaan();
                       }}
-                      className="w-full p-3.5 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50/60 dark:from-amber-950/30 dark:to-orange-950/20 hover:from-amber-100 hover:to-orange-100 dark:hover:from-amber-950/50 dark:hover:to-orange-950/40 border border-amber-200 dark:border-amber-800/60 transition-all flex items-center justify-between text-left group active:scale-[0.99] cursor-pointer shadow-sm"
+                      className="w-full p-3.5 rounded-xl bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-900/60 dark:hover:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 transition-all flex items-center justify-between text-left group active:scale-[0.99] cursor-pointer shadow-xs"
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-400/30 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                        <div className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100 flex items-center justify-center shrink-0">
                           <Gavel className="w-4 h-4" />
                         </div>
                         <div>
                           <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
                             <span>MSME Samadhaan Auto-Filer</span>
-                            <span className="text-[9px] bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 px-1.5 py-0.2 rounded font-mono font-semibold">
+                            <span className="text-[9px] bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-200 px-1.5 py-0.2 rounded font-mono font-semibold">
                               MSMED Act §18
                             </span>
                           </div>

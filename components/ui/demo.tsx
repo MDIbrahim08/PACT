@@ -7,7 +7,7 @@ export function TiltCardPreview() {
   return (
     <div className="flex items-center justify-center p-6">
       <TiltCard className="w-[320px] border border-slate-700 bg-slate-900/90 text-white p-6 shadow-2xl">
-        <div className="text-xs uppercase tracking-wider text-emerald-400 font-mono">Premium 3D Physics</div>
+        <div className="text-xs uppercase tracking-wider text-white font-mono">Premium 3D Physics</div>
         <h3 className="mt-2 text-2xl font-semibold text-white">Tilt me</h3>
         <p className="mt-3 text-sm text-slate-300">Move your cursor across the card to see 3D tilt + interactive glare.</p>
       </TiltCard>
