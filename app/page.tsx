@@ -43,7 +43,8 @@ import {
   Laptop,
   Bot,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Trash2
 } from 'lucide-react';
 import { FeaturesHamburgerMenu } from '@/components/FeaturesHamburgerMenu';
 import { DeviceCompatibilityModal } from '@/components/DeviceCompatibilityModal';
@@ -66,6 +67,7 @@ import { UserConsentOnboarding, UserProfileData } from '@/components/UserConsent
 import { PwaInstallCardContent } from '@/components/PwaInstallPrompt';
 import { PrivacyPolicyModal } from '@/components/PrivacyPolicyModal';
 import { DownloadClientModal } from '@/components/DownloadClientModal';
+import { UninstallClientModal } from '@/components/UninstallClientModal';
 import { GlassFolder } from '@/components/ui/glass-folder-cards';
 import { PhysicsGoldenMascot } from '@/components/PhysicsGoldenMascot';
 import { CenteredWalkthroughVideo } from '@/components/CenteredWalkthroughVideo';
@@ -160,6 +162,7 @@ export default function PactLandingAndAssistant() {
   const [hasShownDownloadModal, setHasShownDownloadModal] = useState(false);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isCompatibilityModalOpen, setIsCompatibilityModalOpen] = useState(false);
+  const [isUninstallModalOpen, setIsUninstallModalOpen] = useState(false);
 
   // Helper to ensure installer modal only pops up ONCE automatically
   const openDownloadModalOnce = () => {
@@ -273,6 +276,14 @@ export default function PactLandingAndAssistant() {
     role: 'buyer' | 'seller' | 'trader' | 'pact';
     text: string;
     timestamp: string;
+    whatsappAction?: {
+      url: string;
+      targetName: string;
+      targetPhone: string;
+      taskType: string;
+      taskSummary: string;
+      fullText: string;
+    };
   }>>(() => [
     {
       id: 'welcome-0',
@@ -754,6 +765,21 @@ export default function PactLandingAndAssistant() {
     playElevenLabsVoice(`Dispatch formally authorized. Your Section 10 legal agreement has been stamped with dual SHA-256 and sent.`);
   };
 
+  // Complete Bot Client Uninstall & Sandbox Reset
+  const handleConfirmUninstall = () => {
+    try {
+      localStorage.removeItem('pact_bot_downloaded');
+      localStorage.removeItem('pact_download_modal_shown');
+      localStorage.removeItem('pact_client_permissions');
+    } catch {}
+    setIsBotDownloaded(false);
+    setIsUninstallModalOpen(false);
+    setIsDrawerOpen(false);
+    isDrawerOpenRef.current = false;
+    stopCurrentAudio();
+    stopGlobalAudio();
+  };
+
   // ChatGPT-Style Systematic Assistant Send Flow
   const handleSendMessage = async (e?: React.FormEvent, customPrompt?: string) => {
     if (e) e.preventDefault();
@@ -839,12 +865,32 @@ export default function PactLandingAndAssistant() {
       const replyText = data.reply || 'Understood. Deal terms logged and analyzed under Indian Contract Act Section 10.';
       const spoken = data.spokenSummary || replyText;
 
+      // Automatic WhatsApp Auto-Pilot Dispatch to Target Contact & Chat
+      if (data.autoOpenWhatsApp && data.whatsappUrl) {
+        try {
+          const waWin = window.open(data.whatsappUrl, '_blank');
+          if (!waWin || waWin.closed || typeof waWin.closed === 'undefined') {
+            window.location.href = data.whatsappUrl;
+          }
+        } catch {
+          window.location.href = data.whatsappUrl;
+        }
+      }
+
       const aiMsg = {
         id: `pact-${Date.now()}`,
         sender: 'Pact Agent',
         role: 'pact' as const,
         text: replyText,
         timestamp: data.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        whatsappAction: data.whatsappUrl ? {
+          url: data.whatsappUrl,
+          targetName: data.whatsappTargetName || 'Counterparty',
+          targetPhone: data.whatsappTargetPhone || '',
+          taskType: data.whatsappTaskType || 'Commercial Action',
+          taskSummary: data.whatsappTaskSummary || 'Legal Task',
+          fullText: data.whatsappFullText || '',
+        } : undefined,
       };
 
       setMessages((prev) => [...prev, aiMsg]);
@@ -1028,12 +1074,32 @@ export default function PactLandingAndAssistant() {
               'Understood. Deal terms logged and analyzed under Indian Contract Act Section 10.';
             const spoken = chatData.spokenSummary || replyText;
 
+            // Automatic WhatsApp Auto-Pilot Dispatch on Voice Command
+            if (chatData.autoOpenWhatsApp && chatData.whatsappUrl) {
+              try {
+                const waWin = window.open(chatData.whatsappUrl, '_blank');
+                if (!waWin || waWin.closed || typeof waWin.closed === 'undefined') {
+                  window.location.href = chatData.whatsappUrl;
+                }
+              } catch {
+                window.location.href = chatData.whatsappUrl;
+              }
+            }
+
             const pactMsg = {
               id: `pact-voice-${Date.now() + 1}`,
               sender: 'Pact Agent',
               role: 'pact' as const,
               text: replyText,
               timestamp: time,
+              whatsappAction: chatData.whatsappUrl ? {
+                url: chatData.whatsappUrl,
+                targetName: chatData.whatsappTargetName || 'Counterparty',
+                targetPhone: chatData.whatsappTargetPhone || '',
+                taskType: chatData.whatsappTaskType || 'Commercial Action',
+                taskSummary: chatData.whatsappTaskSummary || 'Legal Task',
+                fullText: chatData.whatsappFullText || '',
+              } : undefined,
             };
 
             setMessages((prev) => [...prev, pactMsg]);
@@ -2279,6 +2345,19 @@ export default function PactLandingAndAssistant() {
                 </button>
               )}
 
+              {/* Uninstall Bot Client / Reset to Web Mode Button */}
+              {isBotDownloaded && (
+                <button
+                  type="button"
+                  onClick={() => setIsUninstallModalOpen(true)}
+                  className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 border border-rose-500/30 text-xs transition-all active:scale-95 flex items-center space-x-1"
+                  title="Uninstall Bot Client / Reset to Web Mode"
+                >
+                  <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+                  <span className="hidden sm:inline text-[10px] font-mono">Uninstall</span>
+                </button>
+              )}
+
               {/* Minimize to Corner Bubble Close Button */}
               <button
                 type="button"
@@ -2334,6 +2413,87 @@ export default function PactLandingAndAssistant() {
                       <p className="whitespace-pre-wrap text-[11px] sm:text-xs">
                         {msg.text}
                       </p>
+
+                      {/* WhatsApp Auto-Pilot Executed Action Card */}
+                      {msg.whatsappAction && (
+                        <div className="mt-3 pt-3 border-t border-emerald-500/30 space-y-2.5 bg-emerald-950/20 p-3 rounded-xl border border-emerald-500/20">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                              <span className="text-[11px] font-bold text-emerald-300 font-mono flex items-center space-x-1">
+                                <span>⚡ WhatsApp Auto-Pilot Executed</span>
+                              </span>
+                            </div>
+                            <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono border border-emerald-500/30">
+                              BSA 2023 §63(4) Sealed
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-2 text-[10px] bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
+                            <div>
+                              <span className="text-slate-400 block font-mono">Target Recipient:</span>
+                              <span className="font-bold text-white block">{msg.whatsappAction.targetName}</span>
+                              <span className="text-[9px] text-slate-400 font-mono">{msg.whatsappAction.targetPhone}</span>
+                            </div>
+                            <div>
+                              <span className="text-slate-400 block font-mono">Executed Task:</span>
+                              <span className="font-bold text-emerald-400 block">{msg.whatsappAction.taskSummary}</span>
+                              <span className="text-[9px] text-slate-400 font-mono line-clamp-1">{msg.whatsappAction.taskType}</span>
+                            </div>
+                          </div>
+
+                          {/* Quick Launch & Copy Buttons */}
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            <a
+                              href={msg.whatsappAction.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex-1 min-w-[150px] p-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-black text-xs flex items-center justify-center space-x-2 transition-all active:scale-95 shadow-md shadow-[#25D366]/20 font-bold"
+                            >
+                              <Share2 className="w-4 h-4 text-black" />
+                              <span>Re-Open WhatsApp Chat ↗</span>
+                            </a>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (msg.whatsappAction?.fullText) {
+                                  navigator.clipboard.writeText(msg.whatsappAction.fullText);
+                                  setCopiedNudgeId(`wa-action-${msg.id}`);
+                                  setTimeout(() => setCopiedNudgeId(null), 2500);
+                                }
+                              }}
+                              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 flex items-center space-x-1.5 transition-all active:scale-95"
+                            >
+                              <Copy className="w-3.5 h-3.5 text-slate-400" />
+                              <span>{copiedNudgeId === `wa-action-${msg.id}` ? 'Copied Legal Text!' : 'Copy Text'}</span>
+                            </button>
+                          </div>
+
+                          {/* Quick Counterparty Switcher Pills */}
+                          <div className="pt-2 border-t border-slate-800/80">
+                            <span className="text-[9px] text-slate-400 font-mono block uppercase mb-1.5">
+                              Switch WhatsApp Recipient & Auto-Execute:
+                            </span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {[
+                                { name: 'Salman Khan', prompt: 'Open WhatsApp to Salman Khan and tell him payment is overdue under MSMED Act §15' },
+                                { name: 'Prabhanjan More', prompt: 'Open WhatsApp to Prabhanjan More and draft commercial contract for 500 Bales' },
+                                { name: 'Mohammed Ibrahim', prompt: 'Open WhatsApp to Mohammed Ibrahim and send legal demand notice' },
+                                { name: 'Rajesh Patel', prompt: 'Open WhatsApp to Rajesh Patel and demand payment recovery' },
+                              ].map((cp) => (
+                                <button
+                                  key={cp.name}
+                                  type="button"
+                                  onClick={() => handleSendMessage(undefined, cp.prompt)}
+                                  className="text-[10px] px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-emerald-500/20 hover:border-emerald-500/40 border border-slate-700 text-slate-300 hover:text-emerald-300 font-mono transition-all flex items-center space-x-1"
+                                >
+                                  <span>📱 {cp.name}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Interactive Email Thread Quick Selectors */}
                       {msg.text.includes('Connected to Email') && (
@@ -2642,6 +2802,8 @@ export default function PactLandingAndAssistant() {
           {/* Quick Prompt Suggestions */}
           <div className="px-3 pt-2 pb-1.5 bg-[#080d19] border-t border-slate-800/80 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
             {[
+              '⚡ Open WhatsApp to Salman Khan',
+              '📱 WhatsApp MSMED Notice',
               '✍️ Draft a Supply Agreement',
               '🛡️ Lock MSMED 45-Day Payment',
               '📲 Sync WhatsApp & Deal',
@@ -2863,6 +3025,8 @@ export default function PactLandingAndAssistant() {
           } catch {}
         }}
         userProfile={userProfile}
+        isDownloaded={isBotDownloaded}
+        onUninstall={() => setIsUninstallModalOpen(true)}
         onDownloadSuccess={() => {
           setIsBotDownloaded(true);
           setHasShownDownloadModal(true);
@@ -2897,6 +3061,7 @@ export default function PactLandingAndAssistant() {
         onOpenClient={handleOpenClientOrGated}
         onOpenAgent={handleOpenDrawerOrGated}
         onOpenCompatibility={() => setIsCompatibilityModalOpen(true)}
+        onUninstallBot={() => setIsUninstallModalOpen(true)}
         isBotDownloaded={isBotDownloaded}
       />
 
@@ -2904,6 +3069,13 @@ export default function PactLandingAndAssistant() {
       <DeviceCompatibilityModal
         isOpen={isCompatibilityModalOpen}
         onClose={() => setIsCompatibilityModalOpen(false)}
+      />
+
+      {/* Complete Uninstall Client & Data Reset Modal */}
+      <UninstallClientModal
+        isOpen={isUninstallModalOpen}
+        onClose={() => setIsUninstallModalOpen(false)}
+        onConfirmUninstall={handleConfirmUninstall}
       />
 
     </div>

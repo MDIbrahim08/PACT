@@ -16,7 +16,8 @@ import {
   Copy,
   Check,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Trash2
 } from 'lucide-react';
 import { UserProfileData } from '@/components/UserConsentOnboarding';
 
@@ -27,6 +28,8 @@ interface DownloadClientModalProps {
   onOpenClient: () => void;
   onDownloadSuccess?: () => void;
   onOpenCompatibility?: () => void;
+  onUninstall?: () => void;
+  isDownloaded?: boolean;
 }
 
 export const DownloadClientModal: React.FC<DownloadClientModalProps> = ({
@@ -36,6 +39,8 @@ export const DownloadClientModal: React.FC<DownloadClientModalProps> = ({
   onOpenClient,
   onDownloadSuccess,
   onOpenCompatibility,
+  onUninstall,
+  isDownloaded = false,
 }) => {
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState('Initiating cryptographic packaging...');
@@ -423,6 +428,21 @@ export const DownloadClientModal: React.FC<DownloadClientModalProps> = ({
                 >
                   <Laptop className="w-3.5 h-3.5 text-blue-400" />
                   <span>Inspect Mobile, Laptop & Tablet OS Specifications</span>
+                </button>
+              )}
+
+              {/* Uninstall / Clear Bot Client Option */}
+              {isDownloaded && onUninstall && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onUninstall();
+                  }}
+                  className="w-full py-2 text-center text-[11px] font-mono text-red-400 hover:text-red-300 transition-colors border border-red-950 hover:border-red-800 rounded-xl bg-red-950/20 hover:bg-red-950/40 flex items-center justify-center space-x-1.5 cursor-pointer mt-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                  <span>Uninstall Bot Client / Reset to Web Mode</span>
                 </button>
               )}
             </div>

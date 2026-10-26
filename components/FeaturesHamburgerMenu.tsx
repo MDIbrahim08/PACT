@@ -19,7 +19,8 @@ import {
   Sparkles,
   ChevronRight,
   Award,
-  Laptop
+  Laptop,
+  Trash2
 } from 'lucide-react';
 
 export interface FeaturesHamburgerMenuProps {
@@ -32,6 +33,7 @@ export interface FeaturesHamburgerMenuProps {
   onOpenClient: () => void;
   onOpenAgent: () => void;
   onOpenCompatibility: () => void;
+  onUninstallBot?: () => void;
   isBotDownloaded?: boolean;
 }
 
@@ -45,6 +47,7 @@ export function FeaturesHamburgerMenu({
   onOpenClient,
   onOpenAgent,
   onOpenCompatibility,
+  onUninstallBot,
   isBotDownloaded = false,
 }: FeaturesHamburgerMenuProps) {
   // Close menu on Escape key press
@@ -315,6 +318,30 @@ export function FeaturesHamburgerMenu({
                     </div>
                     <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
                   </button>
+
+                  {/* Uninstall Bot / Reset Client Button */}
+                  {onUninstallBot && (
+                    <button
+                      onClick={() => {
+                        onClose();
+                        onUninstallBot();
+                      }}
+                      className="w-full p-3.5 rounded-xl bg-red-50/70 hover:bg-red-100/80 dark:bg-red-950/20 dark:hover:bg-red-950/40 border border-red-200 dark:border-red-900/40 transition-all flex items-center justify-between text-left group active:scale-[0.99] cursor-pointer"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-9 h-9 rounded-lg bg-red-100 dark:bg-red-900/40 border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0">
+                          <Trash2 className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-red-600 dark:text-red-400">
+                            Uninstall Bot / Reset Client
+                          </div>
+                          <p className="text-[11px] text-neutral-500">Remove local client sandbox & reset to web version</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-red-400 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  )}
                 </div>
               </div>
 
