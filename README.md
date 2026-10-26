@@ -29,10 +29,10 @@
 | <img src="docs/screenshots/03-deal-extraction.png" width="100%" alt="Deal Extraction" /> | <img src="docs/screenshots/04-glass-blueprints.png" width="100%" alt="Glass Blueprints" /> |
 | *Verbatim extraction of Consideration, Quantities & Milestones* | *Interactive 3D Glass Folders for Engineering Specs & Charters* |
 
-| 📚 3D MSME Legal Bookshelf | 📱 Siri-Style Voice Call Mode |
+| 📚 3D MSME Legal Bookshelf | 💬 Live Conversational Notary |
 | :---: | :---: |
-| <img src="docs/screenshots/05-legal-bookshelf.png" width="100%" alt="Legal Bookshelf" /> | <img src="docs/screenshots/09-siri-voice-call.jpg" width="60%" alt="Siri Call Mode" /> |
-| *Hand-Bound 3D Legal Volumes for Small Business Owners* | *Hands-Free Siri/ChatGPT Calling with Animated Waveform* |
+| <img src="docs/screenshots/05-legal-bookshelf.png" width="100%" alt="Legal Bookshelf" /> | <img src="docs/screenshots/07-conversation-stream.png" width="60%" alt="Conversation Stream" /> |
+| *Hand-Bound 3D Legal Volumes for Small Business Owners* | *Court-Admissible BSA §63 Certificate & WhatsApp Automation* |
 
 | 💬 In-Drawer AI Legal Assistant | 📱 Android PWA Client on Home Screen |
 | :---: | :---: |

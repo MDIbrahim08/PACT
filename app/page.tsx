@@ -44,8 +44,7 @@ import {
   Bot,
   Maximize2,
   Minimize2,
-  Trash2,
-  PhoneCall
+  Trash2
 } from 'lucide-react';
 import { FeaturesHamburgerMenu } from '@/components/FeaturesHamburgerMenu';
 import { DeviceCompatibilityModal } from '@/components/DeviceCompatibilityModal';
@@ -70,7 +69,6 @@ import { PrivacyPolicyModal } from '@/components/PrivacyPolicyModal';
 import { DownloadClientModal } from '@/components/DownloadClientModal';
 import { UninstallClientModal } from '@/components/UninstallClientModal';
 import { AIChatCard } from '@/components/ui/ai-chat-card';
-import { SiriVoiceCallModal } from '@/components/SiriVoiceCallModal';
 import { GlassFolder } from '@/components/ui/glass-folder-cards';
 import { PhysicsGoldenMascot } from '@/components/PhysicsGoldenMascot';
 import { CenteredWalkthroughVideo } from '@/components/CenteredWalkthroughVideo';
@@ -209,56 +207,26 @@ export default function PactLandingAndAssistant() {
     isDispatched: boolean;
   } | null>(null);
 
-  // Siri-Style Voice Call Modal State
-  const [isSiriCallOpen, setIsSiriCallOpen] = useState<boolean>(false);
-  const isSiriCallOpenRef = useRef<boolean>(false);
-
   // Load user profile, bot download status & standalone PWA client detection on mount
   useEffect(() => {
     try {
-      const isCallMode = typeof window !== 'undefined' && window.location.search.includes('mode=call');
       const isStandalone = typeof window !== 'undefined' && (
         window.matchMedia('(display-mode: standalone)').matches ||
         (window.navigator as any).standalone === true ||
         document.referrer.includes('android-app://') ||
         window.location.search.includes('mode=agent') ||
-        window.location.search.includes('mode=app') ||
-        isCallMode
+        window.location.search.includes('mode=app')
       );
 
-      if (isStandalone || isCallMode) {
+      if (isStandalone) {
         setIsStandaloneApp(true);
         setIsBotDownloaded(true);
-        // Automatically launch Siri-Style Voice Call Mode when tapped from home screen icon!
-        setIsSiriCallOpen(true);
-        isSiriCallOpenRef.current = true;
+        setIsDrawerOpen(true);
         try {
           localStorage.setItem('pact_bot_downloaded', 'true');
         } catch {}
       } else if (localStorage.getItem('pact_bot_downloaded') === 'true') {
         setIsBotDownloaded(true);
-      }
-
-      if (typeof window !== 'undefined' && 'mediaSession' in navigator) {
-        try {
-          navigator.mediaSession.metadata = new MediaMetadata({
-            title: 'Pact Voice AI · Background Listening Active',
-            artist: 'Say "Hey Pact" or tap to talk',
-            album: 'Indian Legal AI Sentinel',
-            artwork: [
-              { src: '/pact-badge.png', sizes: '192x192', type: 'image/png' },
-              { src: '/pact-badge.png', sizes: '512x512', type: 'image/png' },
-            ],
-          });
-          navigator.mediaSession.setActionHandler('play', () => {
-            setIsSiriCallOpen(true);
-            isSiriCallOpenRef.current = true;
-            handleToggleMic(true);
-          });
-          navigator.mediaSession.setActionHandler('pause', () => {
-            handleToggleMic();
-          });
-        } catch {}
       }
 
       if (localStorage.getItem('pact_download_modal_shown') === 'true') {
@@ -1255,11 +1223,9 @@ export default function PactLandingAndAssistant() {
               localStorage.setItem('pact_bot_downloaded', 'true');
             } catch {}
 
-            // Open Siri-style voice call interface immediately!
-            setIsSiriCallOpen(true);
-            isSiriCallOpenRef.current = true;
-            setIsDrawerOpen(false);
-            isDrawerOpenRef.current = false;
+            // Open assistant drawer immediately
+            setIsDrawerOpen(true);
+            isDrawerOpenRef.current = true;
             stopCurrentAudio();
             stopGlobalAudio();
 
@@ -1382,39 +1348,6 @@ export default function PactLandingAndAssistant() {
     isDrawerOpenRef.current = false;
 
     // Immediately re-arm the passive Siri-style listener so calling "Hey Pact" wakes it right up
-    setTimeout(() => {
-      armPassiveListener();
-    }, 150);
-  };
-
-  // Close Siri Voice Call Cleanly
-  const handleCloseSiriCall = () => {
-    setIsSiriCallOpen(false);
-    isSiriCallOpenRef.current = false;
-    stopCurrentAudio();
-    stopGlobalAudio();
-
-    if (isRecording || isRecordingRef.current) {
-      setIsRecording(false);
-      isRecordingRef.current = false;
-      setLiveVoiceState(null);
-      setLiveVoiceMessage('');
-      if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
-      setRecordingSeconds(0);
-
-      if (micSpeechRecRef.current) {
-        try { micSpeechRecRef.current.stop(); } catch {}
-        micSpeechRecRef.current = null;
-      }
-
-      if (micMediaRecorderRef.current && micMediaRecorderRef.current.state !== 'inactive') {
-        try {
-          micMediaRecorderRef.current.stream?.getTracks().forEach((track) => track.stop());
-          micMediaRecorderRef.current.stop();
-        } catch {}
-      }
-    }
-
     setTimeout(() => {
       armPassiveListener();
     }, 150);
@@ -1572,26 +1505,14 @@ export default function PactLandingAndAssistant() {
           <div className="flex items-center space-x-2">
             <button
               onClick={() => {
-                setIsSiriCallOpen(true);
-                isSiriCallOpenRef.current = true;
-                handleToggleMic(true);
-              }}
-              className="px-2.5 py-1 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer shrink-0 shadow-sm"
-              title="Open Siri Voice Call"
-            >
-              <PhoneCall className="w-3 h-3 text-white" />
-              <span>Siri Voice Call</span>
-            </button>
-            <button
-              onClick={() => {
                 setIsDrawerOpen(true);
                 isDrawerOpenRef.current = true;
                 if (!isMobile) setIsDrawerMaximized(true);
               }}
-              className="px-2.5 py-1 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer shrink-0"
+              className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer shrink-0"
             >
               <Bot className="w-3.5 h-3.5" />
-              <span>{isMobile ? 'Workspace' : 'Full Desktop Workspace'}</span>
+              <span>{isMobile ? 'Open Workspace' : 'Full Desktop Workspace'}</span>
             </button>
             <span className="text-[10px] text-neutral-400 hidden md:inline">
               Keep window open or in taskbar for live monitoring
@@ -1611,20 +1532,6 @@ export default function PactLandingAndAssistant() {
 
           {/* Top-Right: Security & Terms, Judicial e-Stamp Paper, Download Client & Features Hamburger */}
           <div className="flex items-center space-x-2 sm:space-x-3">
-            {/* CALL PACT SIRI-STYLE VOICE BUTTON */}
-            <button
-              onClick={() => {
-                setIsSiriCallOpen(true);
-                isSiriCallOpenRef.current = true;
-                handleToggleMic(true);
-              }}
-              className="bg-gradient-to-r from-[#407ADD] to-[#10B981] hover:opacity-90 text-white rounded-full px-3 sm:px-4 py-1.5 sm:py-2 font-medium text-xs sm:text-sm transition-all shadow-md active:scale-95 flex items-center space-x-1.5 cursor-pointer shrink-0"
-              title="Call Pact - Siri Style Voice Assistant"
-            >
-              <PhoneCall className="w-3.5 h-3.5 text-white animate-pulse" />
-              <span>Call Pact</span>
-            </button>
-
             {/* Desktop-only secondary actions to avoid mobile compression */}
             <button
               onClick={() => setIsPrivacyModalOpen(true)}
@@ -2501,23 +2408,6 @@ export default function PactLandingAndAssistant() {
                 </button>
               )}
 
-              {/* Switch to Siri Voice Call Mode Button */}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsDrawerOpen(false);
-                  isDrawerOpenRef.current = false;
-                  setIsSiriCallOpen(true);
-                  isSiriCallOpenRef.current = true;
-                  handleToggleMic(true);
-                }}
-                className="p-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs transition-all active:scale-95 flex items-center space-x-1 cursor-pointer"
-                title="Switch to Full-Screen Siri Voice Call"
-              >
-                <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="hidden sm:inline text-[10px] font-mono">Siri Call</span>
-              </button>
-
               {/* Minimize to Corner Bubble Close Button */}
               <button
                 type="button"
@@ -3234,7 +3124,7 @@ export default function PactLandingAndAssistant() {
           } catch {}
           setIsDownloadModalOpen(false);
           setIsDrawerOpen(true);
-          const activeName = heroName.trim() || userProfile?.fullName || 'Prabhanjan More';
+          const activeName = heroName.trim() || userProfile?.fullName || 'Mohammed Ibrahim';
           playElevenLabsVoice(`Namaste ${activeName}! Your Pact Client is installed. How can I help you today?`);
         }}
         onOpenCompatibility={() => setIsCompatibilityModalOpen(true)}
@@ -3266,38 +3156,6 @@ export default function PactLandingAndAssistant() {
         isOpen={isUninstallModalOpen}
         onClose={() => setIsUninstallModalOpen(false)}
         onConfirmUninstall={handleConfirmUninstall}
-      />
-
-      {/* Siri-Style Full Screen Voice Call Modal */}
-      <SiriVoiceCallModal
-        isOpen={isSiriCallOpen}
-        onClose={handleCloseSiriCall}
-        isRecording={isRecording}
-        isSpeaking={liveVoiceState === 'agent-speaking'}
-        liveVoiceState={liveVoiceState}
-        liveVoiceMessage={liveVoiceMessage}
-        recordingSeconds={recordingSeconds}
-        onToggleMic={() => handleToggleMic()}
-        latestUserTranscript={
-          micTranscriptRef.current || 
-          messages.filter((m) => m.role === 'buyer').slice(-1)[0]?.text || ''
-        }
-        latestAssistantReply={
-          messages.filter((m) => m.role === 'pact').slice(-1)[0]?.text || ''
-        }
-        whatsappActionUrl={
-          messages.slice(-1)[0]?.whatsappAction?.url
-        }
-        whatsappTargetName={
-          messages.slice(-1)[0]?.whatsappAction?.targetName
-        }
-        onOpenWorkspace={() => {
-          setIsSiriCallOpen(false);
-          isSiriCallOpenRef.current = false;
-          setIsDrawerOpen(true);
-          isDrawerOpenRef.current = true;
-        }}
-        userName={userProfile?.fullName || heroName || 'Trader'}
       />
 
     </div>
