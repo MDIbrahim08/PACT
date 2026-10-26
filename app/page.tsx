@@ -325,6 +325,7 @@ export default function PactLandingAndAssistant() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
+  const audioInputRef = useRef<HTMLInputElement>(null);
   const chatBottomRef = useRef<HTMLDivElement>(null);
 
   // Real microphone recording refs
@@ -1405,6 +1406,10 @@ export default function PactLandingAndAssistant() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Ensure drawer is open on mobile & desktop so the user sees upload analysis
+    setIsDrawerOpen(true);
+    isDrawerOpenRef.current = true;
+
     // Reset input so same file can be selected again if desired
     e.target.value = '';
 
@@ -1598,6 +1603,44 @@ export default function PactLandingAndAssistant() {
     <div className="min-h-screen bg-transparent text-neutral-900 selection:bg-neutral-900 selection:text-white relative overflow-x-clip font-sans">
       {/* Whole-website light grid & soft lavender radial gradient background */}
       <BackgroundSnippets fixed={true} />
+
+      {/* Universal Hidden File Inputs (Permanently mounted in DOM so mobile touch and clicks always trigger file picker reliably) */}
+      <input
+        type="file"
+        ref={imageInputRef}
+        onChange={handleFileUpload}
+        accept="image/*"
+        className="fixed -top-[9999px] -left-[9999px] w-px h-px opacity-0 -z-50"
+        tabIndex={-1}
+        aria-hidden="true"
+      />
+      <input
+        type="file"
+        ref={docInputRef}
+        onChange={handleFileUpload}
+        accept="application/pdf,.doc,.docx,.txt,.csv,.json"
+        className="fixed -top-[9999px] -left-[9999px] w-px h-px opacity-0 -z-50"
+        tabIndex={-1}
+        aria-hidden="true"
+      />
+      <input
+        type="file"
+        ref={audioInputRef}
+        onChange={handleFileUpload}
+        accept="audio/*,.mp3,.wav,.m4a,.ogg,.opus,.aac,.webm"
+        className="fixed -top-[9999px] -left-[9999px] w-px h-px opacity-0 -z-50"
+        tabIndex={-1}
+        aria-hidden="true"
+      />
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileUpload}
+        accept="image/*,application/pdf,.doc,.docx,.txt,.csv,.json,audio/*,.ogg,.opus,.m4a,.mp3,.wav"
+        className="fixed -top-[9999px] -left-[9999px] w-px h-px opacity-0 -z-50"
+        tabIndex={-1}
+        aria-hidden="true"
+      />
 
       {/* Standalone Client Status Bar (Adapts dynamically to Mobile Phone vs Laptop/Desktop) */}
       {isStandaloneApp && (
@@ -2345,6 +2388,36 @@ export default function PactLandingAndAssistant() {
                 onAttach={() => fileInputRef.current?.click()}
                 className="min-h-[460px] border border-neutral-200 dark:border-neutral-800 shadow-2xl"
               />
+
+              {/* 1-Click File, Image & Voice Upload Quick Actions (Accessible directly on landing page) */}
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => imageInputRef.current?.click()}
+                  className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 hover:border-neutral-500 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                >
+                  <ImageIcon className="w-3.5 h-3.5" />
+                  <span>Upload Deal Screenshot / Receipt</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => docInputRef.current?.click()}
+                  className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 hover:border-neutral-500 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                >
+                  <Paperclip className="w-3.5 h-3.5" />
+                  <span>Upload Agreement PDF</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => audioInputRef.current?.click()}
+                  className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700 hover:border-neutral-500 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Upload Voice Note</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -2610,7 +2683,7 @@ export default function PactLandingAndAssistant() {
 
                   <button
                     type="button"
-                    onClick={() => fileInputRef.current?.click()}
+                    onClick={() => audioInputRef.current?.click()}
                     className="px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-600 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
                   >
                     <Upload className="w-3.5 h-3.5" />
@@ -3104,29 +3177,6 @@ export default function PactLandingAndAssistant() {
           {messages.length > 1 && (
             <div className="p-3 bg-[#080d19] border-t border-slate-800 shrink-0 relative z-20">
               <form onSubmit={(e) => handleSendMessage(e)} className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-1.5 flex items-center space-x-2 shadow-inner">
-                {/* Multi-format File Inputs */}
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  accept="image/*,application/pdf,.doc,.docx,.txt,.csv,.json,audio/*,.ogg,.opus,.m4a,.mp3,.wav"
-                  className="hidden"
-                />
-                <input
-                  type="file"
-                  ref={imageInputRef}
-                  onChange={handleFileUpload}
-                  accept="image/png,image/jpeg,image/jpg,image/webp,image/heic"
-                  className="hidden"
-                />
-                <input
-                  type="file"
-                  ref={docInputRef}
-                  onChange={handleFileUpload}
-                  accept="application/pdf,.doc,.docx,.txt,.csv,.json"
-                  className="hidden"
-                />
-
                 {/* Glowing Sequenced Voice Mic Button */}
                 <button
                   type="button"
@@ -3175,7 +3225,7 @@ export default function PactLandingAndAssistant() {
                 {/* Audio Voice Note Upload Button */}
                 <button
                   type="button"
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => audioInputRef.current?.click()}
                   className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all active:scale-95 cursor-pointer"
                   title="Upload WhatsApp Voice Note Audio (.mp3, .wav, .m4a)"
                 >
