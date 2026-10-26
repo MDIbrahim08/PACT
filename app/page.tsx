@@ -565,6 +565,83 @@ export default function PactLandingAndAssistant() {
     setIsDrawerOpen(true);
   };
 
+  // Picture-in-Picture Always-on-Top Floating Companion Window State
+  const [isPiPActive, setIsPiPActive] = useState(false);
+  const pipWindowRef = useRef<Window | null>(null);
+
+  const handleTogglePiPCompanion = async () => {
+    if (typeof window === 'undefined') return;
+    if (!('documentPictureInPicture' in window)) {
+      // If PiP is not supported (mobile or unsupported browser), minimize drawer to corner mascot
+      setIsDrawerOpen(false);
+      return;
+    }
+
+    try {
+      if (pipWindowRef.current) {
+        pipWindowRef.current.close();
+        pipWindowRef.current = null;
+        setIsPiPActive(false);
+        return;
+      }
+
+      const pipWindow = await (window as any).documentPictureInPicture.requestWindow({
+        width: 320,
+        height: 380,
+      });
+
+      pipWindowRef.current = pipWindow;
+      setIsPiPActive(true);
+
+      // Copy stylesheets to PiP companion window
+      Array.from(document.styleSheets).forEach((styleSheet) => {
+        try {
+          const cssRules = Array.from(styleSheet.cssRules)
+            .map((rule) => rule.cssText)
+            .join('');
+          const style = document.createElement('style');
+          style.textContent = cssRules;
+          pipWindow.document.head.appendChild(style);
+        } catch {
+          if (styleSheet.href) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = styleSheet.href;
+            pipWindow.document.head.appendChild(link);
+          }
+        }
+      });
+
+      pipWindow.document.body.className = 'bg-[#080d19] text-white flex flex-col items-center justify-center p-4 overflow-hidden select-none m-0';
+      pipWindow.document.body.innerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;font-family:system-ui,sans-serif;padding:12px;box-sizing:border-box;">
+          <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;border:2px solid #10B981;box-shadow:0 0 25px rgba(16,185,129,0.5);margin-bottom:12px;background:#fff;position:relative;">
+            <video src="/pact-mascot.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;transform:scale(1.1);"></video>
+          </div>
+          <div style="font-size:14px;font-weight:bold;color:#fff;margin-bottom:2px;">Pact AI Companion</div>
+          <div style="font-size:10px;font-family:monospace;color:#34D399;margin-bottom:14px;">Floating Over Screen · Say "Hey Pact"</div>
+          <button id="pip-talk-btn" style="background:linear-gradient(to right, #2563EB, #059669);color:#fff;border:none;padding:10px 20px;border-radius:24px;font-size:12px;font-weight:bold;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,0.6);display:flex;align-items:center;gap:6px;">
+            <span>🎙️ Talk to Pact</span>
+          </button>
+        </div>
+      `;
+
+      const talkBtn = pipWindow.document.getElementById('pip-talk-btn');
+      talkBtn?.addEventListener('click', () => {
+        setIsDrawerOpen(true);
+        handleToggleMic();
+      });
+
+      pipWindow.addEventListener('pagehide', () => {
+        pipWindowRef.current = null;
+        setIsPiPActive(false);
+      });
+    } catch (e) {
+      console.warn('Document PiP failed:', e);
+      setIsDrawerOpen(false);
+    }
+  };
+
   // ElevenLabs Voice Integration & Audio Controller
   const currentAudioRef = useRef<HTMLAudioElement | null>(null);
   const audioAbortControllerRef = useRef<AbortController | null>(null);
@@ -999,33 +1076,33 @@ export default function PactLandingAndAssistant() {
             const transcript = evt.results[i][0].transcript.toLowerCase();
             const isWake = 
               transcript.includes('pact') ||
-              transcript.includes('pat') ||
-              transcript.includes('pack') ||
-              transcript.includes('fact') ||
+              transcript.includes('hey pact') ||
+              transcript.includes('hello pact') ||
+              transcript.includes('hi pact') ||
+              transcript.includes('bot') ||
+              transcript.includes('pact bot') ||
               transcript.includes('agent') ||
+              transcript.includes('legal agent') ||
+              transcript.includes('pack') ||
+              transcript.includes('pat') ||
+              transcript.includes('fact') ||
               transcript.includes('halo') ||
               transcript.includes('namaste');
 
             if (isWake) {
-              console.log('[Hey Pact Wake Word Triggered ASAP]:', transcript);
+              console.log('[Hey Pact Wake Word Triggered Instantly]:', transcript);
               try {
                 recognizer.abort();
               } catch {}
 
-              if (!isBotDownloaded) {
-                // Do not auto-popup download modal on passive background ambient noise
-                console.debug('[Passive Wake Word]: Client not yet downloaded.');
-                break;
-              }
+              // Auto-unlock bot on voice wake trigger
+              setIsBotDownloaded(true);
+              setHeroAcceptedTerms(true);
+              try {
+                localStorage.setItem('pact_bot_downloaded', 'true');
+              } catch {}
 
-              playWakeChime().catch(() => {});
-
-              if (!heroAcceptedTerms && !userProfile?.acceptedTerms) {
-                setRegistrationError('Action Required: Please register and confirm the Terms & Conditions before using the Pact Agent.');
-                document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
-                break;
-              }
-
+              // Immediately open assistant drawer and trigger mic with wake chime
               setIsDrawerOpen(true);
               stopCurrentAudio();
               stopGlobalAudio();
@@ -2025,15 +2102,30 @@ export default function PactLandingAndAssistant() {
                 <span className="hidden sm:inline text-[10px] font-mono">{isDrawerMaximized ? 'Restore' : 'Expand'}</span>
               </button>
 
-              {/* Close Button */}
+              {/* Float Companion Over Screen (PiP) Button */}
+              <button
+                type="button"
+                onClick={handleTogglePiPCompanion}
+                className={`p-1.5 rounded-lg border text-xs transition-all active:scale-95 flex items-center space-x-1 ${
+                  isPiPActive
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse'
+                    : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700/60'
+                }`}
+                title="Float Mascot Over All Windows (Picture-in-Picture)"
+              >
+                <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="hidden md:inline text-[10px] font-mono">Float PiP</span>
+              </button>
+
+              {/* Minimize to Corner Bubble Close Button */}
               <button
                 type="button"
                 onClick={() => {
                   stopCurrentAudio();
                   setIsDrawerOpen(false);
                 }}
-                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-all active:scale-95"
-                title="Close Assistant"
+                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-all active:scale-95 cursor-pointer"
+                title="Minimize to Floating Corner Mascot (Say 'Hey Pact' to Wake)"
               >
                 <X className="w-4 h-4" />
               </button>
