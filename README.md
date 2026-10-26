@@ -1,4 +1,4 @@
-# Pact (पैक्ट) — From Handshake to Commercial Contract
+# Pact — From Handshake to Commercial Contract
 ### Srujana Tech Fest 2026 Official Submission | Theme: Legal Services (LS-06)
 > **Transforming informal WhatsApp chats and vernacular voice notes into legally binding, tamper-evident commercial contracts for 63+ million Indian MSMEs under the Indian Contract Act 1872 & Bharatiya Sakshya Adhiniyam 2023.**
 
