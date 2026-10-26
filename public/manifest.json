@@ -2,10 +2,10 @@
   "name": "Pact - Handshake to Commercial Contract",
   "short_name": "Pact",
   "description": "Transform WhatsApp chats & voice notes into legally valid, tamper-evident commercial agreements under Indian Contract Act 1872 & BSA 2023.",
-  "start_url": "/",
+  "start_url": "/?mode=call",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#020617",
+  "theme_color": "#020617",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -23,6 +23,13 @@
   ],
   "categories": ["business", "finance", "productivity", "utilities"],
   "shortcuts": [
+    {
+      "name": "Call Pact Voice AI",
+      "short_name": "Call Pact",
+      "description": "Instant hands-free Siri-style legal assistant voice call",
+      "url": "/?mode=call",
+      "icons": [{ "src": "/pact-badge.png", "sizes": "192x192" }]
+    },
     {
       "name": "New Contract Scan",
       "short_name": "Scan Chat",
