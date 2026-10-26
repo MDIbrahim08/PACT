@@ -72,6 +72,8 @@ import { AIChatCard } from '@/components/ui/ai-chat-card';
 import { GlassFolder } from '@/components/ui/glass-folder-cards';
 import { PhysicsGoldenMascot } from '@/components/PhysicsGoldenMascot';
 import { CenteredWalkthroughVideo } from '@/components/CenteredWalkthroughVideo';
+import { TelegramAutomationModal } from '@/components/TelegramAutomationModal';
+import { MsmeSamadhaanModal } from '@/components/MsmeSamadhaanModal';
 import dynamic from 'next/dynamic';
 import { 
   MSME_BUSINESS_BOOKS, 
@@ -164,6 +166,8 @@ export default function PactLandingAndAssistant() {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isCompatibilityModalOpen, setIsCompatibilityModalOpen] = useState(false);
   const [isUninstallModalOpen, setIsUninstallModalOpen] = useState(false);
+  const [isTelegramModalOpen, setIsTelegramModalOpen] = useState(false);
+  const [isSamadhaanModalOpen, setIsSamadhaanModalOpen] = useState(false);
 
   // Helper to ensure installer modal only pops up ONCE automatically
   const openDownloadModalOnce = () => {
@@ -1548,10 +1552,30 @@ export default function PactLandingAndAssistant() {
 
           {/* Top-Right: Security & Terms, Judicial e-Stamp Paper, Download Client & Features Hamburger */}
           <div className="flex items-center space-x-2 sm:space-x-3">
+            {/* Telegram Commercial Notary Bot */}
+            <button
+              onClick={() => setIsTelegramModalOpen(true)}
+              className="hidden lg:flex px-3.5 py-1.5 rounded-full bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
+              title="Autonomous Telegram Commercial Notary Bot (@PactCommercialBot)"
+            >
+              <Send className="w-3.5 h-3.5 text-sky-600" />
+              <span>Telegram Bot</span>
+            </button>
+
+            {/* MSME Samadhaan Statutory Recovery Auto-Filer */}
+            <button
+              onClick={() => setIsSamadhaanModalOpen(true)}
+              className="hidden md:flex px-3.5 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
+              title="1-Click MSME Samadhaan Recovery Auto-Filer (MSEFC Form 1)"
+            >
+              <Gavel className="w-3.5 h-3.5 text-amber-600" />
+              <span>MSME Samadhaan</span>
+            </button>
+
             {/* Desktop-only secondary actions to avoid mobile compression */}
             <button
               onClick={() => setIsPrivacyModalOpen(true)}
-              className="hidden lg:flex px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
+              className="hidden xl:flex px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
               title="Inspect Zero-Storage Security Measures & DPDP Act 2023 Terms"
             >
               <Shield className="w-3.5 h-3.5 text-emerald-600" />
@@ -1560,7 +1584,7 @@ export default function PactLandingAndAssistant() {
 
             <button
               onClick={() => setIsPrintModalOpen(true)}
-              className="hidden md:flex px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
+              className="hidden xl:flex px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
               title="View Judicial e-Stamp Paper"
             >
               <Award className="w-3.5 h-3.5 text-neutral-800" />
@@ -1809,6 +1833,29 @@ export default function PactLandingAndAssistant() {
               className="text-neutral-900 font-medium underline hover:text-black transition-colors"
             >
               Security Terms ↗
+            </button>
+          </div>
+
+          {/* Live Judge Demo Quick-Actions Pills */}
+          <div className="pt-3 flex flex-wrap items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsTelegramModalOpen(true)}
+              className="px-3 py-1.5 rounded-full bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+            >
+              <Send className="w-3.5 h-3.5 text-sky-600" />
+              <span>Telegram Bot Sentinel</span>
+              <span className="text-[9px] font-mono bg-sky-200/70 text-sky-900 px-1.5 py-0.2 rounded font-bold">LIVE API</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsSamadhaanModalOpen(true)}
+              className="px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+            >
+              <Gavel className="w-3.5 h-3.5 text-amber-700" />
+              <span>MSME Samadhaan Auto-Filer</span>
+              <span className="text-[9px] font-mono bg-amber-200/70 text-amber-900 px-1.5 py-0.2 rounded font-bold">§18 PETITION</span>
             </button>
           </div>
         </form>
@@ -3155,6 +3202,8 @@ export default function PactLandingAndAssistant() {
         onOpenClient={handleOpenClientOrGated}
         onOpenAgent={handleOpenDrawerOrGated}
         onOpenCompatibility={() => setIsCompatibilityModalOpen(true)}
+        onOpenTelegram={() => setIsTelegramModalOpen(true)}
+        onOpenSamadhaan={() => setIsSamadhaanModalOpen(true)}
         onUninstallBot={() => setIsUninstallModalOpen(true)}
         isBotDownloaded={isBotDownloaded}
       />
@@ -3170,6 +3219,26 @@ export default function PactLandingAndAssistant() {
         isOpen={isUninstallModalOpen}
         onClose={() => setIsUninstallModalOpen(false)}
         onConfirmUninstall={handleConfirmUninstall}
+      />
+
+      {/* Autonomous Telegram Commercial Notary Bot Simulator & Webhook Portal */}
+      <TelegramAutomationModal
+        isOpen={isTelegramModalOpen}
+        onClose={() => setIsTelegramModalOpen(false)}
+        onViewStamp={() => setIsPrintModalOpen(true)}
+      />
+
+      {/* MSME Samadhaan Statutory Recovery Auto-Filer (MSEFC Form 1 Petition) */}
+      <MsmeSamadhaanModal
+        isOpen={isSamadhaanModalOpen}
+        onClose={() => setIsSamadhaanModalOpen(false)}
+        claimantName={userProfile?.fullName || heroName || 'Prabhanjan More (Agentics MSME)'}
+        claimantPhone={userProfile?.phone || heroPhone || '+91 98765 43210'}
+        claimantEmail={userProfile?.email || heroEmail || 'contact@agentics.legal'}
+        respondentName={activeScenario?.title || 'Vardhman Textiles / Buyer Enterprises'}
+        principalAmount={245000}
+        dealHash={currentHash || 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}
+        certificateId={certificateId || 'BSA-63-2024-IN01'}
       />
 
     </div>

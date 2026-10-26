@@ -33,6 +33,8 @@ export interface FeaturesHamburgerMenuProps {
   onOpenClient: () => void;
   onOpenAgent: () => void;
   onOpenCompatibility: () => void;
+  onOpenTelegram?: () => void;
+  onOpenSamadhaan?: () => void;
   onUninstallBot?: () => void;
   isBotDownloaded?: boolean;
 }
@@ -47,6 +49,8 @@ export function FeaturesHamburgerMenu({
   onOpenClient,
   onOpenAgent,
   onOpenCompatibility,
+  onOpenTelegram,
+  onOpenSamadhaan,
   onUninstallBot,
   isBotDownloaded = false,
 }: FeaturesHamburgerMenuProps) {
@@ -174,6 +178,60 @@ export function FeaturesHamburgerMenu({
                     </div>
                     <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
                   </button>
+
+                  {/* Telegram Commercial Notary Bot */}
+                  {onOpenTelegram && (
+                    <button
+                      onClick={() => {
+                        onClose();
+                        onOpenTelegram();
+                      }}
+                      className="w-full p-3.5 rounded-xl bg-gradient-to-r from-sky-50 to-blue-50/60 dark:from-sky-950/30 dark:to-blue-950/20 hover:from-sky-100 hover:to-blue-100 dark:hover:from-sky-950/50 dark:hover:to-blue-950/40 border border-sky-200 dark:border-sky-800/60 transition-all flex items-center justify-between text-left group active:scale-[0.99] cursor-pointer shadow-sm"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-9 h-9 rounded-lg bg-sky-500/10 border border-sky-400/30 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
+                          <Send className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
+                            <span>Telegram Notary Bot</span>
+                            <span className="text-[9px] bg-sky-100 dark:bg-sky-900/60 text-sky-800 dark:text-sky-300 px-1.5 py-0.2 rounded font-mono font-semibold">
+                              Live Bot API
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-neutral-500">Autonomous deal sealing & counterparty dispatch via @PactCommercialBot</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  )}
+
+                  {/* MSME Samadhaan Statutory Recovery Auto-Filer */}
+                  {onOpenSamadhaan && (
+                    <button
+                      onClick={() => {
+                        onClose();
+                        onOpenSamadhaan();
+                      }}
+                      className="w-full p-3.5 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50/60 dark:from-amber-950/30 dark:to-orange-950/20 hover:from-amber-100 hover:to-orange-100 dark:hover:from-amber-950/50 dark:hover:to-orange-950/40 border border-amber-200 dark:border-amber-800/60 transition-all flex items-center justify-between text-left group active:scale-[0.99] cursor-pointer shadow-sm"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-400/30 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                          <Gavel className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
+                            <span>MSME Samadhaan Auto-Filer</span>
+                            <span className="text-[9px] bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 px-1.5 py-0.2 rounded font-mono font-semibold">
+                              MSMED Act §18
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-neutral-500">MSEFC Form 1 petition & 3x RBI compound interest recovery engine</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  )}
 
                   {/* Download Standalone Client */}
                   <button
