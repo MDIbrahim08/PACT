@@ -122,9 +122,9 @@ Project PACT delivers an automated commercial notary that functions without chan
 
 ---
 
-## 5. System Workflow and Functional Architecture
+## 5. System Workflow and Multi-Agent Architecture
 
-The functional architecture executes through seven sequential phases:
+The functional workflow is orchestrated by a coordinated Multi-Agent Architecture executing through seven sequential phases across eight autonomous agents:
 1. *Input Capture:* The merchant speaks a brief voice note or enters conversation transcripts into the interface.
 2. *Semantic Parsing:* Natural language models extract key deal entities: buyer, seller, items, quantity, rate, delivery date, and payment terms.
 3. *Statutory Validation:* The extracted fields are checked against deterministic rules for Section 10 and Section 29 compliance.
@@ -237,13 +237,15 @@ Project PACT maintains a strict boundary between artificial intelligence and leg
 
 ---
 
-## 15. Conclusion and Team Contributions
+## 15. Conclusion and Team Concord (Roles, Collaboration & Contributions)
 
-Project PACT demonstrates that commercial legal protection can be delivered without complex legal language or administrative overhead. By combining speech processing with deterministic statutory auditing and modern cryptography, PACT provides Indian MSMEs with a practical shield against payment delays and commercial disputes.
+Project PACT demonstrates that commercial legal protection can be delivered without complex legal language or administrative overhead. By combining speech processing with deterministic statutory auditing and modern cryptography, PACT provides India's sixty-three million MSMEs with an invisible, socially harmonious shield against payment default and contractual uncertainty.
 
-### Team Agentics Roles and Responsibilities
-- *Mohammed Ibrahim (Team Lead & Full-Stack Architect):* Overall architecture, deterministic statutory engine implementation, cryptographic evidence sealing, WhatsApp auto-pilot routing, and legal research.
-- *Prabhanjan More (Co-Developer & Systems Engineer):* Multilingual speech-to-text pipeline integration, legal reference library structuring, progressive web app configuration, cross-platform client validation, and end-to-end test execution.
+### Team Concord: Team Agentics Roles & Contributions
+| Team Member | Role & Specialization | Core Hackathon Contributions & Concordance |
+|---|---|---|
+| *Mohammed Ibrahim* | Team Lead & Full-Stack Architect | System conceptualization, software architecture, implementation of deterministic statutory verification engine (ICA §10/§29), SHA-256 evidence sealing pipeline (BSA §63(4)), and WhatsApp auto-pilot routing. |
+| *Prabhanjan More* | Co-Developer & Systems Engineer | Integration of multilingual speech-to-text pipelines (Sarvam AI / ElevenLabs), MSME legal reference library structuring, progressive web application configuration, cross-platform client validation, and execution of comprehensive test scenarios. |
 
 ### Statutory References
 1. The Indian Contract Act, 1872 (Act No. 9 of 1872) — Sections 10 and 29.
