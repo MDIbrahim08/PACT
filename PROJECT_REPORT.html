@@ -185,6 +185,67 @@
     <strong>PACT</strong> is an invisible, neutral AI notary and commercial assistant. Ingesting informal voice notes or chats, PACT validates the 5 statutory pillars under Section 10 of the Indian Contract Act 1872, eliminates ambiguities that void agreements under Section 29, incorporates MSMED Act 2006 statutory 45-day payment limits, mints court-admissible electronic evidence certificates sealed with SHA-256 digests under BSA 2023 §63(4), and auto-launches WhatsApp with stamped notices pre-filled.
   </p>
 
+  <!-- Official Rubric Alignment -->
+  <h2>🏛️ Srujana 2026 Official Evaluation Rubric Matrix (100 Points)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Evaluation Criterion</th>
+        <th>Weight</th>
+        <th>What Judges Look For</th>
+        <th>How PACT Scores Maximum Marks (Production Reality)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. Problem Statement</strong></td>
+        <td><strong>15%</strong></td>
+        <td>Alignment with selected problem, clarity, depth of understanding, intended users, assumptions, and constraints.</td>
+        <td>Directly targets the ₹10.7 Lakh Crore MSME delayed payment crisis; addresses the "Trust Paradox" & Section 63(4) BSA screenshot inadmissibility across 63M+ merchants.</td>
+      </tr>
+      <tr>
+        <td><strong>2. Tech Strategy</strong></td>
+        <td><strong>20%</strong></td>
+        <td>Architecture, tool selection, data design, technical planning, and whether choices fit the problem.</td>
+        <td>4-Tier Dual-Node Architecture (Client WebCrypto + Server HMAC-SHA256), timing-safe equal verification (<code>crypto.timingSafeEqual</code>), zero-storage privacy guarantee, and low-latency Edge API gateway.</td>
+      </tr>
+      <tr>
+        <td><strong>3. Implementation</strong></td>
+        <td><strong>25%</strong></td>
+        <td>Execution quality, working prototype, code logic, functional completeness, reliability, and testing.</td>
+        <td>Production Next.js 14 + React 18 codebase; 100% deterministic Section 10/29 statutory logic; Sarvam AI STT & ElevenLabs TTS; WhatsApp Auto-Pilot deep-linking; live Judge Tamper Sandbox.</td>
+      </tr>
+      <tr>
+        <td><strong>4. Presentation</strong></td>
+        <td><strong>20%</strong></td>
+        <td>Communication, storytelling, demo quality, and ability to answer questions and explain decisions.</td>
+        <td>High-fidelity UI with <code>AIChatCard</code> typewriter composer, 3D Three.js MSME legal library, clear visual walkthrough, and structured live jury defense script.</td>
+      </tr>
+      <tr>
+        <td><strong>5. Viability & Impact</strong></td>
+        <td><strong>20%</strong></td>
+        <td>Real-world usefulness, market/business value, scalability, risk management, and practical feasibility.</td>
+        <td>Solves real pain without requiring counterparties to download new apps; operates on standard WhatsApp; scales on serverless infrastructure with O(1) verification complexity.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Think Beyond the Obvious -->
+  <h2>💡 "Think Beyond the Obvious" — Answering the 4 Core Jury Questions</h2>
+  <ul>
+    <li><strong>1. What makes this useful to a real user?</strong> Traditional legal apps force MSMEs to draft 10-page contracts that buyers refuse to sign. PACT works <em>inside WhatsApp</em> without breaking trust. The "Blame-the-Bot" social nudge allows a supplier to clarify delivery dates and payment terms politely: <em>"Bhaiya, our Pact accounting bot requires an exact delivery date to generate our GST e-stamp certificate."</em></li>
+    <li><strong>2. What difficult cases have we considered?</strong>
+      <ul>
+        <li><em>Adversarial Screenshot Forgery:</em> Single-digit modifications (e.g. ₹16,00,000 &rarr; ₹10,00,000) are caught by SHA-256 avalanche effect and flagged as <code>TAMPER DETECTED</code>.</li>
+        <li><em>Section 29 Void Uncertainty:</em> Vague terms like <em>"payment delivery ke baad dekh lenge"</em> are flagged before goods leave the warehouse.</li>
+        <li><em>MSMED Act §15 Statutory Cap:</em> Prohibits credit terms exceeding 45 days, automatically calculating 3x RBI compound interest under Section 16.</li>
+        <li><em>Zero-Connectivity Godowns:</em> Operates offline via PWA caching and client-side <code>window.crypto.subtle</code>.</li>
+      </ul>
+    </li>
+    <li><strong>3. What does our approach do differently than a generic chatbot wrapper?</strong> Generic chatbots hallucinate non-existent case laws and produce unverified prose. PACT uses LLMs <em>only for semantic parsing</em>, while all legal enforceability checks, statutory interest rates, and BSA 2023 certificates are calculated by a <strong>100% deterministic algorithmic rule engine</strong>.</li>
+    <li><strong>4. Can we demonstrate that it works live?</strong> Yes! Live voice recording, live WhatsApp Auto-Pilot launch to real phone numbers, live e-Stamp paper rendering, and the interactive Judge Tamper Sandbox demonstrate 100% working code with zero slides.</li>
+  </ul>
+
   <!-- 2. Problem Understanding -->
   <h2>2. Problem Understanding</h2>
   <p>
