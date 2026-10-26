@@ -44,7 +44,9 @@ import {
   Bot,
   Maximize2,
   Minimize2,
-  Trash2
+  Trash2,
+  Image as ImageIcon,
+  Paperclip
 } from 'lucide-react';
 import { FeaturesHamburgerMenu } from '@/components/FeaturesHamburgerMenu';
 import { DeviceCompatibilityModal } from '@/components/DeviceCompatibilityModal';
@@ -281,6 +283,12 @@ export default function PactLandingAndAssistant() {
     role: 'buyer' | 'seller' | 'trader' | 'pact';
     text: string;
     timestamp: string;
+    fileAttachment?: {
+      name: string;
+      size: string;
+      type: 'image' | 'pdf' | 'document' | 'audio';
+      previewUrl?: string;
+    };
     whatsappAction?: {
       url: string;
       targetName: string;
@@ -315,6 +323,8 @@ export default function PactLandingAndAssistant() {
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const docInputRef = useRef<HTMLInputElement>(null);
   const chatBottomRef = useRef<HTMLDivElement>(null);
 
   // Real microphone recording refs
@@ -1390,34 +1400,111 @@ export default function PactLandingAndAssistant() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isDrawerOpen]);
 
-  // Real Audio File Upload: Sends actual audio blob to /api/transcribe
+  // Comprehensive Multimodal File & Image Upload: Sends file to /api/upload
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Reset input so same file can be selected again if desired
+    e.target.value = '';
+
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const isImg = file.type.startsWith('image/') || /\.(png|jpe?g|webp|gif|bmp|heic)$/i.test(file.name);
+    const isAudio = file.type.startsWith('audio/') || /\.(mp3|wav|m4a|ogg|opus)$/i.test(file.name);
+    const previewUrl = isImg ? URL.createObjectURL(file) : undefined;
+    const sizeDisplay = file.size > 1024 * 1024 
+      ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
+      : `${Math.round(file.size / 1024)} KB`;
+
+    // 1. Immediately display user upload in chat
+    const userMsgId = `upload-${Date.now()}`;
+    const userUploadMsg = {
+      id: userMsgId,
+      sender: `${userProfile?.fullName || heroName || 'Trader'} (You)`,
+      role: 'buyer' as const,
+      text: isImg 
+        ? `📸 Uploaded image: ${file.name}` 
+        : isAudio 
+        ? `🎙️ Uploaded voice note: ${file.name}` 
+        : `📄 Uploaded file: ${file.name}`,
+      timestamp: time,
+      fileAttachment: {
+        name: file.name,
+        size: sizeDisplay,
+        type: isImg ? ('image' as const) : isAudio ? ('audio' as const) : ('document' as const),
+        previewUrl,
+      },
+    };
+
+    setMessages((prev) => [...prev, userUploadMsg]);
+    setIsAiResponding(true);
+    setLiveVoiceState('processing');
+    setLiveVoiceMessage(isImg ? '🔍 Gemini Vision OCR analyzing screenshot...' : '⚡ Inspecting document & extracting terms...');
+
     try {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('userName', userProfile?.fullName || heroName || 'Trader');
+      formData.append('prompt', inputText.trim() || 'Extract Section 10 terms and check MSMED 45-day payment cap');
 
-      const res = await fetch('/api/transcribe', {
+      const res = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
 
       const data = await res.json();
-      const liveText = data.transcript || `[Audio file uploaded: ${file.name}]`;
-      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const newMsg = {
-        id: `file-${Date.now()}`,
-        sender: 'Trader (Audio File)',
-        role: 'buyer' as const,
-        text: liveText,
-        timestamp: time,
+      setIsAiResponding(false);
+
+      if (data.success) {
+        const assistantMsg = {
+          id: `pact-upload-reply-${Date.now()}`,
+          sender: 'Pact Legal Notary',
+          role: 'pact' as const,
+          text: data.aiExplanation || 'Terms extracted and verified under Indian Contract Act §10.',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        };
+
+        setMessages((prev) => [...prev, assistantMsg]);
+
+        if (data.serverHash) {
+          setCurrentHash(data.serverHash);
+        }
+        if (data.certificateId) {
+          setCertificateId(data.certificateId);
+        }
+        if (data.extractedText) {
+          setCurrentChatText((prev) => 
+            prev ? `${prev}\n\n[Ingested ${file.name}]:\n${data.extractedText}` : data.extractedText
+          );
+        }
+
+        // Play energetic voiceover
+        if (data.spokenSummary) {
+          playElevenLabsVoice(data.spokenSummary);
+        }
+      } else {
+        const errMsg = {
+          id: `err-${Date.now()}`,
+          sender: 'Pact AI Assistant',
+          role: 'pact' as const,
+          text: `⚠️ Could not parse file: ${data.error || 'Unknown format'}. Please ensure the file contains legible commercial terms.`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        };
+        setMessages((prev) => [...prev, errMsg]);
+        setLiveVoiceState(null);
+      }
+    } catch (err: any) {
+      console.error('File upload error:', err);
+      setIsAiResponding(false);
+      setLiveVoiceState(null);
+      const errMsg = {
+        id: `err-${Date.now()}`,
+        sender: 'Pact AI Assistant',
+        role: 'pact' as const,
+        text: `⚠️ Upload error: ${err.message || 'Network error'}. Please try again.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
-      setMessages((prev) => [...prev, newMsg]);
-      setCurrentChatText((prev) => `${prev}\n\n[${time} Audio Ingested: ${file.name}]: "${liveText}"`);
-    } catch (err) {
-      console.error('File transcription error:', err);
+      setMessages((prev) => [...prev, errMsg]);
     }
   };
 
@@ -2508,6 +2595,36 @@ export default function PactLandingAndAssistant() {
                   isRecording={isRecording}
                   className="bg-slate-900/95 border border-slate-800/90 text-white shadow-2xl max-w-full"
                 />
+
+                {/* 1-Click File, Image & Voice Upload Quick Actions */}
+                <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => imageInputRef.current?.click()}
+                    className="px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-sky-400 border border-slate-800 hover:border-sky-500/40 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                  >
+                    <ImageIcon className="w-3.5 h-3.5" />
+                    <span>Upload Deal Screenshot / Receipt</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => docInputRef.current?.click()}
+                    className="px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-amber-400 border border-slate-800 hover:border-amber-500/40 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                  >
+                    <Paperclip className="w-3.5 h-3.5" />
+                    <span>Upload Agreement PDF</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-600 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Upload Voice Note</span>
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="space-y-3 pt-1">
@@ -2547,6 +2664,36 @@ export default function PactLandingAndAssistant() {
                           )}
                         </div>
                       </div>
+
+                      {/* Attached File / Image Display */}
+                      {msg.fileAttachment && (
+                        <div className="mb-2.5 rounded-xl overflow-hidden border border-slate-700/80 bg-slate-950/60 p-2 text-left">
+                          {msg.fileAttachment.type === 'image' && msg.fileAttachment.previewUrl ? (
+                            <div className="space-y-1.5">
+                              <img
+                                src={msg.fileAttachment.previewUrl}
+                                alt={msg.fileAttachment.name}
+                                className="max-h-60 rounded-lg object-contain bg-black/50 w-full border border-slate-800"
+                              />
+                              <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono pt-0.5 px-0.5">
+                                <span className="truncate max-w-[200px] font-medium text-slate-300">📸 {msg.fileAttachment.name}</span>
+                                <span className="bg-slate-800/80 px-1.5 py-0.5 rounded text-[9px]">{msg.fileAttachment.size}</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex items-center space-x-2.5 p-1">
+                              <div className="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-400/30 text-blue-400 flex items-center justify-center shrink-0">
+                                <FileText className="w-4 h-4" />
+                              </div>
+                              <div className="overflow-hidden flex-1">
+                                <div className="font-semibold truncate text-[11px] text-slate-100">{msg.fileAttachment.name}</div>
+                                <div className="text-[10px] text-slate-400 font-mono">{msg.fileAttachment.size} · Document Attached</div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
                       <p className="whitespace-pre-wrap text-[11px] sm:text-xs">
                         {msg.text}
                       </p>
@@ -2965,11 +3112,26 @@ export default function PactLandingAndAssistant() {
           {messages.length > 1 && (
             <div className="p-3 bg-[#080d19] border-t border-slate-800 shrink-0 relative z-20">
               <form onSubmit={(e) => handleSendMessage(e)} className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-1.5 flex items-center space-x-2 shadow-inner">
+                {/* Multi-format File Inputs */}
                 <input
                   type="file"
                   ref={fileInputRef}
                   onChange={handleFileUpload}
-                  accept="audio/*,.ogg,.opus,.m4a,.mp3,.wav"
+                  accept="image/*,application/pdf,.doc,.docx,.txt,.csv,.json,audio/*,.ogg,.opus,.m4a,.mp3,.wav"
+                  className="hidden"
+                />
+                <input
+                  type="file"
+                  ref={imageInputRef}
+                  onChange={handleFileUpload}
+                  accept="image/png,image/jpeg,image/jpg,image/webp,image/heic"
+                  className="hidden"
+                />
+                <input
+                  type="file"
+                  ref={docInputRef}
+                  onChange={handleFileUpload}
+                  accept="application/pdf,.doc,.docx,.txt,.csv,.json"
                   className="hidden"
                 />
 
@@ -2998,12 +3160,32 @@ export default function PactLandingAndAssistant() {
                   )}
                 </button>
 
-                {/* Audio File Upload Button */}
+                {/* Upload Image / Screenshot Button */}
+                <button
+                  type="button"
+                  onClick={() => imageInputRef.current?.click()}
+                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 hover:text-sky-300 transition-all active:scale-95 cursor-pointer"
+                  title="Upload WhatsApp Deal Screenshot, Invoice or Receipt Image"
+                >
+                  <ImageIcon className="w-3.5 h-3.5" />
+                </button>
+
+                {/* Upload Document / PDF / Contract Button */}
+                <button
+                  type="button"
+                  onClick={() => docInputRef.current?.click()}
+                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 transition-all active:scale-95 cursor-pointer"
+                  title="Upload Contract PDF or Document"
+                >
+                  <Paperclip className="w-3.5 h-3.5" />
+                </button>
+
+                {/* Audio Voice Note Upload Button */}
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all active:scale-95"
-                  title="Upload WhatsApp Voice Note (.mp3, .wav, .m4a)"
+                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all active:scale-95 cursor-pointer"
+                  title="Upload WhatsApp Voice Note Audio (.mp3, .wav, .m4a)"
                 >
                   <Upload className="w-3.5 h-3.5" />
                 </button>

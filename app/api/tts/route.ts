@@ -24,18 +24,18 @@ export async function POST(req: NextRequest) {
     const elevenKey = process.env.ELEVENLABS_API_KEY || '';
 
     // ============================================================
-    // ENGINE 1: ELEVENLABS API (Primary Foreign Young Lady Voice - Rachel)
+    // ENGINE 1: ELEVENLABS API (Primary Energetic Professional Female Voice - Sarah)
     // ============================================================
     if (elevenKey) {
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 7000);
 
-        // Rachel (21m00Tcm4TlvDq8ikWAM) - Articulate, warm, natural foreign young American lady voice (Siri quality)
-        // Alternative: Sarah (EXAVITQu4vr4xnSDxMaL) or Charlotte (XB0fDUnXU5powFXDhCwa)
+        // Sarah (EXAVITQu4vr4xnSDxMaL) - Upbeat, articulate, energetic professional female voice
+        // Alternative: Rachel (21m00Tcm4TlvDq8ikWAM)
         const voiceId = speaker === 'male' 
           ? 'pNInz6obpgDQGcFmaJgB' 
-          : (speaker === 'sarah' ? 'EXAVITQu4vr4xnSDxMaL' : '21m00Tcm4TlvDq8ikWAM');
+          : (speaker === 'rachel' ? '21m00Tcm4TlvDq8ikWAM' : 'EXAVITQu4vr4xnSDxMaL');
         const elevenUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`;
 
         const elevenRes = await fetch(elevenUrl, {
@@ -49,9 +49,9 @@ export async function POST(req: NextRequest) {
             text: cleanText,
             model_id: 'eleven_turbo_v2_5', // Ultra-low latency (<200ms real-time audio)
             voice_settings: {
-              stability: 0.50,          // Natural, articulate young lady cadence
-              similarity_boost: 0.85,   // Crystal vocal fidelity
-              style: 0.20,              // Friendly, intelligent foreign assistant tone
+              stability: 0.35,          // Expressive, non-monotone cadence
+              similarity_boost: 0.88,   // High clarity and vocal fidelity
+              style: 0.45,              // Confident, energetic professional assistant tone
               use_speaker_boost: true,
             },
           }),
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
               'Content-Type': 'audio/mpeg',
               'Content-Length': audioArrayBuffer.byteLength.toString(),
               'x-engine': 'elevenlabs',
-              'x-voice': 'rachel-young-lady',
+              'x-voice': 'sarah-energetic-female',
               'Cache-Control': 'public, max-age=3600',
             },
           });
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
         const timeout = setTimeout(() => controller.abort(), 6000);
 
         const targetLang = language.includes('hi') ? 'hi-IN' : 'en-IN';
-        const targetSpeaker = speaker === 'male' || speaker === 'rohan' ? 'rohan' : (speaker || 'kavya');
+        const targetSpeaker = speaker === 'male' || speaker === 'rohan' ? 'rohan' : (speaker || 'meera');
 
         const sarvamRes = await fetch('https://api.sarvam.ai/text-to-speech', {
           method: 'POST',
@@ -102,9 +102,9 @@ export async function POST(req: NextRequest) {
             inputs: [cleanText],
             target_language_code: targetLang,
             speaker: targetSpeaker,
-            pitch: 0.0,  // Natural smooth pitch
-            pace: 1.02,  // Conversational tempo
-            loudness: 1.15,
+            pitch: 0.2,   // Slightly higher, upbeat, bright tone
+            pace: 1.18,   // Crisp, energetic professional tempo (no boring dragging)
+            loudness: 1.25,
             speech_sample_rate: 16000,
             enable_preprocessing: true,
             model: 'bulbul:v3',

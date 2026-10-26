@@ -109,9 +109,9 @@ function speakWithBrowserSpeech(
         utterance.voice = foreignYoungLadyVoice;
       }
 
-      // Natural, crisp foreign young lady cadence (smooth 1.0 pitch, clear conversational rate)
-      utterance.pitch = 1.0;
-      utterance.rate = 1.02;
+      // Energetic, crisp, professional female cadence (bright 1.06 pitch, snappy 1.15 conversational rate)
+      utterance.pitch = 1.06;
+      utterance.rate = 1.15;
 
       utterance.onstart = () => {
         options?.onStart?.();
@@ -194,8 +194,8 @@ export async function speakText(
         const audioBlob = await res.blob();
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
-        // Perkier, cheerful tempo matching the cute mascot
-        audio.playbackRate = 1.05;
+        // Snappy, energetic professional female tempo
+        audio.playbackRate = 1.12;
         activeAudio = audio;
 
         return new Promise<SpeakResult>((resolve) => {
