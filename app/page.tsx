@@ -74,7 +74,8 @@ import { AIChatCard } from '@/components/ui/ai-chat-card';
 import { GlassFolder } from '@/components/ui/glass-folder-cards';
 import { PhysicsGoldenMascot } from '@/components/PhysicsGoldenMascot';
 import { CenteredWalkthroughVideo } from '@/components/CenteredWalkthroughVideo';
-import { TelegramAutomationModal } from '@/components/TelegramAutomationModal';
+import { EnterpriseSecurityModal } from '@/components/EnterpriseSecurityModal';
+import { TwoFactorAuthModal } from '@/components/TwoFactorAuthModal';
 import { MsmeSamadhaanModal } from '@/components/MsmeSamadhaanModal';
 import dynamic from 'next/dynamic';
 import { 
@@ -168,7 +169,10 @@ export default function PactLandingAndAssistant() {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isCompatibilityModalOpen, setIsCompatibilityModalOpen] = useState(false);
   const [isUninstallModalOpen, setIsUninstallModalOpen] = useState(false);
-  const [isTelegramModalOpen, setIsTelegramModalOpen] = useState(false);
+  const [isEnterpriseSecurityModalOpen, setIsEnterpriseSecurityModalOpen] = useState(false);
+  const [is2FaModalOpen, setIs2FaModalOpen] = useState(false);
+  const [pending2FaAction, setPending2FaAction] = useState<(() => void) | null>(null);
+  const [twoFaActionTitle, setTwoFaActionTitle] = useState('Download Evidence Certificate');
   const [isSamadhaanModalOpen, setIsSamadhaanModalOpen] = useState(false);
 
   // Helper to ensure installer modal only pops up ONCE automatically
@@ -1682,14 +1686,14 @@ export default function PactLandingAndAssistant() {
 
           {/* Top-Right: Security & Terms, Judicial e-Stamp Paper, Download Client & Features Hamburger */}
           <div className="flex items-center space-x-2 sm:space-x-3">
-            {/* Telegram Commercial Notary Bot */}
+            {/* Enterprise Security & Evidence Vault */}
             <button
-              onClick={() => setIsTelegramModalOpen(true)}
-              className="hidden lg:flex px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
-              title="Autonomous Telegram Commercial Notary Bot (@PactCommercialBot)"
+              onClick={() => setIsEnterpriseSecurityModalOpen(true)}
+              className="hidden lg:flex px-3.5 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-800 text-xs font-semibold font-mono transition-all items-center space-x-1.5 shadow-sm active:scale-95 shrink-0"
+              title="7-Tier Enterprise Security & Tamper-Proof Evidence Vault"
             >
-              <Send className="w-3.5 h-3.5 text-neutral-800" />
-              <span>Telegram Bot</span>
+              <Shield className="w-3.5 h-3.5 text-white" />
+              <span>Security & Vault</span>
             </button>
 
             {/* MSME Samadhaan Statutory Recovery Auto-Filer */}
@@ -1970,12 +1974,12 @@ export default function PactLandingAndAssistant() {
           <div className="pt-3 flex flex-wrap items-center justify-center gap-2">
             <button
               type="button"
-              onClick={() => setIsTelegramModalOpen(true)}
-              className="px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-900 border border-neutral-300 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-xs cursor-pointer active:scale-95 font-mono"
+              onClick={() => setIsEnterpriseSecurityModalOpen(true)}
+              className="px-3.5 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-800 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-xs cursor-pointer active:scale-95 font-mono"
             >
-              <Send className="w-3.5 h-3.5 text-neutral-800" />
-              <span>Telegram Bot Sentinel</span>
-              <span className="text-[9px] font-mono bg-neutral-200 text-neutral-900 px-1.5 py-0.5 rounded font-bold border border-neutral-300">LIVE API</span>
+              <Shield className="w-3.5 h-3.5 text-white" />
+              <span>Evidence Vault & 7-Tier Security</span>
+              <span className="text-[9px] font-mono bg-white text-black px-1.5 py-0.5 rounded font-bold">ZERO-TRUST</span>
             </button>
 
             <button
@@ -3426,7 +3430,7 @@ export default function PactLandingAndAssistant() {
         onOpenClient={handleOpenClientOrGated}
         onOpenAgent={handleOpenDrawerOrGated}
         onOpenCompatibility={() => setIsCompatibilityModalOpen(true)}
-        onOpenTelegram={() => setIsTelegramModalOpen(true)}
+        onOpenSecurity={() => setIsEnterpriseSecurityModalOpen(true)}
         onOpenSamadhaan={() => setIsSamadhaanModalOpen(true)}
         onUninstallBot={() => setIsUninstallModalOpen(true)}
         isBotDownloaded={isBotDownloaded}
@@ -3445,11 +3449,33 @@ export default function PactLandingAndAssistant() {
         onConfirmUninstall={handleConfirmUninstall}
       />
 
-      {/* Autonomous Telegram Commercial Notary Bot Simulator & Webhook Portal */}
-      <TelegramAutomationModal
-        isOpen={isTelegramModalOpen}
-        onClose={() => setIsTelegramModalOpen(false)}
-        onViewStamp={() => setIsPrintModalOpen(true)}
+      {/* Enterprise Security & Tamper-Proof Evidence Vault (7 Pillars) */}
+      <EnterpriseSecurityModal
+        isOpen={isEnterpriseSecurityModalOpen}
+        onClose={() => setIsEnterpriseSecurityModalOpen(false)}
+        originalText={pristineChatText}
+        currentText={currentChatText}
+        originalHash={originalHash}
+        currentHash={currentHash}
+        isTampered={isTampered}
+        onModifyText={(newText) => setCurrentChatText(newText)}
+        onRestoreOriginal={() => {
+          setCurrentChatText(pristineChatText);
+          setResolvedAmbiguities({});
+        }}
+      />
+
+      {/* Step-Up Two-Factor Authentication Modal */}
+      <TwoFactorAuthModal
+        isOpen={is2FaModalOpen}
+        onClose={() => setIs2FaModalOpen(false)}
+        actionTitle={twoFaActionTitle}
+        onSuccess={() => {
+          if (pending2FaAction) {
+            pending2FaAction();
+            setPending2FaAction(null);
+          }
+        }}
       />
 
       {/* MSME Samadhaan Statutory Recovery Auto-Filer (MSEFC Form 1 Petition) */}

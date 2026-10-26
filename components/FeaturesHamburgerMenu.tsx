@@ -33,7 +33,7 @@ export interface FeaturesHamburgerMenuProps {
   onOpenClient: () => void;
   onOpenAgent: () => void;
   onOpenCompatibility: () => void;
-  onOpenTelegram?: () => void;
+  onOpenSecurity?: () => void;
   onOpenSamadhaan?: () => void;
   onUninstallBot?: () => void;
   isBotDownloaded?: boolean;
@@ -49,7 +49,7 @@ export function FeaturesHamburgerMenu({
   onOpenClient,
   onOpenAgent,
   onOpenCompatibility,
-  onOpenTelegram,
+  onOpenSecurity,
   onOpenSamadhaan,
   onUninstallBot,
   isBotDownloaded = false,
@@ -179,27 +179,27 @@ export function FeaturesHamburgerMenu({
                     <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
                   </button>
 
-                  {/* Telegram Commercial Notary Bot */}
-                  {onOpenTelegram && (
+                  {/* Enterprise Security & Evidence Vault */}
+                  {onOpenSecurity && (
                     <button
                       onClick={() => {
                         onClose();
-                        onOpenTelegram();
+                        onOpenSecurity();
                       }}
                       className="w-full p-3.5 rounded-xl bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-900/60 dark:hover:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 transition-all flex items-center justify-between text-left group active:scale-[0.99] cursor-pointer shadow-xs"
                     >
                       <div className="flex items-center space-x-3">
                         <div className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100 flex items-center justify-center shrink-0">
-                          <Send className="w-4 h-4" />
+                          <Shield className="w-4 h-4" />
                         </div>
                         <div>
                           <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
-                            <span>Telegram Notary Bot</span>
+                            <span>Evidence Vault & 7-Tier Security</span>
                             <span className="text-[9px] bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-200 px-1.5 py-0.2 rounded font-mono font-semibold">
-                              Live Bot API
+                              Zero-Trust
                             </span>
                           </div>
-                          <p className="text-[11px] text-neutral-500">Autonomous deal sealing & counterparty dispatch via @PactCommercialBot</p>
+                          <p className="text-[11px] text-neutral-500">Tamper Vault, 2FA, GSTIN KYC, RBAC, Anti-Prompt-Injection & AES-256</p>
                         </div>
                       </div>
                       <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
