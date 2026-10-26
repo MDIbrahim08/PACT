@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1050" width="800" height="1050" style="background:#ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Page Background with Subtle Border -->
+  <rect x="20" y="20" width="760" height="1010" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" rx="12" filter="url(#shadow)"/>
+
+  <!-- Top Header Banner -->
+  <rect x="20" y="20" width="760" height="120" fill="#0f172a" rx="12"/>
+  <rect x="20" y="110" width="760" height="30" fill="#0f172a"/>
+
+  <!-- Company Logo & Name -->
+  <text x="50" y="65" font-size="24" font-weight="800" fill="#ffffff" letter-spacing="0.5">PRABHANJAN PACKAGING INDUSTRIES</text>
+  <text x="50" y="90" font-size="12" font-weight="500" fill="#94a3b8">Manufacturers of Rigid Food-Grade Sweet Boxes, Gift Packaging & Corrugated Cartons</text>
+  <text x="50" y="110" font-size="11" font-weight="400" fill="#cbd5e1">Plot No. 42, MIDC Bhosari Industrial Area, Pune, Maharashtra - 411026</text>
+  <text x="50" y="128" font-size="11" font-weight="600" fill="#ffffff">GSTIN: 27PQRST5678M1Z2 | MSME UDYAM: UDYAM-MH-26-004289</text>
+
+  <!-- Badge on top right -->
+  <rect x="580" y="45" width="170" height="40" rx="8" fill="#ffffff" fill-opacity="0.1" stroke="#ffffff" stroke-opacity="0.3"/>
+  <text x="665" y="65" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">TAX INVOICE</text>
+  <text x="665" y="78" font-size="10" font-weight="500" fill="#cbd5e1" text-anchor="middle">ORIGINAL FOR RECIPIENT</text>
+
+  <!-- Meta Info Grid (Invoice No, Date, Payment Terms) -->
+  <rect x="50" y="160" width="700" height="75" fill="#f8fafc" stroke="#e2e8f0" rx="8"/>
+  
+  <text x="70" y="185" font-size="11" font-weight="600" fill="#64748b">INVOICE NUMBER:</text>
+  <text x="70" y="205" font-size="14" font-weight="800" fill="#0f172a">PPI/2026/OCT/884</text>
+
+  <text x="240" y="185" font-size="11" font-weight="600" fill="#64748b">INVOICE DATE:</text>
+  <text x="240" y="205" font-size="14" font-weight="800" fill="#0f172a">26 OCTOBER 2026</text>
+
+  <text x="410" y="185" font-size="11" font-weight="600" fill="#64748b">PAYMENT TERMS:</text>
+  <text x="410" y="205" font-size="13" font-weight="800" fill="#059669">15 DAYS FROM DELIVERY</text>
+
+  <text x="600" y="185" font-size="11" font-weight="600" fill="#64748b">STATUTORY CAP:</text>
+  <text x="600" y="205" font-size="13" font-weight="800" fill="#0f172a">MSMED ACT §15</text>
+
+  <!-- Parties Grid: Billed To (Ibrahim Sweets) vs Shipped From -->
+  <rect x="50" y="255" width="340" height="150" fill="#ffffff" stroke="#cbd5e1" rx="8"/>
+  <rect x="50" y="255" width="340" height="32" fill="#f1f5f9" rx="8"/>
+  <rect x="50" y="275" width="340" height="12" fill="#f1f5f9"/>
+  <text x="65" y="277" font-size="12" font-weight="700" fill="#1e293b">BILLED TO (BUYER):</text>
+  <text x="65" y="310" font-size="15" font-weight="800" fill="#0f172a">IBRAHIM SWEETS &amp; CONFECTIONERIES</text>
+  <text x="65" y="330" font-size="12" font-weight="500" fill="#334155">Attn: Mr. Ibrahim Khan (Proprietor)</text>
+  <text x="65" y="348" font-size="12" fill="#475569">No. 84, Commercial Street, Shivajinagar</text>
+  <text x="65" y="366" font-size="12" fill="#475569">Bengaluru, Karnataka - 560001</text>
+  <text x="65" y="386" font-size="11" font-weight="700" fill="#0f172a">GSTIN: 29AAAAA0000A1Z5 | State Code: 29</text>
+
+  <rect x="410" y="255" width="340" height="150" fill="#ffffff" stroke="#cbd5e1" rx="8"/>
+  <rect x="410" y="255" width="340" height="32" fill="#f1f5f9" rx="8"/>
+  <rect x="410" y="275" width="340" height="12" fill="#f1f5f9"/>
+  <text x="425" y="277" font-size="12" font-weight="700" fill="#1e293b">DISPATCH &amp; DELIVERY LOCATION:</text>
+  <text x="425" y="310" font-size="14" font-weight="700" fill="#0f172a">Ibrahim Sweets Central Warehouse</text>
+  <text x="425" y="330" font-size="12" fill="#475569">Platform Road, Goods Yard, Bangalore</text>
+  <text x="425" y="348" font-size="12" fill="#475569">Mode of Transport: Express Road Freight</text>
+  <text x="425" y="366" font-size="12" fill="#475569">Delivery Deadline: On or before 31-Oct-2026</text>
+  <text x="425" y="386" font-size="11" font-weight="700" fill="#059669">E-Way Bill: 241098442026 (Generated)</text>
+
+  <!-- Items Table Header -->
+  <rect x="50" y="425" width="700" height="36" fill="#0f172a" rx="6"/>
+  <text x="65" y="448" font-size="11" font-weight="700" fill="#ffffff">#</text>
+  <text x="95" y="448" font-size="11" font-weight="700" fill="#ffffff">DESCRIPTION OF GOODS &amp; SPECIFICATIONS</text>
+  <text x="450" y="448" font-size="11" font-weight="700" fill="#ffffff">HSN</text>
+  <text x="510" y="448" font-size="11" font-weight="700" fill="#ffffff">QTY</text>
+  <text x="575" y="448" font-size="11" font-weight="700" fill="#ffffff">RATE (₹)</text>
+  <text x="670" y="448" font-size="11" font-weight="700" fill="#ffffff">TOTAL (₹)</text>
+
+  <!-- Line Item Row -->
+  <rect x="50" y="465" width="700" height="85" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="65" y="495" font-size="13" font-weight="700" fill="#0f172a">1</text>
+  <text x="95" y="495" font-size="13" font-weight="800" fill="#0f172a">Diwali Special Rigid Sweet Gift Boxes (1 Kg Capacity)</text>
+  <text x="95" y="515" font-size="11" fill="#475569">Food-Grade 350 GSM Golden Foil Embossed Outer with 4-Partition Tray</text>
+  <text x="95" y="533" font-size="10" font-weight="600" fill="#0284c7">Custom Printed: "Ibrahim Sweets - Pure Desi Ghee Confections"</text>
+
+  <text x="450" y="495" font-size="12" font-mono font-weight="600" fill="#334155">4819</text>
+  <text x="510" y="495" font-size="13" font-weight="800" fill="#0f172a">500 Pcs</text>
+  <text x="575" y="495" font-size="13" font-weight="700" fill="#0f172a">₹ 240.00</text>
+  <text x="660" y="495" font-size="14" font-weight="800" fill="#0f172a">₹ 1,20,000.00</text>
+
+  <!-- Financial Summary Box -->
+  <rect x="420" y="565" width="330" height="150" fill="#ffffff" stroke="#cbd5e1" rx="8"/>
+  <text x="440" y="595" font-size="12" font-weight="600" fill="#475569">Total Contract Value:</text>
+  <text x="730" y="595" font-size="14" font-weight="700" fill="#0f172a" text-anchor="end">₹ 1,20,000.00</text>
+
+  <text x="440" y="625" font-size="12" font-weight="600" fill="#059669">30% Advance Received (UPI):</text>
+  <text x="730" y="625" font-size="13" font-weight="700" fill="#059669" text-anchor="end">- ₹ 36,000.00</text>
+
+  <line x1="440" y1="645" x2="730" y2="645" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <text x="440" y="680" font-size="14" font-weight="800" fill="#0f172a">NET BALANCE DUE:</text>
+  <text x="730" y="680" font-size="20" font-weight="900" fill="#0f172a" text-anchor="end">₹ 84,000.00</text>
+  <text x="440" y="700" font-size="11" font-weight="700" fill="#dc2626">Due Date: Within 15 Days of Delivery</text>
+
+  <!-- Statutory Legal & Contract Terms Box -->
+  <rect x="50" y="565" width="350" height="150" fill="#f8fafc" stroke="#cbd5e1" rx="8"/>
+  <text x="65" y="590" font-size="12" font-weight="800" fill="#0f172a">STATUTORY LEGAL TERMS &amp; CONDITIONS:</text>
+  <text x="65" y="612" font-size="10" fill="#334155">1. Indian Contract Act 1872 (§10): Binding upon delivery.</text>
+  <text x="65" y="628" font-size="10" fill="#334155">2. MSMED Act 2006 (§15): Balance ₹84,000 must be cleared</text>
+  <text x="65" y="642" font-size="10" fill="#334155">   within 15 days of acceptance (max 45-day statutory cap).</text>
+  <text x="65" y="658" font-size="10" fill="#dc2626" font-weight="700">3. Default penalty: Section 16 penal compound interest</text>
+  <text x="65" y="672" font-size="10" fill="#dc2626" font-weight="700">   at 3x RBI Bank Rate for delayed payments.</text>
+  <text x="65" y="692" font-size="10" fill="#475569">4. Dispute Jurisdiction: Arbitrated via MSEFC Maharashtra.</text>
+
+  <!-- Digital Notary Seal & BSA 2023 §63 Badge -->
+  <rect x="50" y="735" width="700" height="115" fill="#f1f5f9" stroke="#94a3b8" stroke-dasharray="4" rx="8"/>
+  <text x="70" y="765" font-size="12" font-weight="800" fill="#0f172a">⚖️ PACT CRYPTOGRAPHIC NOTARY NOTATION (BSA 2023 §63)</text>
+  <text x="70" y="788" font-size="11" font-mono fill="#334155">Digital Document Hash (SHA-256):</text>
+  <text x="70" y="805" font-size="11" font-mono font-weight="800" fill="#0f172a">9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</text>
+  <text x="70" y="828" font-size="10" fill="#64748b">Verified Dual-Party WhatsApp Timestamp: 2026-10-26T12:00:00Z | Immutable Server Seal #SEAL-BSA-884E</text>
+
+  <!-- Signatures Block -->
+  <line x1="70" y1="940" x2="280" y2="940" stroke="#0f172a" stroke-width="1.5"/>
+  <text x="175" y="960" font-size="12" font-weight="800" fill="#0f172a" text-anchor="middle">Prabhanjan More</text>
+  <text x="175" y="976" font-size="11" fill="#64748b" text-anchor="middle">For Prabhanjan Packaging Industries</text>
+
+  <line x1="520" y1="940" x2="730" y2="940" stroke="#0f172a" stroke-width="1.5"/>
+  <text x="625" y="960" font-size="12" font-weight="800" fill="#0f172a" text-anchor="middle">Ibrahim Khan</text>
+  <text x="625" y="976" font-size="11" fill="#64748b" text-anchor="middle">For Ibrahim Sweets &amp; Confectioneries</text>
+
+  <!-- Bottom Watermark Footer -->
+  <text x="400" y="1015" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">
+    Generated &amp; Certified by Pact AI Sentinel • Indian Contract Act 1872 (§10) • MSMED Act 2006 (§15) • BSA 2023 (§63)
+  </text>
+</svg>

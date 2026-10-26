@@ -1517,6 +1517,36 @@ export default function PactLandingAndAssistant() {
     }
   };
 
+  // 1-Click Live Demo Load: Loads Ibrahim Sweets vs Prabhanjan Packaging Demo Invoice
+  const handleLoadDemoInvoice = async () => {
+    try {
+      setIsDrawerOpen(true);
+      isDrawerOpenRef.current = true;
+      const res = await fetch('/demo-assets/ibrahim_sweets_invoice.svg');
+      const blob = await res.blob();
+      const demoFile = new File([blob], 'Ibrahim_Sweets_vs_Prabhanjan_Invoice.svg', { type: 'image/svg+xml' });
+      const mockEvent = {
+        target: {
+          files: [demoFile],
+          value: '',
+        }
+      } as unknown as React.ChangeEvent<HTMLInputElement>;
+      await handleFileUpload(mockEvent);
+    } catch (e) {
+      console.error('Failed to load demo invoice:', e);
+    }
+  };
+
+  // Download Demo Invoice Image directly to mobile device / laptop
+  const handleDownloadDemoImage = () => {
+    const a = document.createElement('a');
+    a.href = '/demo-assets/ibrahim_sweets_invoice.svg';
+    a.download = 'Ibrahim_Sweets_vs_Prabhanjan_Invoice.svg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   // Resolve Ambiguity 1-Click
   const handleResolveAmbiguity = (flagId: string, resolution: string) => {
     setResolvedAmbiguities((prev) => ({ ...prev, [flagId]: resolution }));
@@ -2421,6 +2451,27 @@ export default function PactLandingAndAssistant() {
                   <Upload className="w-3.5 h-3.5" />
                   <span>Upload Voice Note</span>
                 </button>
+
+                {/* 1-Click Demo Invoice Simulator for Judge Presentation */}
+                <button
+                  type="button"
+                  onClick={handleLoadDemoInvoice}
+                  className="px-3 py-1.5 rounded-full bg-white hover:bg-neutral-200 text-black border border-white text-[11px] font-mono font-bold flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-md"
+                  title="Simulate Instant Live Upload of Ibrahim Sweets vs Prabhanjan Invoice"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-black" />
+                  <span>⚡ Try Demo Deal (Live OCR)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadDemoImage}
+                  className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700 hover:border-neutral-500 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                  title="Download Demo Tax Invoice SVG Image to Phone"
+                >
+                  <Download className="w-3.5 h-3.5 text-neutral-300" />
+                  <span>Save Demo Image</span>
+                </button>
               </div>
             </div>
           </div>
@@ -2692,6 +2743,27 @@ export default function PactLandingAndAssistant() {
                   >
                     <Upload className="w-3.5 h-3.5" />
                     <span>Upload Voice Note</span>
+                  </button>
+
+                  {/* 1-Click Demo Invoice Simulator for Judge Presentation */}
+                  <button
+                    type="button"
+                    onClick={handleLoadDemoInvoice}
+                    className="px-3 py-1.5 rounded-full bg-white hover:bg-neutral-200 text-black border border-white text-[11px] font-mono font-bold flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-md"
+                    title="Simulate Instant Live Upload of Ibrahim Sweets vs Prabhanjan Invoice"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-black" />
+                    <span>⚡ Try Demo Deal (Live OCR)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleDownloadDemoImage}
+                    className="px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-600 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                    title="Download Demo Tax Invoice SVG Image to Phone"
+                  >
+                    <Download className="w-3.5 h-3.5 text-slate-300" />
+                    <span>Save Demo Image</span>
                   </button>
                 </div>
               </div>

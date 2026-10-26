@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 850" width="540" height="850" style="background:#0b141a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  
+  <!-- WhatsApp Top Status / App Bar -->
+  <rect x="0" y="0" width="540" height="75" fill="#1f2c34"/>
+  <circle cx="45" cy="40" r="22" fill="#00a884"/>
+  <text x="45" y="47" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">PP</text>
+  
+  <text x="80" y="36" font-size="16" font-weight="700" fill="#e9edef">Prabhanjan More (Packaging Factory)</text>
+  <text x="80" y="55" font-size="12" fill="#8696a0">+91 97315 ••••• · online · Business Account</text>
+
+  <!-- Encryption Notice Banner -->
+  <rect x="50" y="95" width="440" height="40" rx="8" fill="#182229"/>
+  <text x="270" y="119" font-size="11" fill="#ffd279" text-anchor="middle">
+    🔒 Messages are end-to-end encrypted. Tap to verify Pact SHA-256 seal.
+  </text>
+
+  <!-- Message 1: Incoming from Prabhanjan (Packaging Factory) -->
+  <rect x="25" y="155" width="410" height="155" rx="14" fill="#202c33"/>
+  <text x="42" y="180" font-size="12" font-weight="700" fill="#00a884">Prabhanjan Packaging Industries</text>
+  
+  <text x="42" y="205" font-size="13" fill="#e9edef">Bhai Ibrahim, Diwali gift box order ready.</text>
+  <text x="42" y="225" font-size="13" fill="#e9edef">Total 500 Sweet Boxes @ Rs 240 = Rs 1,20,000 total.</text>
+  <text x="42" y="245" font-size="13" fill="#e9edef">Send 30% advance (Rs 36,000) today on UPI.</text>
+  <text x="42" y="265" font-size="13" fill="#e9edef">Balance Rs 84,000 in 15 days on delivery to Bangalore.</text>
+  <text x="42" y="285" font-size="13" font-weight="600" fill="#00a884">Delivery by Friday. Please confirm karo.</text>
+  <text x="415" y="295" font-size="10" fill="#8696a0" text-anchor="end">11:42 AM</text>
+
+  <!-- Message 2: Outgoing from Ibrahim (Sweet Shop) -->
+  <rect x="105" y="330" width="410" height="115" rx="14" fill="#005c4b"/>
+  <text x="122" y="358" font-size="13" fill="#e9edef">Haan bhai Prabhanjan, deal confirmed!</text>
+  <text x="122" y="378" font-size="13" fill="#e9edef">Advance of Rs 36,000 sent via UPI ref #UPI99841.</text>
+  <text x="122" y="398" font-size="13" fill="#e9edef">Balance Rs 84,000 within 15 days of box delivery.</text>
+  <text x="122" y="418" font-size="13" fill="#e9edef">Send invoice with GSTIN. 👍</text>
+  <text x="495" y="432" font-size="10" fill="#8696a0" text-anchor="end">11:44 AM · ✓✓</text>
+
+  <!-- Message 3: Pact Commercial Legal Notary Intercept & Dual-Hash Seal -->
+  <rect x="35" y="465" width="470" height="210" rx="16" fill="#111b21" stroke="#00a884" stroke-width="1.5"/>
+  <rect x="35" y="465" width="470" height="34" rx="16" fill="#00a884" fill-opacity="0.15"/>
+  
+  <text x="55" y="488" font-size="12" font-weight="800" fill="#00a884">⚖️ PACT COMMERCIAL LEGAL NOTARY [REF: PACT-884E]</text>
+  
+  <text x="55" y="520" font-size="12" font-weight="700" fill="#e9edef">Commercial Deal Locked under Indian Contract Act 1872 (§10):</text>
+  <text x="55" y="540" font-size="11" fill="#8696a0">• Seller: Ibrahim Sweets (GSTIN 29AAAAA0000A1Z5)</text>
+  <text x="55" y="558" font-size="11" fill="#8696a0">• Buyer: Prabhanjan Packaging (GSTIN 27PQRST5678M1Z2)</text>
+  <text x="55" y="576" font-size="11" fill="#8696a0">• Consideration: ₹1,20,000 (Advance ₹36,000 | Balance ₹84,000)</text>
+  <text x="55" y="594" font-size="11" fill="#8696a0">• Statutory Limit: MSMED Act 2006 §15 (15-Day Term, 45-Day Cap)</text>
+  
+  <rect x="55" y="610" width="430" height="45" rx="8" fill="#182229"/>
+  <text x="70" y="628" font-size="10" font-mono font-weight="700" fill="#00a884">BSA 2023 §63(4) DIGITAL NOTARY SEAL (SHA-256):</text>
+  <text x="70" y="644" font-size="9.5" font-mono fill="#e9edef">9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</text>
+  
+  <text x="55" y="668" font-size="10" font-weight="700" fill="#ffd279">Reply 'AGREE' or 'CONFIRMED' to finalize court evidence record.</text>
+  <text x="485" y="668" font-size="10" fill="#8696a0" text-anchor="end">11:45 AM</text>
+
+  <!-- Message 4: Prabhanjan's Consent by Conduct -->
+  <rect x="25" y="695" width="220" height="55" rx="14" fill="#202c33"/>
+  <text x="42" y="722" font-size="14" font-weight="800" fill="#00a884">AGREE. CONFIRMED.</text>
+  <text x="42" y="740" font-size="11" fill="#e9edef">Boxes dispatched tomorrow.</text>
+  <text x="230" y="740" font-size="10" fill="#8696a0" text-anchor="end">11:46 AM</text>
+
+  <!-- WhatsApp Bottom Input Bar -->
+  <rect x="0" y="780" width="540" height="70" fill="#1f2c34"/>
+  <rect x="15" y="795" width="430" height="42" rx="21" fill="#2a3942"/>
+  <text x="40" y="821" font-size="14" fill="#8696a0">Pact Notary Sentinel active on WhatsApp...</text>
+  <circle cx="495" cy="816" r="22" fill="#00a884"/>
+  <text x="495" y="822" font-size="16" fill="#ffffff" text-anchor="middle">🎙️</text>
+</svg>
