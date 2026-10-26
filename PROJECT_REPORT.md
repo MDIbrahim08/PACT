@@ -1,5 +1,7 @@
 # PACT: Commercial Contract and Electronic Evidence Notary System
 
+<p align="right"><img src="public/report-assets/logo.png" alt="PACT Official Logo" width="80" height="80" style="border-radius: 8px;" /></p>
+
 ### Srujana Tech Fest 2026 | National Software Hackathon
 ### Official Hackathon Track: Legal Services (Theme Code: LS-06)
 *Document Classification: Final Detailed Project Report (Non-Technical & Compliance Edition)*

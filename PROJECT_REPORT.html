@@ -66,6 +66,35 @@
       line-height: 1.25;
     }
 
+    .report-header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .report-header-text {
+      flex: 1;
+    }
+
+    .report-header-logo {
+      flex-shrink: 0;
+      margin-top: 2px;
+      text-align: right;
+    }
+
+    .corner-logo {
+      width: 76px;
+      height: 76px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      padding: 2px;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      display: block;
+    }
+
     .report-subtitle {
       font-size: 11pt;
       font-weight: 400;
@@ -214,8 +243,15 @@
       <span>Date: October 26, 2026</span>
     </div>
 
-    <h1 class="report-title">PACT: Commercial Contract and Electronic Evidence Notary System</h1>
-    <p class="report-subtitle">A Non-Technical Comprehensive Project Report on Formalizing Informal MSME Commerce through Autonomous Statutory Auditing and Cryptographic Evidence Certificates</p>
+    <div class="report-header-content">
+      <div class="report-header-text">
+        <h1 class="report-title">PACT: Commercial Contract and Electronic Evidence Notary System</h1>
+        <p class="report-subtitle">A Non-Technical Comprehensive Project Report on Formalizing Informal MSME Commerce through Autonomous Statutory Auditing and Cryptographic Evidence Certificates</p>
+      </div>
+      <div class="report-header-logo">
+        <img src="public/report-assets/logo.png" alt="PACT Official Logo" class="corner-logo" />
+      </div>
+    </div>
 
     <table class="metadata-table">
       <tr>
