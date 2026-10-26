@@ -337,6 +337,8 @@ export default function PactLandingAndAssistant() {
   const micAudioChunksRef = useRef<Blob[]>([]);
   const micSpeechRecRef = useRef<any>(null);
   const micTranscriptRef = useRef<string>('');
+  const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const idleMicTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Copied states
   const [copiedNudgeId, setCopiedNudgeId] = useState<string | null>(null);
@@ -947,15 +949,17 @@ export default function PactLandingAndAssistant() {
     }
   };
 
-  // Sequenced Mic & "Hey Pact" Wake-Up Audio Pipeline
+  // Sequenced Mic & "Hey Pact" Wake-Up Audio Pipeline with Instant Voice Activity Detection
   const handleToggleMic = async (eOrWakeTrigger?: React.MouseEvent | boolean) => {
     const isWakeTrigger = typeof eOrWakeTrigger === 'boolean' ? eOrWakeTrigger : false;
     if (isRecording || isRecordingRef.current) {
       // User clicked mic or action to finish recording
+      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+      if (idleMicTimerRef.current) clearTimeout(idleMicTimerRef.current);
       setIsRecording(false);
       isRecordingRef.current = false;
       setLiveVoiceState('processing');
-      setLiveVoiceMessage('⚡ Transcribing Spoken Audio...');
+      setLiveVoiceMessage('⚡ Analyzing Spoken Deal...');
       if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
       setRecordingSeconds(0);
 
@@ -1003,24 +1007,22 @@ export default function PactLandingAndAssistant() {
       stopCurrentAudio();
       stopGlobalAudio();
 
-      // 2. Immediately trigger visual listening state (glowing #407ADD to #10B981 pulse ring)
+      // 2. Clear any lingering timers
+      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+      if (idleMicTimerRef.current) clearTimeout(idleMicTimerRef.current);
+
+      // 3. Immediately trigger visual listening state
       setIsRecording(true);
       isRecordingRef.current = true;
       setLiveVoiceState('listening');
-      setLiveVoiceMessage('🔔 "Hey Pact" Wake Chime Playing...');
+      setLiveVoiceMessage('🎙️ Pact is Listening (Dictate Deal Terms)...');
       setRecordingSeconds(0);
 
-      // 3. Play preloaded wake chime FIRST so microphone does not capture the chime
-      try {
-        await playWakeChime();
-      } catch (chimeErr) {
-        console.warn('[Wake Chime]: Fallback triggered:', chimeErr);
-      }
+      // 4. Play wake chime non-blocking so microphone captures immediately without latency
+      playWakeChime().catch(() => {});
 
-      // 4. Open active microphone recording stream right as chime finishes (350ms mark)
       micTranscriptRef.current = '';
       micAudioChunksRef.current = [];
-      setLiveVoiceMessage('🎙️ Pact is Listening (Dictate Deal Terms)...');
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -1046,28 +1048,29 @@ export default function PactLandingAndAssistant() {
         };
 
         recorder.onstop = async () => {
+          if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+          if (idleMicTimerRef.current) clearTimeout(idleMicTimerRef.current);
           stream.getTracks().forEach((track) => track.stop());
           setIsRecording(false);
           isRecordingRef.current = false;
           setLiveVoiceState('processing');
-          setLiveVoiceMessage('⚡ Transcribing Spoken Audio...');
+          setLiveVoiceMessage('⚡ Instant Voice Analysis...');
 
           try {
-            const blob = new Blob(micAudioChunksRef.current, { type: 'audio/webm' });
-            const formData = new FormData();
-            formData.append('file', blob, 'voice-deal.webm');
-            if (micTranscriptRef.current) {
-              formData.append('transcript', micTranscriptRef.current);
+            let liveText = micTranscriptRef.current?.trim() || '';
+
+            // Fallback to server STT only if browser speech recognition did not yield text
+            if (!liveText && micAudioChunksRef.current.length > 0) {
+              const blob = new Blob(micAudioChunksRef.current, { type: 'audio/webm' });
+              const formData = new FormData();
+              formData.append('file', blob, 'voice-deal.webm');
+              const res = await fetch('/api/transcribe', {
+                method: 'POST',
+                body: formData,
+              });
+              const data = await res.json();
+              liveText = data.transcript || '';
             }
-
-            // Stream user audio to Sarvam AI STT saaras:v3 (with Gemini & Browser Fallback)
-            const res = await fetch('/api/transcribe', {
-              method: 'POST',
-              body: formData,
-            });
-
-            const data = await res.json();
-            const liveText = data.transcript || micTranscriptRef.current || '';
 
             if (!liveText.trim()) {
               setLiveVoiceState(null);
@@ -1150,7 +1153,7 @@ export default function PactLandingAndAssistant() {
           }
         };
 
-        // Real-time browser speech recognition for instant transcription
+        // Real-time browser speech recognition for instant transcription & Voice Activity Detection (VAD)
         const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         if (SpeechRec) {
           try {
@@ -1163,8 +1166,40 @@ export default function PactLandingAndAssistant() {
               for (let i = 0; i < evt.results.length; ++i) {
                 t += evt.results[i][0].transcript + ' ';
               }
-              micTranscriptRef.current = t.trim();
+              const clean = t.trim();
+              micTranscriptRef.current = clean;
+              if (clean) {
+                setLiveVoiceState('user-speaking');
+                setLiveVoiceMessage(`🎙️ "${clean}"`);
+              }
+
+              // Auto-stop on 1.3s of silence after speech (Instant VAD)
+              if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+              silenceTimerRef.current = setTimeout(() => {
+                if (micTranscriptRef.current && micTranscriptRef.current.trim().length > 0) {
+                  console.log('[VAD]: 1.3s pause detected after speech, auto-submitting...');
+                  if (micMediaRecorderRef.current && micMediaRecorderRef.current.state === 'recording') {
+                    micMediaRecorderRef.current.stop();
+                  }
+                  if (micSpeechRecRef.current) {
+                    try { micSpeechRecRef.current.stop(); } catch {}
+                  }
+                }
+              }, 1300);
             };
+
+            rec.onspeechend = () => {
+              if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+              silenceTimerRef.current = setTimeout(() => {
+                if (micMediaRecorderRef.current && micMediaRecorderRef.current.state === 'recording') {
+                  micMediaRecorderRef.current.stop();
+                }
+                if (micSpeechRecRef.current) {
+                  try { micSpeechRecRef.current.stop(); } catch {}
+                }
+              }, 700);
+            };
+
             rec.start();
             micSpeechRecRef.current = rec;
           } catch {}
@@ -1174,6 +1209,23 @@ export default function PactLandingAndAssistant() {
         recordingTimerRef.current = setInterval(() => {
           setRecordingSeconds((prev) => prev + 1);
         }, 1000);
+
+        // Auto-safeguard: If no speech detected after 5s of calling "Hey Pact", prompt the user gently
+        if (idleMicTimerRef.current) clearTimeout(idleMicTimerRef.current);
+        idleMicTimerRef.current = setTimeout(() => {
+          if (!micTranscriptRef.current || micTranscriptRef.current.trim().length === 0) {
+            console.log('[Mic Idle]: No speech detected within 5s');
+            if (micMediaRecorderRef.current && micMediaRecorderRef.current.state === 'recording') {
+              micMediaRecorderRef.current.stop();
+            }
+            if (micSpeechRecRef.current) {
+              try { micSpeechRecRef.current.stop(); } catch {}
+            }
+            setLiveVoiceState('agent-speaking');
+            setLiveVoiceMessage('Namaste! I am listening. Tell me your deal terms.');
+            playElevenLabsVoice('Namaste! I am listening. Tell me your deal terms or WhatsApp notice.');
+          }
+        }, 5000);
       } catch (err) {
         console.warn('Microphone permission not granted:', err);
         setIsRecording(false);
@@ -1264,8 +1316,20 @@ export default function PactLandingAndAssistant() {
             stopCurrentAudio();
             stopGlobalAudio();
 
-            // Trigger active listening session with wake chime
-            handleToggleMic(true);
+            // Extract trailing command if user spoke instruction together with wake word (e.g. "Hey Pact open WhatsApp to Prabhanjan")
+            const wakeWordRegex = /^(hey|hi|hello|ok|yo|listen)?\s*(pact|packed|pack|pat|fact|backed|bot|agent|siri)\b[\s,]*/i;
+            const trailingCommand = transcript.replace(wakeWordRegex, '').trim();
+
+            if (trailingCommand && trailingCommand.length >= 3) {
+              // User already spoke their instruction! Respond immediately with 0 delay!
+              setLiveVoiceState('processing');
+              setLiveVoiceMessage(`⚡ Instant Wake Command: "${trailingCommand}"`);
+              playWakeChime().catch(() => {});
+              handleSendMessage(undefined, trailingCommand);
+            } else {
+              // User just called "Hey Pact", trigger active listening with wake chime & auto-silence VAD
+              handleToggleMic(true);
+            }
 
             setTimeout(() => {
               isTriggeringWakeRef.current = false;
@@ -2378,105 +2442,7 @@ export default function PactLandingAndAssistant() {
         onListenAudio={(text) => playElevenLabsVoice(text)}
       />
 
-      {/* ============================================================
-          SECTION 5: INTERACTIVE COMMERCIAL AI BOT CHAT (AIChatCard Showcase)
-         ============================================================ */}
-      <section className="relative z-10 py-16 sm:py-24 px-4 sm:px-8 border-t border-neutral-200/80 bg-neutral-50/60 dark:bg-neutral-950/60">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="text-center space-y-3">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-xs font-mono text-neutral-900 dark:text-white shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-neutral-900 dark:bg-white animate-ping" />
-              <span>LIVE INTERACTIVE COMMERCIAL AI COMPOSER</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
-              Direct Deal Negotiation & Legal Draft Notary
-            </h2>
-            <p className="text-neutral-600 dark:text-neutral-400 text-sm sm:text-base max-w-xl mx-auto">
-              Type, edit, or select any statutory commercial instruction. Pact instantly generates court-enforceable clauses under Section 10 and auto-dispatches to WhatsApp.
-            </p>
-          </div>
 
-          <div className="flex justify-center">
-            <div className="w-full max-w-[460px]">
-              <AIChatCard
-                title="Pact Commercial AI Sentinel"
-                subtitle="Indian Contract Act §10 & WhatsApp Auto-Pilot"
-                greeting={`Namaste, ${userProfile?.fullName || heroName || 'Trader'}!`}
-                prompt="What deal terms, WhatsApp chat, or legal demand can I execute today?"
-                prompts={[
-                  "Open WhatsApp to Salman Khan and tell him payment is overdue under MSMED Act §15",
-                  "Draft a Section 10 supply contract for 500 Bales with Surat Mills",
-                  "Audit our WhatsApp chat for Section 10 pillars and statutory payment limits",
-                  "Open WhatsApp to Prabhanjan More and draft commercial contract",
-                  "Generate a court-admissible electronic evidence certificate under BSA 2023 §63"
-                ]}
-                autoType={false}
-                placeholder="Ask Pact anything or dictate commercial terms…"
-                icon={<Bot className="h-5 w-5 text-white" />}
-                onSend={(msg) => {
-                  setIsDrawerOpen(true);
-                  isDrawerOpenRef.current = true;
-                  handleSendMessage(undefined, msg);
-                }}
-                onReset={handleResetChat}
-                onAttach={() => fileInputRef.current?.click()}
-                className="min-h-[460px] border border-neutral-200 dark:border-neutral-800 shadow-2xl"
-              />
-
-              {/* 1-Click File, Image & Voice Upload Quick Actions (Accessible directly on landing page) */}
-              <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => imageInputRef.current?.click()}
-                  className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 hover:border-neutral-500 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
-                >
-                  <ImageIcon className="w-3.5 h-3.5" />
-                  <span>Upload Deal Screenshot / Receipt</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => docInputRef.current?.click()}
-                  className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 hover:border-neutral-500 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
-                >
-                  <Paperclip className="w-3.5 h-3.5" />
-                  <span>Upload Agreement PDF</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => audioInputRef.current?.click()}
-                  className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700 hover:border-neutral-500 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
-                >
-                  <Upload className="w-3.5 h-3.5" />
-                  <span>Upload Voice Note</span>
-                </button>
-
-                {/* 1-Click Demo Invoice Simulator for Judge Presentation */}
-                <button
-                  type="button"
-                  onClick={handleLoadDemoInvoice}
-                  className="px-3 py-1.5 rounded-full bg-white hover:bg-neutral-200 text-black border border-white text-[11px] font-mono font-bold flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-md"
-                  title="Simulate Instant Live Upload of Ibrahim Sweets vs Prabhanjan Invoice"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-black" />
-                  <span>⚡ Try Demo Deal (Live OCR)</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleDownloadDemoImage}
-                  className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700 hover:border-neutral-500 text-[11px] font-mono flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
-                  title="Download Demo Tax Invoice SVG Image to Phone"
-                >
-                  <Download className="w-3.5 h-3.5 text-neutral-300" />
-                  <span>Save Demo Image</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ============================================================
           SECTION: 3D TILT PWA DOWNLOAD TERMINAL (Clean Frosted Glass at End of Page)
@@ -2901,7 +2867,6 @@ export default function PactLandingAndAssistant() {
                             </span>
                             <div className="flex flex-wrap gap-1.5">
                               {[
-                                { name: 'Salman Khan', prompt: 'Open WhatsApp to Salman Khan and tell him payment is overdue under MSMED Act §15' },
                                 { name: 'Prabhanjan More', prompt: 'Open WhatsApp to Prabhanjan More and draft commercial contract for 500 Bales' },
                                 { name: 'Mohammed Ibrahim', prompt: 'Open WhatsApp to Mohammed Ibrahim and send legal demand notice' },
                                 { name: 'Rajesh Patel', prompt: 'Open WhatsApp to Rajesh Patel and demand payment recovery' },
@@ -3228,7 +3193,6 @@ export default function PactLandingAndAssistant() {
           {messages.length > 1 && (
             <div className="px-3 pt-2 pb-1.5 bg-[#080d19] border-t border-slate-800/80 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
               {[
-                '⚡ Open WhatsApp to Salman Khan',
                 '📱 WhatsApp MSMED Notice',
                 '✍️ Draft a Supply Agreement',
                 '🛡️ Lock MSMED 45-Day Payment',

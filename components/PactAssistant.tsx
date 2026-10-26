@@ -283,21 +283,22 @@ export const PactAssistant: React.FC<PactAssistantProps> = ({
         setStatusMessage('⚡ Sarvam AI Transcribing Audio...');
 
         try {
-          const audioBlob = new Blob(activeAudioChunksRef.current, { type: 'audio/webm' });
-          const formData = new FormData();
-          formData.append('file', audioBlob, 'wake-recording.webm');
-          if (activeTranscriptRef.current) {
-            formData.append('transcript', activeTranscriptRef.current);
+          let transcript = activeTranscriptRef.current?.trim() || '';
+
+          // Only fall back to network STT if browser speech recognition did not capture text
+          if (!transcript && activeAudioChunksRef.current.length > 0) {
+            const audioBlob = new Blob(activeAudioChunksRef.current, { type: 'audio/webm' });
+            const formData = new FormData();
+            formData.append('file', audioBlob, 'wake-recording.webm');
+
+            const transcribeRes = await fetch('/api/transcribe', {
+              method: 'POST',
+              body: formData,
+            });
+
+            const data = await transcribeRes.json();
+            transcript = data.transcript || '';
           }
-
-          // Transcribe via Sarvam AI saaras:v3 (with Gemini & Browser Fallback)
-          const transcribeRes = await fetch('/api/transcribe', {
-            method: 'POST',
-            body: formData,
-          });
-
-          const data = await transcribeRes.json();
-          const transcript = data.transcript || activeTranscriptRef.current || '';
 
           if (transcript.trim()) {
             await processUserTranscript(transcript);
@@ -332,7 +333,7 @@ export const PactAssistant: React.FC<PactAssistantProps> = ({
             }
             activeTranscriptRef.current = combined.trim();
 
-            // Auto-stop recording on 2.2s silence
+            // Auto-stop recording on 1.2s silence (Instant Voice Activity Detection)
             if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
             silenceTimerRef.current = setTimeout(() => {
               if (activeMediaRecorderRef.current && activeMediaRecorderRef.current.state === 'recording') {
@@ -343,7 +344,7 @@ export const PactAssistant: React.FC<PactAssistantProps> = ({
                   activeSpeechRecRef.current.stop();
                 } catch {}
               }
-            }, 2200);
+            }, 1200);
           };
 
           rec.start();
@@ -427,7 +428,8 @@ export const PactAssistant: React.FC<PactAssistantProps> = ({
           if (!isAlive || isListening || isProcessing) return;
 
           for (let i = evt.resultIndex; i < evt.results.length; i++) {
-            const transcript = evt.results[i][0].transcript.toLowerCase();
+            const rawTranscript = evt.results[i][0].transcript;
+            const transcript = rawTranscript.toLowerCase();
 
             // Wake word trigger matches: "hey pact", "hello pact", "hi pact", "pact"
             if (
@@ -435,13 +437,21 @@ export const PactAssistant: React.FC<PactAssistantProps> = ({
               transcript.includes('hello pact') ||
               transcript.includes('hi pact') ||
               transcript.includes('ok pact') ||
-              transcript.includes('okay pact')
+              transcript.includes('okay pact') ||
+              transcript.startsWith('pact ')
             ) {
-              console.log('[Wake Word Triggered]:', transcript);
+              console.log('[Wake Word Triggered]:', rawTranscript);
               try {
                 recognizer.abort();
               } catch {}
-              startSequencedVoiceCapture();
+
+              const wakeRegex = /^(hey|hi|hello|ok|okay)?\s*pact\b[\s,]*/i;
+              const trailing = rawTranscript.replace(wakeRegex, '').trim();
+              if (trailing && trailing.length >= 3) {
+                processUserTranscript(trailing);
+              } else {
+                startSequencedVoiceCapture();
+              }
               break;
             }
           }
