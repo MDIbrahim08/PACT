@@ -17,6 +17,30 @@
 
 ---
 
+## 📸 Product & Bot Visual Showcase
+
+| 🌐 Web Platform & Hero Onboarding | 🤖 3D Legal Sentinel Mascot |
+| :---: | :---: |
+| <img src="docs/screenshots/01-hero-registration.png" width="100%" alt="Hero Registration" /> | <img src="docs/screenshots/02-mascot-multilingual.png" width="100%" alt="3D Mascot" /> |
+| *BSA §63 Compliance Gateway & MSME Merchant Registration* | *Multilingual Vernacular Audio & Intent Extraction Engine* |
+
+| 📋 Section 10 Term Extraction | 📂 Architectural Blueprints & Charters |
+| :---: | :---: |
+| <img src="docs/screenshots/03-deal-extraction.png" width="100%" alt="Deal Extraction" /> | <img src="docs/screenshots/04-glass-blueprints.png" width="100%" alt="Glass Blueprints" /> |
+| *Verbatim extraction of Consideration, Quantities & Milestones* | *Interactive 3D Glass Folders for Engineering Specs & Charters* |
+
+| 📚 3D MSME Legal Bookshelf | 📱 Siri-Style Voice Call Mode |
+| :---: | :---: |
+| <img src="docs/screenshots/05-legal-bookshelf.png" width="100%" alt="Legal Bookshelf" /> | <img src="docs/screenshots/09-siri-voice-call.jpg" width="60%" alt="Siri Call Mode" /> |
+| *Hand-Bound 3D Legal Volumes for Small Business Owners* | *Hands-Free Siri/ChatGPT Calling with Animated Waveform* |
+
+| 💬 In-Drawer AI Legal Assistant | 📱 Android PWA Client on Home Screen |
+| :---: | :---: |
+| <img src="docs/screenshots/06-ai-chat-card.png" width="60%" alt="AI Chat Card" /> | <img src="docs/screenshots/08-mobile-homescreen.png" width="60%" alt="Mobile Home Screen" /> |
+| *Clean Conversational Assistant with 1-Click WhatsApp Sync* | *Standalone Offline Client on Android Launcher with Background Listening* |
+
+---
+
 ## 🏛️ Executive Summary & Srujana 2026 Rubric Alignment
 
 | Rubric Pillar | Srujana Evaluation Criteria | How Pact Delivers (Production Reality) |
