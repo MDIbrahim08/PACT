@@ -182,11 +182,22 @@ The functional architecture executes through seven sequential phases:
 
 ---
 
-## 10. Utilization of Artificial Intelligence and External Services
+## 10. Utilization of Artificial Intelligence and Multi-Agent Architecture
 
-Project PACT maintains a strict boundary between artificial intelligence and legal execution:
-- *Role of Artificial Intelligence:* Used strictly for speech-to-text transcription and extracting structured fields from conversational text.
-- *Role of Deterministic Algorithms:* All legal evaluations, statutory audits, interest calculations, and cryptographic operations are executed by deterministic code. This eliminates the risk of legal hallucination and guarantees reproducible results.
+Project PACT maintains a strict boundary between artificial intelligence and legal execution. The bot functions as a coordinated Multi-Agent System comprising eight specialized autonomous agents:
+
+| Agent Designation | Underlying Engine | Primary Operational Responsibility | Governing Standard |
+|---|---|---|---|
+| Acoustic & Speech Agent | Sarvam AI (`saaras:v3`) & ElevenLabs | Ingests regional voice recordings in Hindi, Marathi, Gujarati; provides sub-350ms streaming voice feedback. | Multilingual Audio Perception |
+| Conversational Parsing Agent | Google Gemini 2.5 Flash / Groq Llama-3.1 | Transforms messy trade conversations and voice notes into normalized commercial deal parameters. | Semantic Entity Extraction |
+| Deterministic Statutory Agent | Custom TypeScript Rule Engine (Non-AI) | Audits agreements against the five statutory contract pillars: consent, competency, consideration, object, and certainty. | Indian Contract Act, 1872 Section 10 |
+| Ambiguity Resolution Agent | Contextual Nudge Generator | Detects vague terms (e.g. payment after delivery) and drafts polite "Blame-the-Bot" clarification requests. | Indian Contract Act, 1872 Section 29 |
+| Payment Protection Sentinel | Financial Rule Calculation Engine | Enforces statutory 45-day payment limits and automatically calculates 3x RBI compound interest for delayed payments. | MSMED Act, 2006 Sections 15 & 16 |
+| Cryptographic Notary Agent | Node.js `crypto` (`timingSafeEqual`) & WebCrypto | Generates SHA-256 evidence digests, issues electronic certificates, and powers the Judge Tamper Sandbox. | Bharatiya Sakshya Adhiniyam, 2023 §63(4) |
+| WhatsApp Auto-Pilot Agent | Telephony Protocol & MSME Directory Resolver | Resolves counterparty contacts (e.g. Salman Khan, Prabhanjan More) and launches pre-filled statutory dispatches. | Universal Telephony Protocol (`wa.me`) |
+| Zero-Storage Privacy Agent | Session Memory & Sandbox Purge Controller | Guarantees zero central data retention, evaluates transactions ephemerally, and manages client install/uninstall lifecycles. | Digital Personal Data Protection Act, 2023 |
+
+*Strict Deterministic Boundary:* No artificial intelligence model is permitted to evaluate contract validity, compute interest rates, or determine legal admissibility. All legal evaluations, statutory threshold comparisons, date validations, and cryptographic hash operations are executed by deterministic programmatic rules. This completely eliminates legal hallucinations, ensuring that every certificate generated is legally accurate and reproducible.
 
 ---
 
