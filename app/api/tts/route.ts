@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     const elevenKey = process.env.ELEVENLABS_API_KEY || '';
 
     // ============================================================
-    // ENGINE 1: SARVAM AI (Primary Young Indian Multilingual Voice)
+    // ENGINE 1: SARVAM AI (Primary Cute Bubbly Indian Companion Voice)
     // ============================================================
     if (sarvamKey) {
       try {
@@ -32,8 +32,8 @@ export async function POST(req: NextRequest) {
         const timeout = setTimeout(() => controller.abort(), 6000);
 
         const targetLang = language.includes('hi') ? 'hi-IN' : 'en-IN';
-        // Simran is a young, energetic, clear Indian voice; rohan is young male
-        const targetSpeaker = speaker === 'male' || speaker === 'rohan' ? 'rohan' : (speaker || 'simran');
+        // 'pooja' is Sarvam's sweetest, highest-clarity youthful cute voice; fallback to 'simran'
+        const targetSpeaker = speaker === 'male' || speaker === 'rohan' ? 'rohan' : (speaker || 'pooja');
 
         const sarvamRes = await fetch('https://api.sarvam.ai/text-to-speech', {
           method: 'POST',
@@ -45,8 +45,8 @@ export async function POST(req: NextRequest) {
             inputs: [cleanText],
             target_language_code: targetLang,
             speaker: targetSpeaker,
-            pitch: 0.1,
-            pace: 1.12,
+            pitch: 0.35, // Bright, youthful, cute mascot tone
+            pace: 1.08,  // Cheerful, friendly conversational tempo
             loudness: 1.25,
             speech_sample_rate: 8000,
             enable_preprocessing: true,
@@ -83,16 +83,18 @@ export async function POST(req: NextRequest) {
     }
 
     // ============================================================
-    // ENGINE 2: ELEVENLABS API (Automatic High-Fidelity Young Voice Fallback)
+    // ENGINE 2: ELEVENLABS API (Cute, Expressive Anime/Companion Voice)
     // ============================================================
     if (elevenKey) {
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 7000);
 
-        // Sarah (EXAVITQu4vr4xnSDxMaL) - Young, fresh, professional, energetic
-        // Or Adam (pNInz6obpgDQGcFmaJgB) if male
-        const voiceId = speaker === 'male' ? 'pNInz6obpgDQGcFmaJgB' : 'EXAVITQu4vr4xnSDxMaL';
+        // Domi (AZnzlk1XvdvUeBnXmlld) - Bubbly, cute, energetic, youthful companion voice
+        // Or Dorothy (ThT5KcBeYPX3keUQqHPh) - Sweet, warm, animated character tone
+        const voiceId = speaker === 'male' 
+          ? 'pNInz6obpgDQGcFmaJgB' 
+          : (speaker === 'dorothy' ? 'ThT5KcBeYPX3keUQqHPh' : 'AZnzlk1XvdvUeBnXmlld');
         const elevenUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`;
 
         const elevenRes = await fetch(elevenUrl, {
@@ -106,8 +108,10 @@ export async function POST(req: NextRequest) {
             text: cleanText,
             model_id: 'eleven_multilingual_v2',
             voice_settings: {
-              stability: 0.45,
+              stability: 0.35,      // Expressive, emotive cute delivery
               similarity_boost: 0.85,
+              style: 0.42,          // Lively, charming personality inflection
+              use_speaker_boost: true,
             },
           }),
           signal: controller.signal,

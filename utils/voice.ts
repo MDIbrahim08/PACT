@@ -83,22 +83,26 @@ function speakWithBrowserSpeech(
       const cleanText = sanitizeTextForSpeech(text);
       const utterance = new SpeechSynthesisUtterance(cleanText);
 
-      // Prefer Indian English or Hindi voice if available
+      // Prefer cute, friendly high-clarity voices (Zira, Jenny, Samantha, Veena, Heera)
       const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(
+      const cuteVoice = voices.find(
         (v) =>
-          v.lang.includes('en-IN') ||
-          v.lang.includes('hi-IN') ||
-          v.name.includes('India') ||
-          v.name.includes('Rishi') ||
-          v.name.includes('Heera')
+          v.name.includes('Jenny') ||
+          v.name.includes('Zira') ||
+          v.name.includes('Samantha') ||
+          v.name.includes('Veena') ||
+          v.name.includes('Heera') ||
+          v.name.includes('Google UK English Female') ||
+          v.name.includes('Google US English') ||
+          (v.lang.includes('en') && !v.name.includes('David') && !v.name.includes('George') && !v.name.includes('Rishi'))
       );
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
+      if (cuteVoice) {
+        utterance.voice = cuteVoice;
       }
 
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
+      // High, cute animated companion pitch and cheerful tempo
+      utterance.pitch = 1.35;
+      utterance.rate = 1.08;
 
       utterance.onstart = () => {
         options?.onStart?.();
@@ -181,6 +185,8 @@ export async function speakText(
         const audioBlob = await res.blob();
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
+        // Perkier, cheerful tempo matching the cute mascot
+        audio.playbackRate = 1.05;
         activeAudio = audio;
 
         return new Promise<SpeakResult>((resolve) => {

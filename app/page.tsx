@@ -589,7 +589,7 @@ export default function PactLandingAndAssistant() {
     setLiveVoiceMessage('');
   };
 
-  // Play High-Fidelity Voice via Dual-Engine Pipeline (Young Voice: Sarvam Simran -> ElevenLabs Sarah)
+  // Play High-Fidelity Voice via Dual-Engine Pipeline (Cute Bubbly Voice: Sarvam Pooja -> ElevenLabs Domi)
   const playElevenLabsVoice = async (textToSpeak: string) => {
     stopCurrentAudio();
     stopGlobalAudio();
@@ -604,7 +604,7 @@ export default function PactLandingAndAssistant() {
 
     try {
       setLiveVoiceState('agent-speaking');
-      setLiveVoiceMessage('🔊 Pact Speaking (Young Voice)...');
+      setLiveVoiceMessage('🔊 Pact Speaking (Cute Companion Voice)...');
 
       const controller = new AbortController();
       audioAbortControllerRef.current = controller;
@@ -613,7 +613,7 @@ export default function PactLandingAndAssistant() {
         signal: controller.signal,
         onStart: () => {
           setLiveVoiceState('agent-speaking');
-          setLiveVoiceMessage('🔊 Pact Voice Active (Simran)...');
+          setLiveVoiceMessage('🔊 Pact Voice Active (Cute Companion)...');
         },
         onEnd: () => {
           setLiveVoiceState(null);
