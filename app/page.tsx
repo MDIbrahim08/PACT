@@ -243,11 +243,11 @@ export default function PactLandingAndAssistant() {
           setHeroAcceptedTerms(Boolean(parsed.acceptedTerms));
         }
       } else if (isStandalone) {
-        // Pre-fill registered client details for seamless standalone app experience
+        // Pre-fill client details for seamless standalone app experience without leaking personal contacts
         const defaultProfile: UserProfileData = {
-          fullName: 'Mohammed Ibrahim',
-          phone: '+919606836524',
-          email: 'mi5062254@gmail.com',
+          fullName: 'Prabhanjan More',
+          phone: '',
+          email: '',
           acceptedTerms: true,
           onDemandMailConsent: true,
           contactSyncConsent: true,
@@ -844,8 +844,8 @@ export default function PactLandingAndAssistant() {
 
     try {
       const activeName = userProfile?.fullName || heroName || 'Trader';
-      const activePhone = userProfile?.phone || heroPhone || '+91 96068 36524';
-      const activeEmail = userProfile?.email || heroEmail || 'mi5062254@gmail.com';
+      const activePhone = userProfile?.phone || heroPhone || '';
+      const activeEmail = userProfile?.email || heroEmail || '';
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -2443,6 +2443,8 @@ export default function PactLandingAndAssistant() {
                   onSend={(msg) => handleSendMessage(undefined, msg)}
                   onReset={handleResetChat}
                   onAttach={() => fileInputRef.current?.click()}
+                  onMic={handleToggleMic}
+                  isRecording={isRecording}
                   className="bg-slate-900/95 border border-slate-800/90 text-white shadow-2xl max-w-full"
                 />
               </div>
@@ -2627,8 +2629,7 @@ export default function PactLandingAndAssistant() {
                             <a
                               href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
                                 `🤝 *PACT COMMERCIAL CONTRACT SUMMARY*\n` +
-                                `*Registered Trader:* ${userProfile?.fullName || heroName || 'Trader'}\n` +
-                                `*Mobile:* ${userProfile?.phone || heroPhone || '+91 96068 36524'}\n` +
+                                `*Authorized Merchant:* ${userProfile?.fullName || heroName || 'Verified MSME Merchant'}\n` +
                                 `*Statutory Terms:* Indian Contract Act §10 & MSMED Act §15 (45-Day Payment Lock)\n` +
                                 `*BSA 2023 Evidence Seal:* SHA-256 [${currentHash ? currentHash.substring(0, 16) : '7a8f4b1e9c20'}...]\n\n` +
                                 `_Verified via Pact MSME Contract Notary_`
@@ -2664,7 +2665,7 @@ export default function PactLandingAndAssistant() {
                             SMS Native Telephony Action:
                           </span>
                           <a
-                            href={`sms:${(userProfile?.phone || heroPhone || '+919606836524').replace(/\D/g, '')}?&body=${encodeURIComponent(
+                            href={`sms:${(userProfile?.phone || heroPhone || '').replace(/\D/g, '')}?&body=${encodeURIComponent(
                               `[PACT LEGAL ALERT] Agreement sealed under Indian Contract Act §10 & BSA 2023 §63 for ${userProfile?.fullName || 'Trader'}. Dual-hash verified.`
                             )}`}
                             className="w-full p-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 text-xs flex items-center justify-center space-x-1.5 transition-all active:scale-95 font-semibold"
@@ -2679,7 +2680,7 @@ export default function PactLandingAndAssistant() {
                       {msg.text.includes('Omni-Channel Device Sync Status') && (
                         <div className="mt-3 pt-2.5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                           <a
-                            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🤝 Pact Legal Bot synced on WhatsApp: ${userProfile?.phone || heroPhone || '+91 96068 36524'}`)}`}
+                            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🤝 Pact Legal Bot synced on WhatsApp for ${userProfile?.fullName || heroName || 'Verified Merchant'}`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-2 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366]/25 border border-[#25D366]/30 text-emerald-300 flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
@@ -2688,14 +2689,14 @@ export default function PactLandingAndAssistant() {
                             <span>Test WhatsApp</span>
                           </a>
                           <a
-                            href={`mailto:${userProfile?.email || heroEmail || 'mi5062254@gmail.com'}?subject=${encodeURIComponent('Pact Contract Sync Test')}&body=${encodeURIComponent('Pact Zero-Storage Legal Contract Sync verified.')}`}
+                            href={`mailto:${userProfile?.email || heroEmail || ''}?subject=${encodeURIComponent('Pact Contract Sync Test')}&body=${encodeURIComponent('Pact Zero-Storage Legal Contract Sync verified.')}`}
                             className="p-2 rounded-xl bg-indigo-600/15 hover:bg-indigo-600/25 border border-indigo-500/30 text-indigo-300 flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
                           >
                             <Mail className="w-3 h-3 text-indigo-400" />
                             <span>Test Email</span>
                           </a>
                           <a
-                            href={`sms:${(userProfile?.phone || heroPhone || '+919606836524').replace(/\D/g, '')}?&body=${encodeURIComponent('Pact SMS Telephony sync test verified.')}`}
+                            href={`sms:${(userProfile?.phone || heroPhone || '').replace(/\D/g, '')}?&body=${encodeURIComponent('Pact SMS Telephony sync test verified.')}`}
                             className="p-2 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 flex items-center justify-center space-x-1 font-mono text-[11px] transition-all"
                           >
                             <Smartphone className="w-3 h-3 text-blue-400" />
@@ -2842,7 +2843,7 @@ export default function PactLandingAndAssistant() {
                         <span>WhatsApp</span>
                       </a>
                       <a
-                        href={`mailto:${userProfile?.email || heroEmail || 'mi5062254@gmail.com'}?subject=${encodeURIComponent(`PACT Legal Contract: ${preSendConsentDoc.title}`)}&body=${encodeURIComponent(
+                        href={`mailto:${userProfile?.email || heroEmail || ''}?subject=${encodeURIComponent(`PACT Legal Contract: ${preSendConsentDoc.title}`)}&body=${encodeURIComponent(
                           `Commercial Contract Dispatch under Indian Contract Act 1872 §10\n\n` +
                           `Recipient: ${preSendConsentDoc.recipient}\n` +
                           `Scope: ${preSendConsentDoc.summary}\n` +
@@ -2856,7 +2857,7 @@ export default function PactLandingAndAssistant() {
                         <span>Email</span>
                       </a>
                       <a
-                        href={`sms:${(userProfile?.phone || heroPhone || '+919606836524').replace(/\D/g, '')}?&body=${encodeURIComponent(
+                        href={`sms:${(userProfile?.phone || heroPhone || '').replace(/\D/g, '')}?&body=${encodeURIComponent(
                           `[PACT] ${preSendConsentDoc.title} authorized. Hash: ${currentHash ? currentHash.substring(0, 12) : '7a8f4b1e9c20'}... MSMED Act §15 active.`
                         )}`}
                         className="p-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 flex items-center justify-center space-x-1 transition-all"
@@ -2874,102 +2875,106 @@ export default function PactLandingAndAssistant() {
             <div ref={chatBottomRef} />
           </div>
 
-          {/* Quick Prompt Suggestions */}
-          <div className="px-3 pt-2 pb-1.5 bg-[#080d19] border-t border-slate-800/80 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
-            {[
-              '⚡ Open WhatsApp to Salman Khan',
-              '📱 WhatsApp MSMED Notice',
-              '✍️ Draft a Supply Agreement',
-              '🛡️ Lock MSMED 45-Day Payment',
-              '📲 Sync WhatsApp & Deal',
-              '✉️ Check Email Threads',
-              '💬 Send SMS Notice',
-              '📱 Sync Device (Zero-Storage)',
-            ].map((suggestion, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => handleSendMessage(undefined, suggestion.replace(/^[^\s]+\s/, ''))}
-                className="text-[10px] whitespace-nowrap px-3 py-1 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-600 transition-all shrink-0 active:scale-95"
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
+          {/* Quick Prompt Suggestions (Only visible when conversation is active) */}
+          {messages.length > 1 && (
+            <div className="px-3 pt-2 pb-1.5 bg-[#080d19] border-t border-slate-800/80 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+              {[
+                '⚡ Open WhatsApp to Salman Khan',
+                '📱 WhatsApp MSMED Notice',
+                '✍️ Draft a Supply Agreement',
+                '🛡️ Lock MSMED 45-Day Payment',
+                '📲 Sync WhatsApp & Deal',
+                '✉️ Check Email Threads',
+                '💬 Send SMS Notice',
+                '📱 Sync Device (Zero-Storage)',
+              ].map((suggestion, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleSendMessage(undefined, suggestion.replace(/^[^\s]+\s/, ''))}
+                  className="text-[10px] whitespace-nowrap px-3 py-1 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-600 transition-all shrink-0 active:scale-95"
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          )}
 
-          {/* Drawer Bottom Conversational Bar */}
-          <div className="p-3 bg-[#080d19] border-t border-slate-800 shrink-0 relative z-20">
-            <form onSubmit={(e) => handleSendMessage(e)} className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-1.5 flex items-center space-x-2 shadow-inner">
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileUpload}
-                accept="audio/*,.ogg,.opus,.m4a,.mp3,.wav"
-                className="hidden"
-              />
+          {/* Drawer Bottom Conversational Bar (Only visible when conversation is active) */}
+          {messages.length > 1 && (
+            <div className="p-3 bg-[#080d19] border-t border-slate-800 shrink-0 relative z-20">
+              <form onSubmit={(e) => handleSendMessage(e)} className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-1.5 flex items-center space-x-2 shadow-inner">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  accept="audio/*,.ogg,.opus,.m4a,.mp3,.wav"
+                  className="hidden"
+                />
 
-              {/* Glowing Sequenced Voice Mic Button */}
-              <button
-                type="button"
-                onClick={handleToggleMic}
-                className={`relative w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 shadow-md cursor-pointer ${
-                  isRecording
-                    ? 'bg-gradient-to-r from-[#407ADD] to-[#10B981] text-white ring-4 ring-emerald-500/40 animate-pulse scale-105'
-                    : 'bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700/80 active:scale-95'
-                }`}
-                title={
-                  isRecording
-                    ? 'Stop Recording'
-                    : 'Speak into Microphone (Plays "Hey Pact" Chime)'
-                }
-              >
-                {isRecording ? (
-                  <MicOff className="w-4 h-4 animate-spin text-white" />
-                ) : (
-                  <Mic className="w-4 h-4 text-emerald-400" />
-                )}
-                {isRecording && (
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                )}
-              </button>
-
-              {/* Audio File Upload Button */}
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all active:scale-95"
-                title="Upload WhatsApp Voice Note (.mp3, .wav, .m4a)"
-              >
-                <Upload className="w-3.5 h-3.5" />
-              </button>
-
-              {/* Text Input */}
-              <input
-                type="text"
-                autoFocus
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSendMessage();
+                {/* Glowing Sequenced Voice Mic Button */}
+                <button
+                  type="button"
+                  onClick={handleToggleMic}
+                  className={`relative w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 shadow-md cursor-pointer ${
+                    isRecording
+                      ? 'bg-gradient-to-r from-[#407ADD] to-[#10B981] text-white ring-4 ring-emerald-500/40 animate-pulse scale-105'
+                      : 'bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700/80 active:scale-95'
+                  }`}
+                  title={
+                    isRecording
+                      ? 'Stop Recording'
+                      : 'Speak into Microphone (Plays "Hey Pact" Chime)'
                   }
-                }}
-                placeholder={userProfile?.fullName || heroName ? `Ask Pact or dictate terms, ${userProfile?.fullName || heroName}...` : "Ask Pact or paste a WhatsApp deal..."}
-                className="flex-1 bg-transparent text-xs text-slate-100 placeholder-slate-500 focus:outline-none px-2 py-1 pointer-events-auto"
-              />
+                >
+                  {isRecording ? (
+                    <MicOff className="w-4 h-4 animate-spin text-white" />
+                  ) : (
+                    <Mic className="w-4 h-4 text-emerald-400" />
+                  )}
+                  {isRecording && (
+                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                  )}
+                </button>
 
-              {/* Send Button */}
-              <button
-                type="submit"
-                disabled={!inputText.trim() || isAiResponding}
-                className="w-9 h-9 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white flex items-center justify-center shrink-0 transition-all active:scale-95 shadow-sm"
-                title="Send Message"
-              >
-                <Send className="w-3.5 h-3.5" />
-              </button>
-            </form>
-          </div>
+                {/* Audio File Upload Button */}
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all active:scale-95"
+                  title="Upload WhatsApp Voice Note (.mp3, .wav, .m4a)"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                </button>
+
+                {/* Text Input */}
+                <input
+                  type="text"
+                  autoFocus
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }
+                  }}
+                  placeholder={userProfile?.fullName || heroName ? `Ask Pact or dictate terms, ${userProfile?.fullName || heroName}...` : "Ask Pact or paste a WhatsApp deal..."}
+                  className="flex-1 bg-transparent text-xs text-slate-100 placeholder-slate-500 focus:outline-none px-2 py-1 pointer-events-auto"
+                />
+
+                {/* Send Button */}
+                <button
+                  type="submit"
+                  disabled={!inputText.trim() || isAiResponding}
+                  className="w-9 h-9 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white flex items-center justify-center shrink-0 transition-all active:scale-95 shadow-sm"
+                  title="Send Message"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                </button>
+              </form>
+            </div>
+          )}
 
         </div>
       )}
@@ -3068,9 +3073,9 @@ export default function PactLandingAndAssistant() {
           const activePhone = heroPhone.trim() || userProfile?.phone || '';
           const activeEmail = heroEmail.trim() || userProfile?.email || '';
           const updated: UserProfileData = {
-            fullName: activeName || 'Mohammed Ibrahim',
-            phone: activePhone || '+91 96068 36524',
-            email: activeEmail || 'mi5062254@gmail.com',
+            fullName: activeName || 'Prabhanjan More',
+            phone: activePhone || '',
+            email: activeEmail || '',
             acceptedTerms: true,
             onDemandMailConsent: true,
             contactSyncConsent: true,

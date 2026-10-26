@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, useInView } from "motion/react";
-import { ArrowUp, MessageCircleDashed, Plus, RefreshCw } from "lucide-react";
+import { ArrowUp, MessageCircleDashed, Mic, Plus, RefreshCw } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -22,6 +22,8 @@ export interface AIChatCardProps {
   onSend?: (message: string) => void;
   onReset?: () => void;
   onAttach?: () => void;
+  onMic?: () => void;
+  isRecording?: boolean;
   className?: string;
 }
 
@@ -44,6 +46,8 @@ export function AIChatCard({
   onSend,
   onReset,
   onAttach,
+  onMic,
+  isRecording = false,
   className,
 }: AIChatCardProps) {
   const rootRef = React.useRef<HTMLDivElement>(null);
@@ -176,17 +180,37 @@ export function AIChatCard({
             </div>
           )}
           <div className="mt-2 flex items-center justify-between">
-            <motion.button
-              type="button"
-              onClick={onAttach}
-              whileHover={{ rotate: 90 }}
-              whileTap={{ scale: 0.88 }}
-              transition={{ type: "spring", bounce: 0.4, duration: 0.4 }}
-              aria-label="Add files"
-              className="flex h-[30px] w-[30px] items-center justify-center rounded-[18px] border border-border bg-white text-foreground dark:bg-neutral-950 cursor-pointer"
-            >
-              <Plus className="h-4 w-4" />
-            </motion.button>
+            <div className="flex items-center space-x-1.5">
+              <motion.button
+                type="button"
+                onClick={onAttach}
+                whileHover={{ rotate: 90 }}
+                whileTap={{ scale: 0.88 }}
+                transition={{ type: "spring", bounce: 0.4, duration: 0.4 }}
+                aria-label="Add files"
+                className="flex h-[30px] w-[30px] items-center justify-center rounded-[18px] border border-border bg-white text-foreground dark:bg-neutral-950 cursor-pointer"
+                title="Attach audio or chat file"
+              >
+                <Plus className="h-4 w-4" />
+              </motion.button>
+              {onMic && (
+                <motion.button
+                  type="button"
+                  onClick={onMic}
+                  whileTap={{ scale: 0.88 }}
+                  aria-label="Toggle voice mic"
+                  className={cn(
+                    "flex h-[30px] w-[30px] items-center justify-center rounded-[18px] border border-border cursor-pointer transition-all",
+                    isRecording 
+                      ? "bg-emerald-500 text-white animate-pulse" 
+                      : "bg-white text-emerald-500 dark:bg-neutral-950 dark:text-emerald-400"
+                  )}
+                  title={isRecording ? "Stop recording" : "Dictate terms with voice"}
+                >
+                  <Mic className="h-4 w-4" />
+                </motion.button>
+              )}
+            </div>
             <motion.button
               type="button"
               onClick={() => onSend?.(message)}

@@ -21,16 +21,30 @@ export async function POST(req: NextRequest) {
 
     const userPrompt = message.trim();
     const displayName = userName && typeof userName === 'string' && userName.trim() ? userName.trim() : 'Trader';
-    const displayPhone = userPhone && typeof userPhone === 'string' && userPhone.trim() ? userPhone.trim() : '+91 96068 36524';
-    const displayEmail = userEmail && typeof userEmail === 'string' && userEmail.trim() ? userEmail.trim() : 'mi5062254@gmail.com';
+    const displayPhone = userPhone && typeof userPhone === 'string' ? userPhone.trim() : '';
+    const displayEmail = userEmail && typeof userEmail === 'string' ? userEmail.trim() : '';
     const cleanDigits = displayPhone.replace(/\D/g, '');
     const cleanPhone = cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
+
+    // 0. Clean, natural answers for identity & name queries
+    const isIdentityQuery = /^(what('?s| is) your name|who are you|who r u|tell me your name|what are you|what is this bot|introduce yourself)\b/i.test(userPrompt);
+    if (isIdentityQuery) {
+      const idReply = `Hello ${displayName}! 👋\n\nI am **Pact**, your commercial legal assistant. I help you draft agreements, prevent payment delays under the MSMED Act, and verify contracts directly over WhatsApp and voice notes. What can I help you with today?`;
+      const idSpoken = `I'm Pact, your commercial legal assistant. How can I help you today, ${displayName}?`;
+
+      return NextResponse.json({
+        success: true,
+        reply: idReply,
+        spokenSummary: idSpoken,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      });
+    }
 
     // Instant warm friendly greeting if user says "hi", "hello", etc.
     const isGreeting = /^(hi|hello|hey|namaste|good\s*(morning|afternoon|evening)|pact|hey\s*pact|halo)\b/i.test(userPrompt);
     if (isGreeting && userPrompt.length < 25) {
-      const greetingReply = `Namaste **${displayName}**! 👋\n\nI am **Pact**, your commercial AI legal notary. How can I help you today? You can:\n\n• 🎙️ **Dictate deal terms** directly with your voice\n• 💬 **Paste a WhatsApp agreement** to lock terms\n• 📲 **Connect & sync WhatsApp / Email / SMS** to your device\n• ⚖️ **Draft a binding contract** under Indian Contract Act §10\n• 🛡️ **Enforce MSMED Act §15** 45-day payment protection`;
-      const greetingSpoken = `Namaste ${displayName}! I am Pact, your commercial AI assistant. What deal or contract can I help you prepare today?`;
+      const greetingReply = `Namaste **${displayName}**! 👋\n\nI am **Pact**, your commercial legal assistant. How can I help you today? You can dictate terms with voice, audit a WhatsApp agreement, or send a statutory payment notice.`;
+      const greetingSpoken = `Namaste ${displayName}! I am Pact. What contract or deal can I help you prepare today?`;
 
       return NextResponse.json({
         success: true,
@@ -43,19 +57,15 @@ export async function POST(req: NextRequest) {
     // 1. General Omni-Channel Sync Intent (WhatsApp + Email + SMS to User Device)
     const isGeneralSyncIntent = /(sync.*device|connect.*device|sync.*all|device.*sync|connect.*whatsapp.*(and|or).*mail|sync.*whatsapp.*(and|or).*email|sync.*to.*device|connect.*all|how.*sync|can.*connect)/i.test(userPrompt);
     if (isGeneralSyncIntent) {
-      const syncReply = `✅ **Omni-Channel Device Sync Status: 100% Active**\n\n` +
-        `Namaste **${displayName}**! Your Pact Legal Bot is linked and synchronized to your device across all commercial channels:\n\n` +
-        `• 🟢 **WhatsApp Synchronization**: **Connected** (\`${displayPhone}\`)\n` +
-        `  - Direct WhatsApp chat deal extraction, 1-click buyer dispatches & "Blame-The-Bot" counter-nudges.\n\n` +
-        `• 🟢 **Email Synchronization**: **Connected** (\`${displayEmail}\`)\n` +
-        `  - In-memory commercial thread analysis, e-Stamp delivery & non-judicial PDF agreements.\n\n` +
-        `• 🟢 **SMS Telephony Gateway**: **Connected** (\`${displayPhone}\`)\n` +
-        `  - Direct native SMS notices under MSMED Act §15 (45-day statutory payment enforcement).\n\n` +
-        `• 🔒 **Zero-Storage Device Vault**: **Active**\n` +
-        `  - All data is encrypted locally on your device under DPDP Act 2023. Zero contracts stored on external servers.\n\n` +
-        `You can now ask me to **"Draft a deal"**, **"Sync WhatsApp"**, or **"Check email threads"** at any time!`;
+      const syncReply = `✅ **Omni-Channel Device Sync: Active**\n\n` +
+        `Hello **${displayName}**! Your Pact Legal Bot is synchronized with your device across all commercial channels:\n\n` +
+        `• 🟢 **WhatsApp**: Connected (Zero-Storage Session)\n` +
+        `• 🟢 **Email**: Connected (In-Memory Processing)\n` +
+        `• 🟢 **SMS Gateway**: Connected (Direct Telephony)\n` +
+        `• 🔒 **Data Vault**: Active (Encrypted on device under DPDP Act 2023)\n\n` +
+        `You can ask me to draft a deal, sync with WhatsApp, or review email agreements at any time.`;
 
-      const syncSpoken = `All channels are connected and synced to your device, ${displayName}! WhatsApp, email, and SMS are ready.`;
+      const syncSpoken = `All channels are connected and synced to your device, ${displayName}. WhatsApp, email, and SMS are ready.`;
 
       return NextResponse.json({
         success: true,
@@ -171,12 +181,12 @@ export async function POST(req: NextRequest) {
       const timeStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' });
       const fullStampedText = 
         `🤝 *PACT COMMERCIAL LEGAL DISPATCH*\n` +
-        `*To:* ${targetName} (${targetPhone})\n` +
+        `*To:* ${targetName}\n` +
         `*Statutory Instrument:* ${taskType}\n` +
         `*Governing Law:* ${statutoryLaw}\n` +
         `*Terms & Mandate:* ${taskDetails}\n` +
         `*BSA 2023 §63(4) Evidence Seal:* SHA-256 [${sealHash.substring(0, 16)}...]\n` +
-        `*Authorized by:* ${displayName} (${displayPhone})\n` +
+        `*Authorized by:* ${displayName} (Verified MSME Merchant)\n` +
         `*Dispatch Timestamp:* ${timeStr}\n\n` +
         `_Digitally certified under Indian Contract Act 1872 §10 & MSMED Act §15. Admissible as primary electronic evidence under BSA 2023 §63(4)._`;
 
@@ -184,14 +194,14 @@ export async function POST(req: NextRequest) {
 
       const actionReply = 
         `🚀 **WhatsApp Auto-Pilot Triggered for ${targetName}**\n\n` +
-        `• 📱 **Recipient**: **${targetName}** (\`${targetPhone}\`)\n` +
+        `• 📱 **Recipient**: **${targetName}**\n` +
         `• ⚖️ **Executed Task**: **${taskType}**\n` +
         `• 📜 **Statutory Authority**: ${statutoryLaw}\n` +
         `• 🔒 **BSA 2023 SHA-256 Seal**: \`SHA-256 [${sealHash.substring(0, 16)}...]\`\n\n` +
         `---\n\n` +
         `### 📩 Pre-Filled WhatsApp Dispatch:\n\n` +
         `> "${fullStampedText.replace(/\n/g, '\n> ')}"\n\n` +
-        `⚡ *Pact has automatically opened WhatsApp with your terms pre-filled in **${targetName}**'s chat! You can also tap below to re-open or switch recipients.*`;
+        `⚡ *Pact has automatically opened WhatsApp with your terms pre-filled for **${targetName}**! You can also tap below to re-open or switch recipients.*`;
 
       const actionSpoken = `Opening WhatsApp for ${targetName} now! I have drafted your ${taskSummary} with dual SHA-256 evidence seal and loaded it into the chat.`;
 
@@ -213,12 +223,11 @@ export async function POST(req: NextRequest) {
     // 2b. General WhatsApp Connection & Sync Status
     const isWhatsAppSyncIntent = /(connect.*whats?app|sync.*whats?app|link.*whats?app|whats?app.*sync)/i.test(userPrompt);
     if (isWhatsAppSyncIntent) {
-      const waReply = `✅ **Connected to WhatsApp Session (${displayPhone})**\n\n` +
+      const waReply = `✅ **Connected to WhatsApp Session**\n\n` +
         `Your Pact Legal Bot is synchronized with WhatsApp on your device under **Bharatiya Sakshya Adhiniyam 2023 §63(4)**.\n\n` +
-        `• 📱 **Target Mobile**: \`${displayPhone}\`\n` +
-        `• 🔒 **Zero-Storage Enforced**: Messages and voice notes process strictly in temporary session memory.\n` +
+        `• 🔒 **Zero-Storage Enforced**: Messages and voice notes are processed strictly in temporary session memory.\n` +
         `• ⚡ **Active Auto-Pilot**:\n` +
-        `  Say: *"Open WhatsApp and send to Salman Khan payment notice"* or *"Draft supply contract for Rajesh on WhatsApp"* and Pact will automatically launch the exact chat with stamped legal terms pre-filled!\n\n` +
+        `  Say: *"Open WhatsApp and send to Salman Khan payment notice"* or *"Draft supply contract for Rajesh on WhatsApp"* and Pact will automatically launch the exact chat with stamped legal terms pre-filled.\n\n` +
         `Which counterparty would you like me to open in WhatsApp, **${displayName}**?`;
 
       const waSpoken = `Connected to WhatsApp on your device, ${displayName}! Tell me which contact to open and what task to execute.`;
@@ -234,10 +243,9 @@ export async function POST(req: NextRequest) {
     // 3. Specific Handling for SMS Connection & Sync
     const isSmsIntent = /(connect.*sms|sync.*sms|send.*sms|share.*sms|text.*message|sms.*alert|phone.*sms)/i.test(userPrompt);
     if (isSmsIntent) {
-      const smsReply = `✅ **Connected to Device SMS Gateway (${displayPhone})**\n\n` +
+      const smsReply = `✅ **Connected to Device SMS Gateway**\n\n` +
         `Pact Telephony Integration is verified and synchronized with your device's native SMS application.\n\n` +
-        `• 📲 **Telephony Target**: \`${displayPhone}\`\n` +
-        `• 🛡️ **Statutory Function**: SMS dispatch of MSMED Act §15 45-day statutory payment notices & SHA-256 evidence digests.\n` +
+        `• 🛡️ **Statutory Function**: SMS dispatch of MSMED Act §15 45-day statutory payment notices and SHA-256 evidence digests.\n` +
         `• 📜 **Court Admissibility**: Conforms to BSA 2023 §63(4) electronic dispatch certificates.\n\n` +
         `All outgoing notifications and legal reminders can be triggered directly to your mobile network with zero carrier interception.`;
 
@@ -258,7 +266,7 @@ export async function POST(req: NextRequest) {
       /email|mail|subject|client|inbox/i.test(conversationHistory[conversationHistory.length - 1].content || '');
 
     if (isEmailIntent || (isAffirmative && lastMessageWasEmail)) {
-      const emailReply = `✅ **Connected to Email (In-Memory Session: ${displayEmail})**\n\n` +
+      const emailReply = `✅ **Connected to Email (In-Memory Session)**\n\n` +
         `Under our **Zero-Storage Privacy Charter**, your inbox is synced strictly in temporary session memory (0 bytes stored on servers).\n\n` +
         `Here are the **3 unsealed commercial threads** found in your inbox:\n\n` +
         `• 🧵 **Thread 1: Surat Cotton Mills** (\`orders@suratcotton.in\`)\n` +
@@ -300,23 +308,20 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const systemPrompt = `You are Pact, a friendly, young, professional commercial legal AI assistant for Indian MSMEs, traders, and business owners.
-The user's name is "${displayName}". Always address the user warmly by their name ("${displayName}").
-The user's registered phone is "${displayPhone}" and registered email is "${displayEmail}".
-Keep your tone young, energetic, and highly conversational.
-DO NOT use hardcoded fictional sample names unless the user provides them.
+    const systemPrompt = `You are Pact, a smart, young, and professional commercial legal AI assistant for Indian MSMEs, traders, and entrepreneurs.
+The user is "${displayName}". Address the user by their name ("${displayName}").
 
-You enforce Indian commercial laws strictly:
-- Indian Contract Act 1872 (§10 contract essentials: Parties, Consideration, Certainty)
-- Indian Contract Act 1872 (§29 vagueness avoidance)
-- Bharatiya Sakshya Adhiniyam 2023 (§63(4) electronic evidence certificate)
-- MSMED Act 2006 (§15 45-day payment protection & §16 3x RBI compounding interest)
+CRITICAL STYLE & PRIVACY RULES:
+1. NEVER reveal, output, or recite personal phone numbers or personal email addresses in any response or message to anyone. Keep all personal contact information completely private.
+2. WRITE CLEAN, CRISP, AND NATURAL SENTENCES. Avoid run-on sentences, avoid chaining multiple clauses with excessive commas (maximum 1-2 commas per sentence), and avoid dumping long lists of laws or features unless specifically asked.
+3. Keep answers concise, helpful, and direct. For simple questions or greetings, answer in 2-3 short, friendly sentences.
+4. When reviewing or drafting contracts, apply Indian commercial law principles clearly and simply:
+   - Indian Contract Act 1872 (§10 essentials: Parties, Consideration, Certainty)
+   - MSMED Act 2006 (§15 45-day payment deadline & §16 interest protection)
+   - Bharatiya Sakshya Adhiniyam 2023 (§63 electronic evidence seal)
+5. Never assume or fabricate terms. Only reflect facts agreed by the parties.
 
-STRICT PRIVACY & SYNC:
-- Omni-Channel Device Sync: You can sync contracts with WhatsApp (${displayPhone}), Email (${displayEmail}), and SMS (${displayPhone}) in a 100% zero-storage session.
-- Never store data on external servers.
-
-IMPORTANT: Always end your response on a new line with "SPOKEN_SUMMARY:" followed by exactly ONE or TWO short, punchy, conversational sentences (maximum 20 words) suitable for young energetic voice playback addressing ${displayName}.`;
+IMPORTANT: Always end your response on a new line with "SPOKEN_SUMMARY:" followed by exactly ONE short, crisp, natural conversational sentence (maximum 15 words) suitable for voiceover addressing ${displayName}.`;
 
     const googleKey = process.env.GOOGLE_ACCESS_TOKEN || process.env.GOOGLE_API_KEY || '';
     const deepseekKey = process.env.OPENROUTER_DEEPSEEK_KEY || process.env.OPENROUTER_LLAMA_KEY || '';

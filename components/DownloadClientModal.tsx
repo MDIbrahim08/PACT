@@ -206,11 +206,11 @@ export const DownloadClientModal: React.FC<DownloadClientModalProps> = ({
         <div className="mb-3 p-3 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs flex items-center justify-between font-mono">
           <div className="space-y-0.5">
             <span className="text-[9px] text-slate-400 block uppercase tracking-wider">Registered Client Identity</span>
-            <span className="text-white font-bold">{userProfile?.fullName || 'Mohammed Ibrahim'}</span>
+            <span className="text-white font-bold">{userProfile?.fullName || 'Verified MSME Trader'}</span>
           </div>
           <div className="text-right space-y-0.5">
             <span className="text-[9px] text-slate-400 block uppercase tracking-wider">Contact / Sync ID</span>
-            <span className="text-emerald-400 font-mono text-[11px]">{userProfile?.phone || '+91 96068 36524'}</span>
+            <span className="text-emerald-400 font-mono text-[11px]">{userProfile?.phone ? userProfile.phone : 'Client Device Encrypted'}</span>
           </div>
         </div>
 
