@@ -2,11 +2,16 @@
 ### Srujana Tech Fest 2026 Official Submission | Theme: Legal Services (LS-06)
 > **Transforming informal WhatsApp chats and vernacular voice notes into legally binding, tamper-evident commercial contracts for 63+ million Indian MSMEs under the Indian Contract Act 1872 & Bharatiya Sakshya Adhiniyam 2023.**
 
+[![Official Report](https://img.shields.io/badge/📄%20Full%20Project%20Report-PROJECT__REPORT.md-blue?style=for-the-badge)](PROJECT_REPORT.md)
+[![Live Codebase](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/MDIbrahim08/PACT)
+
 [![Next.js 14](https://img.shields.io/badge/Next.js-14.2-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![BSA 2023 Section 63(4)](https://img.shields.io/badge/BSA%202023-%C2%A7%2063(4)%20Certified-emerald)](https://indiacode.nic.in)
 [![ICA 1872 Section 10](https://img.shields.io/badge/ICA%201872-%C2%A7%2010%20Compliant-blue)](https://indiacode.nic.in)
 [![MSMED Act 2006](https://img.shields.io/badge/MSMED%20Act-Section%2015%2F16-amber)](https://msme.gov.in)
+
+> 📑 **Jury Review Quick-Access:** The official 15-section detailed project report covering problem understanding, architecture, completed features, test cases, legal citations, and setup is accessible in [**PROJECT_REPORT.md**](PROJECT_REPORT.md).
 
 ---
 
