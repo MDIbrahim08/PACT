@@ -68,6 +68,7 @@ import { PwaInstallCardContent } from '@/components/PwaInstallPrompt';
 import { PrivacyPolicyModal } from '@/components/PrivacyPolicyModal';
 import { DownloadClientModal } from '@/components/DownloadClientModal';
 import { UninstallClientModal } from '@/components/UninstallClientModal';
+import { AIChatCard } from '@/components/ui/ai-chat-card';
 import { GlassFolder } from '@/components/ui/glass-folder-cards';
 import { PhysicsGoldenMascot } from '@/components/PhysicsGoldenMascot';
 import { CenteredWalkthroughVideo } from '@/components/CenteredWalkthroughVideo';
@@ -2151,6 +2152,55 @@ export default function PactLandingAndAssistant() {
       />
 
       {/* ============================================================
+          SECTION 5: INTERACTIVE COMMERCIAL AI BOT CHAT (AIChatCard Showcase)
+         ============================================================ */}
+      <section className="relative z-10 py-16 sm:py-24 px-4 sm:px-8 border-t border-neutral-200/80 bg-neutral-50/60 dark:bg-neutral-950/60">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-mono text-blue-600 dark:text-blue-400">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
+              <span>LIVE INTERACTIVE COMMERCIAL AI COMPOSER</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
+              Direct Deal Negotiation & Legal Draft Notary
+            </h2>
+            <p className="text-neutral-600 dark:text-neutral-400 text-sm sm:text-base max-w-xl mx-auto">
+              Type, edit, or select any statutory commercial instruction. Pact instantly generates court-enforceable clauses under Section 10 and auto-dispatches to WhatsApp.
+            </p>
+          </div>
+
+          <div className="flex justify-center">
+            <div className="w-full max-w-[460px]">
+              <AIChatCard
+                title="Pact Commercial AI Sentinel"
+                subtitle="Indian Contract Act §10 & WhatsApp Auto-Pilot"
+                greeting={`Namaste, ${userProfile?.fullName || heroName || 'Trader'}!`}
+                prompt="What deal terms, WhatsApp chat, or legal demand can I execute today?"
+                prompts={[
+                  "Open WhatsApp to Salman Khan and tell him payment is overdue under MSMED Act §15",
+                  "Draft a Section 10 supply contract for 500 Bales with Surat Mills",
+                  "Audit our WhatsApp chat for Section 10 pillars and statutory payment limits",
+                  "Open WhatsApp to Prabhanjan More and draft commercial contract",
+                  "Generate a court-admissible electronic evidence certificate under BSA 2023 §63"
+                ]}
+                autoType={true}
+                placeholder="Ask Pact anything or dictate commercial terms…"
+                icon={<Bot className="h-5 w-5 text-blue-500" />}
+                onSend={(msg) => {
+                  setIsDrawerOpen(true);
+                  isDrawerOpenRef.current = true;
+                  handleSendMessage(undefined, msg);
+                }}
+                onReset={handleResetChat}
+                onAttach={() => fileInputRef.current?.click()}
+                className="min-h-[460px] border border-neutral-200 dark:border-neutral-800 shadow-2xl"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
           SECTION: 3D TILT PWA DOWNLOAD TERMINAL (Clean Frosted Glass at End of Page)
          ============================================================ */}
       <section className="relative z-10 py-12 sm:py-16 px-4 sm:px-8 border-t border-neutral-200/60 bg-transparent flex flex-col items-center justify-center">
@@ -2372,9 +2422,33 @@ export default function PactLandingAndAssistant() {
 
           {/* Drawer Scrollable Content Canvas - Clean Full-Height Chat Stream */}
           <div className="flex-1 flex flex-col px-4 py-3 space-y-3.5 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-800">
-            {/* Clean Messages Feed */}
-            <div className="space-y-3 pt-1">
-              {messages.map((msg) => {
+            {/* Clean Messages Feed / Animated AIChatCard Initial Composer */}
+            {messages.length <= 1 ? (
+              <div className="py-1 animate-fadeIn w-full flex flex-col items-center">
+                <AIChatCard
+                  title="Pact Commercial AI Sentinel"
+                  subtitle="MSME Indian Contract Act §10 & WhatsApp Notary"
+                  greeting={`Namaste, ${userProfile?.fullName || heroName || 'Trader'}!`}
+                  prompt="What deal terms, WhatsApp chat, or legal notice can I draft or verify today?"
+                  prompts={[
+                    "Open WhatsApp to Salman Khan and tell him payment is overdue under MSMED Act §15",
+                    "Draft a Section 10 supply contract for 500 Bales with Surat Mills",
+                    "Audit our WhatsApp chat for Section 10 pillars and statutory payment limits",
+                    "Open WhatsApp to Prabhanjan More and draft commercial contract",
+                    "Generate a court-admissible electronic evidence certificate under BSA 2023 §63"
+                  ]}
+                  autoType={true}
+                  placeholder="Ask anything or dictate deal terms…"
+                  icon={<Bot className="h-5 w-5 text-emerald-400" />}
+                  onSend={(msg) => handleSendMessage(undefined, msg)}
+                  onReset={handleResetChat}
+                  onAttach={() => fileInputRef.current?.click()}
+                  className="bg-slate-900/95 border border-slate-800/90 text-white shadow-2xl max-w-full"
+                />
+              </div>
+            ) : (
+              <div className="space-y-3 pt-1">
+                {messages.map((msg) => {
                 const isUser = msg.role === 'buyer' || msg.sender.includes('You') || msg.sender.includes('Trader');
                 const isPact = msg.role === 'pact' || msg.sender.includes('Pact');
 
@@ -2679,6 +2753,7 @@ export default function PactLandingAndAssistant() {
                 </div>
               )}
             </div>
+          )}
 
             {/* Mandatory Pre-Send Authorization Consent Card (Only appears when user creates a legal doc) */}
             {preSendConsentDoc && (

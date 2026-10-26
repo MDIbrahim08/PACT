@@ -9,6 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        border: "hsl(var(--border, 217.2 32.6% 17.5%))",
+        input: "hsl(var(--input, 217.2 32.6% 17.5%))",
+        ring: "hsl(var(--ring, 212.7 26.8% 83.9%))",
+        foreground: "hsl(var(--foreground, 210 40% 98%))",
+        muted: {
+          DEFAULT: "hsl(var(--muted, 217.2 32.6% 17.5%))",
+          foreground: "hsl(var(--muted-foreground, 215 20.2% 65.1%))",
+        },
         background: "#080c14",
         surface: "#0f172a",
         "surface-card": "#131f37",
