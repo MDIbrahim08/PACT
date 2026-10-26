@@ -596,8 +596,24 @@ export default function PactLandingAndAssistant() {
 
   const handleTogglePiPCompanion = async () => {
     if (typeof window === 'undefined') return;
+
+    // Mobile / Video PiP fallback for floating over screen when documentPictureInPicture is unavailable
     if (!('documentPictureInPicture' in window)) {
-      // If PiP is not supported (mobile or unsupported browser), minimize drawer to corner mascot
+      try {
+        const videoEl = document.querySelector('video') as HTMLVideoElement;
+        if (videoEl && 'requestPictureInPicture' in videoEl) {
+          if (document.pictureInPictureElement) {
+            await document.exitPictureInPicture();
+            setIsPiPActive(false);
+          } else {
+            await videoEl.requestPictureInPicture();
+            setIsPiPActive(true);
+          }
+          return;
+        }
+      } catch (err) {
+        console.warn('Video PiP fallback error:', err);
+      }
       setIsDrawerOpen(false);
       return;
     }
@@ -2378,22 +2394,20 @@ export default function PactLandingAndAssistant() {
                 <span className="hidden sm:inline text-[10px] font-mono">{isDrawerMaximized ? 'Restore' : 'Expand'}</span>
               </button>
 
-              {/* Float Companion Over Screen (PiP) Button - Desktop Only */}
-              {!isMobile && (
-                <button
-                  type="button"
-                  onClick={handleTogglePiPCompanion}
-                  className={`p-1.5 rounded-lg border text-xs transition-all active:scale-95 flex items-center space-x-1 ${
-                    isPiPActive
-                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse'
-                      : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700/60'
-                  }`}
-                  title="Float Mascot Over All Windows (Picture-in-Picture)"
-                >
-                  <Layers className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="hidden md:inline text-[10px] font-mono">Float PiP</span>
-                </button>
-              )}
+              {/* Float Companion Over Screen (PiP) Button */}
+              <button
+                type="button"
+                onClick={handleTogglePiPCompanion}
+                className={`p-1.5 rounded-lg border text-xs transition-all active:scale-95 flex items-center space-x-1 cursor-pointer ${
+                  isPiPActive
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse'
+                    : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700/60'
+                }`}
+                title="Float Mascot Over Screen & Apps (Picture-in-Picture)"
+              >
+                <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-[10px] font-mono">Float</span>
+              </button>
 
               {/* Uninstall Bot Client / Reset to Web Mode Button */}
               {isBotDownloaded && (
