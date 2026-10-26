@@ -1,5 +1,6 @@
 # Pact — From Handshake to Commercial Contract
 ### Srujana Tech Fest 2026 Official Submission | Theme: Legal Services (LS-06)
+**Team Agentics:** Mohammed Ibrahim (Lead) & Prabhanjan More
 > **Transforming informal WhatsApp chats and vernacular voice notes into legally binding, tamper-evident commercial contracts for 63+ million Indian MSMEs under the Indian Contract Act 1872 & Bharatiya Sakshya Adhiniyam 2023.**
 
 [![Official Report](https://img.shields.io/badge/📄%20Full%20Project%20Report-PROJECT__REPORT.md-blue?style=for-the-badge)](PROJECT_REPORT.md)
@@ -248,4 +249,4 @@ The application will be live at `http://localhost:3000`.
 
 ---
 
-*Submitted for Srujana Tech Fest 2026. Built with precision for the hardworking MSME entrepreneurs of India.*
+*Submitted for Srujana Tech Fest 2026 by Team Agentics (Mohammed Ibrahim & Prabhanjan More). Built with precision for the hardworking MSME entrepreneurs of India.*

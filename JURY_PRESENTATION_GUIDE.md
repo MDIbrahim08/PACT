@@ -1,6 +1,6 @@
-# PACT (पैक्ट) — Official Jury Presentation & Q&A Defense Guide
+# PACT — Official Jury Presentation & Q&A Defense Guide
 ### Srujana Tech Fest 2026 | Final Round Preparation (12:30 PM Evaluation)
-**Theme:** Legal Services (LS-06) | **Team:** Mohammed Ibrahim & Team
+**Theme:** Legal Services (LS-06) | **Team:** Team Agentics (Mohammed Ibrahim & Prabhanjan More)
 
 ---
 

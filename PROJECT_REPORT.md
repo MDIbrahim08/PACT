@@ -11,7 +11,8 @@
 ## Document Metadata
 
 - *Project Name:* Project PACT (Commercial Contract and Electronic Evidence System)
-- *Team Lead:* Mohammed Ibrahim
+- *Team Name:* Team Agentics
+- *Team Members:* Mohammed Ibrahim (Team Lead), Prabhanjan More (Co-Developer)
 - *Official Track:* Legal Services (Code: LS-06)
 - *Submission Target:* 10:00 AM, October 26, 2026
 - *Target Demographic:* 63+ Million Indian Micro, Small, and Medium Enterprises (MSMEs)
@@ -229,9 +230,9 @@ Project PACT maintains a strict boundary between artificial intelligence and leg
 
 Project PACT demonstrates that commercial legal protection can be delivered without complex legal language or administrative overhead. By combining speech processing with deterministic statutory auditing and modern cryptography, PACT provides Indian MSMEs with a practical shield against payment delays and commercial disputes.
 
-### Team Roles and Responsibilities
+### Team Agentics Roles and Responsibilities
 - *Mohammed Ibrahim (Team Lead & Full-Stack Architect):* Overall architecture, deterministic statutory engine implementation, cryptographic evidence sealing, WhatsApp auto-pilot routing, and legal research.
-- *Engineering Team:* Speech-to-text pipeline integration, legal reference library structuring, progressive web app configuration, and end-to-end test execution.
+- *Prabhanjan More (Co-Developer & Systems Engineer):* Multilingual speech-to-text pipeline integration, legal reference library structuring, progressive web app configuration, cross-platform client validation, and end-to-end test execution.
 
 ### Statutory References
 1. The Indian Contract Act, 1872 (Act No. 9 of 1872) — Sections 10 and 29.
