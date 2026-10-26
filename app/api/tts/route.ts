@@ -24,16 +24,73 @@ export async function POST(req: NextRequest) {
     const elevenKey = process.env.ELEVENLABS_API_KEY || '';
 
     // ============================================================
-    // ENGINE 1: SARVAM AI (Primary Cute Bubbly Indian Companion Voice)
+    // ENGINE 1: ELEVENLABS API (Primary Foreign Young Lady Voice - Rachel)
     // ============================================================
-    if (sarvamKey) {
+    if (elevenKey) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 7000);
+
+        // Rachel (21m00Tcm4TlvDq8ikWAM) - Articulate, warm, natural foreign young American lady voice (Siri quality)
+        // Alternative: Sarah (EXAVITQu4vr4xnSDxMaL) or Charlotte (XB0fDUnXU5powFXDhCwa)
+        const voiceId = speaker === 'male' 
+          ? 'pNInz6obpgDQGcFmaJgB' 
+          : (speaker === 'sarah' ? 'EXAVITQu4vr4xnSDxMaL' : '21m00Tcm4TlvDq8ikWAM');
+        const elevenUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`;
+
+        const elevenRes = await fetch(elevenUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'xi-api-key': elevenKey,
+            Accept: 'audio/mpeg',
+          },
+          body: JSON.stringify({
+            text: cleanText,
+            model_id: 'eleven_turbo_v2_5', // Ultra-low latency (<200ms real-time audio)
+            voice_settings: {
+              stability: 0.50,          // Natural, articulate young lady cadence
+              similarity_boost: 0.85,   // Crystal vocal fidelity
+              style: 0.20,              // Friendly, intelligent foreign assistant tone
+              use_speaker_boost: true,
+            },
+          }),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeout);
+
+        if (elevenRes.ok) {
+          const audioArrayBuffer = await elevenRes.arrayBuffer();
+          return new Response(audioArrayBuffer, {
+            status: 200,
+            headers: {
+              'Content-Type': 'audio/mpeg',
+              'Content-Length': audioArrayBuffer.byteLength.toString(),
+              'x-engine': 'elevenlabs',
+              'x-voice': 'rachel-young-lady',
+              'Cache-Control': 'public, max-age=3600',
+            },
+          });
+        } else {
+          const errText = await elevenRes.text().catch(() => '');
+          console.warn('[ElevenLabs TTS Warning, Falling to Fallback]:', elevenRes.status, errText);
+        }
+      } catch (elevenErr: any) {
+        console.warn('[ElevenLabs TTS Exception, Falling to Fallback]:', elevenErr?.message);
+      }
+    }
+
+    // ============================================================
+    // ENGINE 2: SARVAM AI (Secondary Fallback for Hindi / Regional queries)
+    // ============================================================
+    if (sarvamKey && (language.includes('hi') || !elevenKey)) {
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 6000);
 
         const targetLang = language.includes('hi') ? 'hi-IN' : 'en-IN';
-        // 'pooja' is Sarvam's sweetest, highest-clarity youthful cute voice; fallback to 'simran'
-        const targetSpeaker = speaker === 'male' || speaker === 'rohan' ? 'rohan' : (speaker || 'pooja');
+        const targetSpeaker = speaker === 'male' || speaker === 'rohan' ? 'rohan' : (speaker || 'kavya');
 
         const sarvamRes = await fetch('https://api.sarvam.ai/text-to-speech', {
           method: 'POST',
@@ -45,10 +102,10 @@ export async function POST(req: NextRequest) {
             inputs: [cleanText],
             target_language_code: targetLang,
             speaker: targetSpeaker,
-            pitch: 0.35, // Bright, youthful, cute mascot tone
-            pace: 1.08,  // Cheerful, friendly conversational tempo
-            loudness: 1.25,
-            speech_sample_rate: 8000,
+            pitch: 0.0,  // Natural smooth pitch
+            pace: 1.02,  // Conversational tempo
+            loudness: 1.15,
+            speech_sample_rate: 16000,
             enable_preprocessing: true,
             model: 'bulbul:v3',
           }),
@@ -75,67 +132,10 @@ export async function POST(req: NextRequest) {
           }
         } else {
           const errText = await sarvamRes.text().catch(() => '');
-          console.warn('[Sarvam AI TTS Error, Falling back to ElevenLabs]:', sarvamRes.status, errText);
+          console.warn('[Sarvam AI Fallback Error]:', sarvamRes.status, errText);
         }
       } catch (sarvamErr: any) {
-        console.warn('[Sarvam AI TTS Exception, Falling back to ElevenLabs]:', sarvamErr?.message);
-      }
-    }
-
-    // ============================================================
-    // ENGINE 2: ELEVENLABS API (Cute, Expressive Anime/Companion Voice)
-    // ============================================================
-    if (elevenKey) {
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 7000);
-
-        // Domi (AZnzlk1XvdvUeBnXmlld) - Bubbly, cute, energetic, youthful companion voice
-        // Or Dorothy (ThT5KcBeYPX3keUQqHPh) - Sweet, warm, animated character tone
-        const voiceId = speaker === 'male' 
-          ? 'pNInz6obpgDQGcFmaJgB' 
-          : (speaker === 'dorothy' ? 'ThT5KcBeYPX3keUQqHPh' : 'AZnzlk1XvdvUeBnXmlld');
-        const elevenUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`;
-
-        const elevenRes = await fetch(elevenUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'xi-api-key': elevenKey,
-            Accept: 'audio/mpeg',
-          },
-          body: JSON.stringify({
-            text: cleanText,
-            model_id: 'eleven_multilingual_v2',
-            voice_settings: {
-              stability: 0.35,      // Expressive, emotive cute delivery
-              similarity_boost: 0.85,
-              style: 0.42,          // Lively, charming personality inflection
-              use_speaker_boost: true,
-            },
-          }),
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeout);
-
-        if (elevenRes.ok) {
-          const audioArrayBuffer = await elevenRes.arrayBuffer();
-          return new Response(audioArrayBuffer, {
-            status: 200,
-            headers: {
-              'Content-Type': 'audio/mpeg',
-              'Content-Length': audioArrayBuffer.byteLength.toString(),
-              'x-engine': 'elevenlabs',
-              'Cache-Control': 'public, max-age=3600',
-            },
-          });
-        } else {
-          const errText = await elevenRes.text().catch(() => '');
-          console.warn('[ElevenLabs Fallback Error]:', elevenRes.status, errText);
-        }
-      } catch (elevenErr: any) {
-        console.warn('[ElevenLabs Fallback Exception]:', elevenErr?.message);
+        console.warn('[Sarvam AI Fallback Exception]:', sarvamErr?.message);
       }
     }
 

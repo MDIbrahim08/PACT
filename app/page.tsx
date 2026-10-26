@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { 
   Shield, 
   Sparkles, 
@@ -109,8 +109,31 @@ export default function PactLandingAndAssistant() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isDrawerMaximized, setIsDrawerMaximized] = useState(false);
   const [isStandaloneApp, setIsStandaloneApp] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
+
+  // Synchronized state refs for Siri-style continuous acoustic listener
+  const isDrawerOpenRef = useRef(false);
+  const isRecordingRef = useRef(false);
+  const isSpeakingRef = useRef(false);
+  const isTriggeringWakeRef = useRef(false);
+  const passiveRecRef = useRef<any>(null);
+  const isMountedRef = useRef(true);
+
+  // Detect Mobile Viewport
+  useEffect(() => {
+    const updateMobile = () => setIsMobile(typeof window !== 'undefined' && window.innerWidth < 768);
+    updateMobile();
+    window.addEventListener('resize', updateMobile);
+    return () => window.removeEventListener('resize', updateMobile);
+  }, []);
+
+  // Keep isDrawerOpenRef in sync
+  useEffect(() => {
+    isDrawerOpenRef.current = isDrawerOpen;
+  }, [isDrawerOpen]);
+
 
   // Hero User Data Collection Input States (Replaces old single deal box)
   const [heroName, setHeroName] = useState('');
@@ -267,6 +290,12 @@ export default function PactLandingAndAssistant() {
   // Conversational drawer input
   const [inputText, setInputText] = useState('');
   const [isRecording, setIsRecording] = useState(false);
+
+  // Keep isRecordingRef in sync
+  useEffect(() => {
+    isRecordingRef.current = isRecording;
+  }, [isRecording]);
+
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -368,22 +397,6 @@ export default function PactLandingAndAssistant() {
     };
   }, [currentChatText, activeScenarioId]);
 
-  // Click outside listener for drawer
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        isDrawerOpen &&
-        drawerRef.current &&
-        !drawerRef.current.contains(event.target as Node) &&
-        bubbleRef.current &&
-        !bubbleRef.current.contains(event.target as Node)
-      ) {
-        setIsDrawerOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isDrawerOpen]);
 
   // Global Keyboard Shortcut: Ctrl + Shift + D / Cmd + Shift + D to toggle Backend Diagnostics Modal
   useEffect(() => {
@@ -437,12 +450,12 @@ export default function PactLandingAndAssistant() {
 
   const agentStatusText = useMemo(() => {
     if (liveVoiceState === 'listening') return '🎙️ "Hey Pact" Voice Listening...';
-    if (liveVoiceState === 'user-speaking') return '🎙️ User Speaking (Sarvam AI)...';
-    if (liveVoiceState === 'processing') return '🧠 Sarvam AI & Legal Engine Analyzing...';
-    if (liveVoiceState === 'agent-speaking') return '🔊 Pact Agent Speaking...';
+    if (liveVoiceState === 'user-speaking') return '🎙️ User Dictating Terms...';
+    if (liveVoiceState === 'processing') return '🧠 Legal & Ambiguity Engine Analyzing...';
+    if (liveVoiceState === 'agent-speaking') return '🔊 Pact Voice Active (Foreign Young Lady)...';
     if (isTampered) return 'Tamper Detected! Hash Mismatch';
     if (unresolvedCount > 0) return `Pact flagged ${unresolvedCount} terms to verify`;
-    return 'Pact AI Agent · Active & Unlocked';
+    return 'Pact AI Agent · Background Wake Active (Say "Hey Pact" or "Bot")';
   }, [liveVoiceState, isTampered, unresolvedCount]);
 
   // Scenario Loader
@@ -666,22 +679,23 @@ export default function PactLandingAndAssistant() {
     setLiveVoiceMessage('');
   };
 
-  // Play High-Fidelity Voice via Dual-Engine Pipeline (Cute Bubbly Voice: Sarvam Pooja -> ElevenLabs Domi)
+  // Play High-Fidelity Voice via Dual-Engine Pipeline (Primary: ElevenLabs Rachel Foreign Young Lady -> Fallback: Browser Samantha/Jenny)
   const playElevenLabsVoice = async (textToSpeak: string) => {
     stopCurrentAudio();
     stopGlobalAudio();
     if (!textToSpeak || isVoiceMuted) return;
 
-    // Pick first 2 conversational sentences (up to 220 chars) for ultra-fast <400ms generation
+    // Pick first 2 conversational sentences (up to 240 chars) for ultra-fast <350ms generation
     const sentences = textToSpeak
       .replace(/[*#_`~>]/g, '')
       .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
       .split(/(?<=[.?!])\s+/);
-    const shortText = (sentences.slice(0, 2).join(' ') || textToSpeak).substring(0, 220);
+    const shortText = (sentences.slice(0, 2).join(' ') || textToSpeak).substring(0, 240);
 
     try {
+      isSpeakingRef.current = true;
       setLiveVoiceState('agent-speaking');
-      setLiveVoiceMessage('🔊 Pact Speaking (Cute Companion Voice)...');
+      setLiveVoiceMessage('🔊 Pact Speaking (Foreign Young Lady Voice)...');
 
       const controller = new AbortController();
       audioAbortControllerRef.current = controller;
@@ -689,19 +703,23 @@ export default function PactLandingAndAssistant() {
       await speakText(shortText, {
         signal: controller.signal,
         onStart: () => {
+          isSpeakingRef.current = true;
           setLiveVoiceState('agent-speaking');
-          setLiveVoiceMessage('🔊 Pact Voice Active (Cute Companion)...');
+          setLiveVoiceMessage('🔊 Pact Voice Active (Foreign Young Lady)...');
         },
         onEnd: () => {
+          isSpeakingRef.current = false;
           setLiveVoiceState(null);
           setLiveVoiceMessage('');
         },
         onError: () => {
+          isSpeakingRef.current = false;
           setLiveVoiceState(null);
           setLiveVoiceMessage('');
         },
       });
     } catch (err: any) {
+      isSpeakingRef.current = false;
       if (err.name !== 'AbortError') {
         console.warn('Voice playback exception:', err);
       }
@@ -848,12 +866,14 @@ export default function PactLandingAndAssistant() {
   };
 
   // Sequenced Mic & "Hey Pact" Wake-Up Audio Pipeline
-  const handleToggleMic = async () => {
-    if (isRecording) {
-      // User clicked mic to finish recording
+  const handleToggleMic = async (eOrWakeTrigger?: React.MouseEvent | boolean) => {
+    const isWakeTrigger = typeof eOrWakeTrigger === 'boolean' ? eOrWakeTrigger : false;
+    if (isRecording || isRecordingRef.current) {
+      // User clicked mic or action to finish recording
       setIsRecording(false);
+      isRecordingRef.current = false;
       setLiveVoiceState('processing');
-      setLiveVoiceMessage('⚡ Sarvam AI Transcribing Audio...');
+      setLiveVoiceMessage('⚡ Transcribing Spoken Audio...');
       if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
       setRecordingSeconds(0);
 
@@ -867,8 +887,14 @@ export default function PactLandingAndAssistant() {
         micMediaRecorderRef.current.stop();
       }
     } else {
-      // Automatically unlock microphone if running as installed standalone app or profile registered
-      if (!isBotDownloaded && !isStandaloneApp) {
+      // If triggered by Siri-style wake word, automatically ensure client is unlocked
+      if (isWakeTrigger) {
+        setIsBotDownloaded(true);
+        setHeroAcceptedTerms(true);
+        try {
+          localStorage.setItem('pact_bot_downloaded', 'true');
+        } catch {}
+      } else if (!isBotDownloaded && !isStandaloneApp) {
         if (heroAcceptedTerms || userProfile?.acceptedTerms) {
           setIsBotDownloaded(true);
           try {
@@ -882,7 +908,7 @@ export default function PactLandingAndAssistant() {
             id: `pact-mic-lock-${Date.now()}`,
             sender: 'Pact Security Sentinel',
             role: 'pact' as const,
-            text: '🎙️ **Activate Voice Assistant**: Confirm terms or register client to enable full Sarvam AI speech-to-text voice recognition.',
+            text: '🎙️ **Activate Voice Assistant**: Confirm terms or register client to enable full speech-to-text voice recognition.',
             timestamp: time,
           };
           setMessages((prev) => [...prev, lockedMsg]);
@@ -897,6 +923,7 @@ export default function PactLandingAndAssistant() {
 
       // 2. Immediately trigger visual listening state (glowing #407ADD to #10B981 pulse ring)
       setIsRecording(true);
+      isRecordingRef.current = true;
       setLiveVoiceState('listening');
       setLiveVoiceMessage('🔔 "Hey Pact" Wake Chime Playing...');
       setRecordingSeconds(0);
@@ -911,7 +938,7 @@ export default function PactLandingAndAssistant() {
       // 4. Open active microphone recording stream right as chime finishes (350ms mark)
       micTranscriptRef.current = '';
       micAudioChunksRef.current = [];
-      setLiveVoiceMessage('🎙️ Pact is Listening (Sarvam AI STT)...');
+      setLiveVoiceMessage('🎙️ Pact is Listening (Dictate Deal Terms)...');
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -939,8 +966,9 @@ export default function PactLandingAndAssistant() {
         recorder.onstop = async () => {
           stream.getTracks().forEach((track) => track.stop());
           setIsRecording(false);
+          isRecordingRef.current = false;
           setLiveVoiceState('processing');
-          setLiveVoiceMessage('⚡ Sarvam AI Transcribing Audio...');
+          setLiveVoiceMessage('⚡ Transcribing Spoken Audio...');
 
           try {
             const blob = new Blob(micAudioChunksRef.current, { type: 'audio/webm' });
@@ -1011,7 +1039,7 @@ export default function PactLandingAndAssistant() {
             setMessages((prev) => [...prev, pactMsg]);
             setCurrentChatText((prev) => `${prev}\n\n[${time} Pact Spoken Response]: "${replyText}"`);
 
-            // Stream response through Sarvam AI bulbul:v3 -> ElevenLabs -> Browser SpeechSynthesis
+            // Stream response through Foreign Young Lady Voice (ElevenLabs Rachel -> Samantha Fallback)
             await playElevenLabsVoice(spoken);
           } catch (err) {
             console.error('Audio processing error:', err);
@@ -1020,14 +1048,14 @@ export default function PactLandingAndAssistant() {
           }
         };
 
-        // Real-time browser speech recognition for Indian dialects
+        // Real-time browser speech recognition for instant transcription
         const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         if (SpeechRec) {
           try {
             const rec = new SpeechRec();
             rec.continuous = true;
             rec.interimResults = true;
-            rec.lang = 'en-IN';
+            rec.lang = 'en-US';
             rec.onresult = (evt: any) => {
               let t = '';
               for (let i = 0; i < evt.results.length; ++i) {
@@ -1047,6 +1075,7 @@ export default function PactLandingAndAssistant() {
       } catch (err) {
         console.warn('Microphone permission not granted:', err);
         setIsRecording(false);
+        isRecordingRef.current = false;
         setLiveVoiceState(null);
         setLiveVoiceMessage('');
         alert('Please allow microphone permissions to record live audio deals.');
@@ -1054,97 +1083,225 @@ export default function PactLandingAndAssistant() {
     }
   };
 
-  // Passive "Hey Pact" / "Hello Pact" Wake-Word Trigger
-  useEffect(() => {
+  // Siri-Style Phonetic Acoustic Wake-Word Matcher
+  const matchSiriWakeTrigger = (rawText: string): boolean => {
+    if (!rawText) return false;
+    const text = rawText.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!text) return false;
+
+    // 1. Direct keywords and common Siri/Assistant invocations
+    const directKeywords = [
+      'hey pact', 'hello pact', 'hi pact', 'ok pact', 'yo pact', 'listen pact', 'pact',
+      'pact bot', 'pact ai', 'pact legal', 'pact assistant',
+      'hey bot', 'hello bot', 'hi bot', 'ok bot', 'the bot', 'bot',
+      'hey agent', 'hello agent', 'hi agent', 'legal agent', 'agent',
+      'hey siri', 'siri', 'assistant', 'hey assistant',
+      'hey pacta', 'pacta', 'hey fact', 'fact'
+    ];
+
+    for (const kw of directKeywords) {
+      const reg = new RegExp(`(^|\\s)${kw}(\\s|$)`, 'i');
+      if (reg.test(text)) return true;
+    }
+
+    // 2. Phonetic acoustic variants that speech recognizers yield when a user says "Pact" or "Hey Pact"
+    // e.g. "packed", "pack", "pat", "fact", "backed", "back", "tact", "impact", "contact"
+    const phoneticPattern = /(^|\s)(hey|hi|hello|ok|yo)?\s*(pact|packed|pack|pat|fact|backed|bot|agent|siri)\b/i;
+    if (phoneticPattern.test(text)) return true;
+
+    return false;
+  };
+
+  // Arm / Start Passive Siri-Style Listener with continuous watchdog
+  const armPassiveListener = useCallback(() => {
     if (typeof window === 'undefined') return;
+    if (!isMountedRef.current || isRecordingRef.current || isSpeakingRef.current) return;
+
     const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRec) return;
 
-    let isAlive = true;
-    let recognizer: any = null;
+    try {
+      if (passiveRecRef.current) {
+        try {
+          passiveRecRef.current.onresult = null;
+          passiveRecRef.current.onend = null;
+          passiveRecRef.current.onerror = null;
+          passiveRecRef.current.abort();
+        } catch {}
+        passiveRecRef.current = null;
+      }
 
-    const startPassiveListener = () => {
-      try {
-        recognizer = new SpeechRec();
-        recognizer.continuous = true;
-        recognizer.interimResults = true;
-        recognizer.lang = 'en-IN';
+      const recognizer = new SpeechRec();
+      recognizer.continuous = true;
+      recognizer.interimResults = true;
+      recognizer.lang = 'en-US'; // en-US ensures highest phonetic accuracy for "Pact", "Siri", "Bot"
 
-        recognizer.onresult = (evt: any) => {
-          if (!isAlive || isRecording) return;
-          for (let i = evt.resultIndex; i < evt.results.length; i++) {
-            const transcript = evt.results[i][0].transcript.toLowerCase();
-            const isWake = 
-              transcript.includes('pact') ||
-              transcript.includes('hey pact') ||
-              transcript.includes('hello pact') ||
-              transcript.includes('hi pact') ||
-              transcript.includes('bot') ||
-              transcript.includes('pact bot') ||
-              transcript.includes('agent') ||
-              transcript.includes('legal agent') ||
-              transcript.includes('pack') ||
-              transcript.includes('pat') ||
-              transcript.includes('fact') ||
-              transcript.includes('halo') ||
-              transcript.includes('namaste');
+      recognizer.onresult = (evt: any) => {
+        if (!isMountedRef.current || isRecordingRef.current || isSpeakingRef.current) return;
+        for (let i = evt.resultIndex; i < evt.results.length; i++) {
+          const transcript = evt.results[i][0].transcript;
+          if (matchSiriWakeTrigger(transcript)) {
+            console.log('[Siri-Style Acoustic Wake-Word Triggered]:', transcript);
+            if (isTriggeringWakeRef.current) return;
+            isTriggeringWakeRef.current = true;
 
-            if (isWake) {
-              console.log('[Hey Pact Wake Word Triggered Instantly]:', transcript);
-              try {
-                recognizer.abort();
-              } catch {}
+            try {
+              recognizer.abort();
+            } catch {}
 
-              // Auto-unlock bot on voice wake trigger
-              setIsBotDownloaded(true);
-              setHeroAcceptedTerms(true);
-              try {
-                localStorage.setItem('pact_bot_downloaded', 'true');
-              } catch {}
+            // Auto-unlock bot on voice wake trigger
+            setIsBotDownloaded(true);
+            setHeroAcceptedTerms(true);
+            try {
+              localStorage.setItem('pact_bot_downloaded', 'true');
+            } catch {}
 
-              // Immediately open assistant drawer and trigger mic with wake chime
-              setIsDrawerOpen(true);
-              stopCurrentAudio();
-              stopGlobalAudio();
-              handleToggleMic();
-              break;
-            }
-          }
-        };
+            // Open assistant drawer immediately
+            setIsDrawerOpen(true);
+            isDrawerOpenRef.current = true;
+            stopCurrentAudio();
+            stopGlobalAudio();
 
-        recognizer.onerror = (e: any) => {
-          if (e.error !== 'no-speech' && e.error !== 'aborted') {
-            console.debug('[Passive Wake-Word]:', e.error);
-          }
-        };
+            // Trigger active listening session with wake chime
+            handleToggleMic(true);
 
-        recognizer.onend = () => {
-          if (isAlive && !isRecording) {
             setTimeout(() => {
-              if (isAlive && !isRecording) {
-                try {
-                  recognizer.start();
-                } catch {}
-              }
-            }, 600);
+              isTriggeringWakeRef.current = false;
+            }, 1200);
+            break;
           }
-        };
+        }
+      };
 
-        recognizer.start();
+      recognizer.onerror = (e: any) => {
+        if (e.error !== 'no-speech' && e.error !== 'aborted') {
+          console.debug('[Passive Wake Listener Event]:', e.error);
+        }
+      };
+
+      recognizer.onend = () => {
+        // Chromium watchdog: If drawer closed and not recording, re-arm within 120ms
+        if (isMountedRef.current && !isRecordingRef.current && !isSpeakingRef.current) {
+          setTimeout(() => {
+            if (isMountedRef.current && !isRecordingRef.current && !isSpeakingRef.current) {
+              armPassiveListener();
+            }
+          }, 120);
+        }
+      };
+
+      recognizer.start();
+      passiveRecRef.current = recognizer;
+    } catch (err) {
+      setTimeout(() => {
+        if (isMountedRef.current && !isRecordingRef.current && !isSpeakingRef.current) {
+          armPassiveListener();
+        }
+      }, 400);
+    }
+  }, []);
+
+  // Siri-Style Acoustic Wake-Word Engine & Periodic Watchdog Heartbeat
+  useEffect(() => {
+    isMountedRef.current = true;
+    armPassiveListener();
+
+    // Screen WakeLock to keep mobile device receptive
+    let wakeLock: any = null;
+    const requestWakeLock = async () => {
+      try {
+        if ('wakeLock' in navigator && (navigator as any).wakeLock) {
+          wakeLock = await (navigator as any).wakeLock.request('screen');
+        }
       } catch {}
     };
+    requestWakeLock();
 
-    startPassiveListener();
-
-    return () => {
-      isAlive = false;
-      if (recognizer) {
-        try {
-          recognizer.abort();
-        } catch {}
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        requestWakeLock();
+        if (!isRecordingRef.current && !isSpeakingRef.current) {
+          armPassiveListener();
+        }
       }
     };
-  }, [isRecording]);
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // Watchdog Heartbeat: Checks every 2000ms if passive listener needs restart
+    const heartbeatTimer = setInterval(() => {
+      if (isMountedRef.current && !isRecordingRef.current && !isSpeakingRef.current) {
+        if (!passiveRecRef.current) {
+          armPassiveListener();
+        }
+      }
+    }, 2000);
+
+    return () => {
+      isMountedRef.current = false;
+      clearInterval(heartbeatTimer);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      try { wakeLock?.release(); } catch {}
+      if (passiveRecRef.current) {
+        try {
+          passiveRecRef.current.abort();
+        } catch {}
+        passiveRecRef.current = null;
+      }
+    };
+  }, [armPassiveListener]);
+
+  // Close / Minimize Assistant Drawer cleanly without locking microphone
+  const handleCloseDrawer = () => {
+    stopCurrentAudio();
+    stopGlobalAudio();
+
+    // If recording was active, cleanly release microphone streams
+    if (isRecordingRef.current || isRecording) {
+      setIsRecording(false);
+      isRecordingRef.current = false;
+      setLiveVoiceState(null);
+      setLiveVoiceMessage('');
+      if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
+      setRecordingSeconds(0);
+
+      if (micSpeechRecRef.current) {
+        try { micSpeechRecRef.current.stop(); } catch {}
+        micSpeechRecRef.current = null;
+      }
+
+      if (micMediaRecorderRef.current && micMediaRecorderRef.current.state !== 'inactive') {
+        try {
+          micMediaRecorderRef.current.stream?.getTracks().forEach((track) => track.stop());
+          micMediaRecorderRef.current.stop();
+        } catch {}
+      }
+    }
+
+    setIsDrawerOpen(false);
+    isDrawerOpenRef.current = false;
+
+    // Immediately re-arm the passive Siri-style listener so calling "Hey Pact" wakes it right up
+    setTimeout(() => {
+      armPassiveListener();
+    }, 150);
+  };
+
+  // Click outside listener for assistant drawer (cleanly closes & arms passive listener)
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isDrawerOpen &&
+        drawerRef.current &&
+        !drawerRef.current.contains(event.target as Node) &&
+        bubbleRef.current &&
+        !bubbleRef.current.contains(event.target as Node)
+      ) {
+        handleCloseDrawer();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isDrawerOpen]);
 
   // Real Audio File Upload: Sends actual audio blob to /api/transcribe
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1268,24 +1425,27 @@ export default function PactLandingAndAssistant() {
       {/* Whole-website light grid & soft lavender radial gradient background */}
       <BackgroundSnippets fixed={true} />
 
-      {/* Standalone Desktop Client Status Bar (Visible in Laptop / Desktop Installed PWA Mode) */}
+      {/* Standalone Client Status Bar (Adapts dynamically to Mobile Phone vs Laptop/Desktop) */}
       {isStandaloneApp && (
-        <div className="bg-neutral-950 text-white px-4 py-2 border-b border-neutral-800 flex items-center justify-between text-xs font-mono select-none">
+        <div className="bg-neutral-950 text-white px-3 sm:px-4 py-2 border-b border-neutral-800 flex items-center justify-between text-xs font-mono select-none">
           <div className="flex items-center space-x-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-bold text-white tracking-wide">Pact Legal Agent · Desktop Standalone Client Active</span>
+            <span className="font-bold text-white tracking-wide text-[11px] sm:text-xs">
+              {isMobile ? 'Pact Voice AI · Background Listening Active' : 'Pact Legal Agent · Desktop Standalone Client Active'}
+            </span>
             <span className="hidden sm:inline text-neutral-400">| Zero-Storage Secure Sandbox</span>
           </div>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => {
                 setIsDrawerOpen(true);
-                setIsDrawerMaximized(true);
+                isDrawerOpenRef.current = true;
+                if (!isMobile) setIsDrawerMaximized(true);
               }}
-              className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer"
+              className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer shrink-0"
             >
               <Bot className="w-3.5 h-3.5" />
-              <span>Full Desktop Workspace</span>
+              <span>{isMobile ? 'Open Workspace' : 'Full Desktop Workspace'}</span>
             </button>
             <span className="text-[10px] text-neutral-400 hidden md:inline">
               Keep window open or in taskbar for live monitoring
@@ -2102,30 +2262,29 @@ export default function PactLandingAndAssistant() {
                 <span className="hidden sm:inline text-[10px] font-mono">{isDrawerMaximized ? 'Restore' : 'Expand'}</span>
               </button>
 
-              {/* Float Companion Over Screen (PiP) Button */}
-              <button
-                type="button"
-                onClick={handleTogglePiPCompanion}
-                className={`p-1.5 rounded-lg border text-xs transition-all active:scale-95 flex items-center space-x-1 ${
-                  isPiPActive
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse'
-                    : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700/60'
-                }`}
-                title="Float Mascot Over All Windows (Picture-in-Picture)"
-              >
-                <Layers className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="hidden md:inline text-[10px] font-mono">Float PiP</span>
-              </button>
+              {/* Float Companion Over Screen (PiP) Button - Desktop Only */}
+              {!isMobile && (
+                <button
+                  type="button"
+                  onClick={handleTogglePiPCompanion}
+                  className={`p-1.5 rounded-lg border text-xs transition-all active:scale-95 flex items-center space-x-1 ${
+                    isPiPActive
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse'
+                      : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700/60'
+                  }`}
+                  title="Float Mascot Over All Windows (Picture-in-Picture)"
+                >
+                  <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="hidden md:inline text-[10px] font-mono">Float PiP</span>
+                </button>
+              )}
 
               {/* Minimize to Corner Bubble Close Button */}
               <button
                 type="button"
-                onClick={() => {
-                  stopCurrentAudio();
-                  setIsDrawerOpen(false);
-                }}
+                onClick={handleCloseDrawer}
                 className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-all active:scale-95 cursor-pointer"
-                title="Minimize to Floating Corner Mascot (Say 'Hey Pact' to Wake)"
+                title="Minimize to Floating Corner Mascot (Say 'Hey Pact' or 'Bot' to Wake)"
               >
                 <X className="w-4 h-4" />
               </button>

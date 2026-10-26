@@ -83,26 +83,35 @@ function speakWithBrowserSpeech(
       const cleanText = sanitizeTextForSpeech(text);
       const utterance = new SpeechSynthesisUtterance(cleanText);
 
-      // Prefer cute, friendly high-clarity voices (Zira, Jenny, Samantha, Veena, Heera)
+      // Prefer natural foreign young lady voices (Samantha [Siri], Microsoft Jenny Natural, Aria, Google US English)
       const voices = window.speechSynthesis.getVoices();
-      const cuteVoice = voices.find(
+      const foreignYoungLadyVoice = voices.find(
         (v) =>
-          v.name.includes('Jenny') ||
-          v.name.includes('Zira') ||
-          v.name.includes('Samantha') ||
-          v.name.includes('Veena') ||
-          v.name.includes('Heera') ||
-          v.name.includes('Google UK English Female') ||
-          v.name.includes('Google US English') ||
-          (v.lang.includes('en') && !v.name.includes('David') && !v.name.includes('George') && !v.name.includes('Rishi'))
-      );
-      if (cuteVoice) {
-        utterance.voice = cuteVoice;
+          !v.lang.includes('IN') &&
+          !v.name.includes('David') &&
+          !v.name.includes('George') &&
+          !v.name.includes('Mark') &&
+          !v.name.includes('Rishi') &&
+          (
+            v.name.includes('Jenny') ||
+            v.name.includes('Samantha') ||
+            v.name.includes('Aria') ||
+            v.name.includes('Google US English') ||
+            v.name.includes('Google UK English Female') ||
+            v.name.includes('Victoria') ||
+            v.name.includes('Karen') ||
+            v.name.includes('Zira') ||
+            (v.lang.startsWith('en') && v.name.toLowerCase().includes('female'))
+          )
+      ) || voices.find((v) => v.lang.startsWith('en-US')) || voices[0];
+
+      if (foreignYoungLadyVoice) {
+        utterance.voice = foreignYoungLadyVoice;
       }
 
-      // High, cute animated companion pitch and cheerful tempo
-      utterance.pitch = 1.35;
-      utterance.rate = 1.08;
+      // Natural, crisp foreign young lady cadence (smooth 1.0 pitch, clear conversational rate)
+      utterance.pitch = 1.0;
+      utterance.rate = 1.02;
 
       utterance.onstart = () => {
         options?.onStart?.();
